@@ -1,0 +1,8 @@
+# Ignore .ipynb checkpoints
+.ipynb_checkpoints/
+
+# Ignore Manual folder
+/Manual/
+
+# Ignore software folder
+/software/
