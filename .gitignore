@@ -6,3 +6,6 @@
 
 # Ignore software folder
 /software/
+
+# Ignore data folder
+/data/
