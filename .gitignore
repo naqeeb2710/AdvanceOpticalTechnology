@@ -9,3 +9,6 @@
 
 # Ignore data folder
 /data/
+
+# Ignore plot folder
+/plot/
