@@ -131,6 +131,10 @@ inst.position(final_angle)
 final_position = inst.position()
 print(f"Final Position: {final_position} degrees")
 
+# Close the instrument
+inst.close()
+apt.apt_clean_up()
+
 
 
 
