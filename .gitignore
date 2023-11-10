@@ -12,3 +12,9 @@
 
 # Ignore plot folder
 /plot/
+
+# Ignore pycache folder 
+/__pycache__/
+
+# Ignore .DS_Store files
+.DS_Store
