@@ -15,6 +15,7 @@ class SpectrometerController:
         devices = list_devices()
         if devices:
             self.spec = Spectrometer(devices[0])
+            print(devices[0])
         else:
             print("No spectrometer devices available.")
 
@@ -51,6 +52,27 @@ class SpectrometerController:
 
             for row in zip(wavelengths, *intensities):
                 csv_writer.writerow(row)
+        
+
+        # Create the "plot" folder if it doesn't exist
+        plot_folder = 'plot'
+        if not os.path.exists(plot_folder):
+            os.makedirs(plot_folder)
+
+        # Dynamically generate the plot filename based on the current angle
+        output_plot_filename = output_csv_filename.replace('.csv', '.png')
+        # Save the plot as an image file in the "plot" folder
+        output_plot_filepath = os.path.join(plot_folder, output_plot_filename)
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+        ax.plot(wavelengths[:len(current_wavelengths)], intensities[0])
+
+        # Label the x and y axes
+        ax.set_xlabel('Wavelength (nm)')
+        ax.set_ylabel('Intensity')
+
+        plt.savefig(output_plot_filepath, bbox_inches='tight', pad_inches=0)
+        time.sleep(1.0)
 
     def disconnect_spectrometer(self):
         if self.spec is not None:
@@ -61,6 +83,9 @@ class MotorController:
     def __init__(self):
         self.apt = Thorlabs_APT()
         self.inst = Thorlabs_K10CR1("K10CR1", 0, self.apt)
+    
+    def move_home(self):
+        self.inst.move_home()
 
     def configure_motor(self, target_velocity):
         self.inst.velocity_max(target_velocity)
@@ -102,9 +127,13 @@ def main():
     spectrometer_controller = SpectrometerController()
     motor_controller = MotorController()
 
+    # Move to zero and recalibrate
+    motor_controller.move_home()
+
     try:
         # Connect to spectrometer
         spectrometer_controller.connect_spectrometer()
+        
 
         # Input parameters
         initial_angle = float(input("Enter the initial angle in degrees: "))
@@ -122,11 +151,6 @@ def main():
         measurement_controller = MeasurementController(spectrometer_controller, motor_controller)
 
         # Measure at angles with default velocity
-        measurement_controller.measure_at_angles(
-            initial_angle, final_angle, step_size, num_accumulations, exposure_time_micros, delay_seconds
-        )
-
-        # Measure again with the updated velocity
         measurement_controller.measure_at_angles(
             initial_angle, final_angle, step_size, num_accumulations, exposure_time_micros, delay_seconds
         )
