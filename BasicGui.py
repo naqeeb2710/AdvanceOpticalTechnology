@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from threading import Thread
 import queue
+import sys
 from main_v2 import SpectrometerController  # Importing SpectrometerController from the other module
 from main_v2 import MotorController  # Importing MotorController from the other module
 from main_v2 import MeasurementController  # Importing MeasurementController from the other module
@@ -52,6 +53,10 @@ class App:
 
         # Button to start measurement
         ttk.Button(self.root, text="Start Measurement", command=self.start_measurement).grid(row=7, column=0, columnspan=2, pady=10)
+        # Quit button
+        ttk.Button(self.root, text="Quit", command=self.quit_application).grid(row=8, column=0, columnspan=2, pady=10)
+        # Bind the close button to the quit_application method
+        self.root.protocol("WM_DELETE_WINDOW", self.quit_application)
 
     def start_measurement(self):
         try:
@@ -90,7 +95,15 @@ class App:
         #     self.motor_controller.close_motor()
         #     root.quit()
 
+    def quit_application(self):
+        # Disconnect spectrometer and close motor when quitting the application
+        self.spectrometer_controller.disconnect_spectrometer()
+        self.motor_controller.close_motor()
+        # self.root.destroy()
+        sys.exit()
+
 # Create the main application window
 root = tk.Tk()
 app = App(root)
+# root.protocol("WM_DELETE_WINDOW", app.quit_application)  # Handle window close button
 root.mainloop()
