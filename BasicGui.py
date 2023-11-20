@@ -88,7 +88,7 @@ class App:
         #     # Disconnect spectrometer and close motor
         #     self.spectrometer_controller.disconnect_spectrometer()
         #     self.motor_controller.close_motor()
-        #     # root.quit()
+        #     root.quit()
 
 # Create the main application window
 root = tk.Tk()

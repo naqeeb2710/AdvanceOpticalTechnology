@@ -88,15 +88,18 @@ class MotorController:
         self.inst.move_home()
 
     def configure_motor(self, target_velocity):
+        if hasattr(self.inst, 'velocity_max'):
+            self.inst.velocity_max(0) # Set velocity to 0 before cleanup
         self.inst.velocity_max(target_velocity)
 
     def move_to_angle(self, angle):
         self.inst.position(angle)
 
     def close_motor(self):
+        if hasattr(self.inst, 'velocity_max'):
+            self.inst.velocity_max(0)  # Set velocity to 0 before cleanup
         self.inst.close()
         self.apt.apt_clean_up()
-
 
 class MeasurementController:
     def __init__(self, spectrometer_controller, motor_controller):
