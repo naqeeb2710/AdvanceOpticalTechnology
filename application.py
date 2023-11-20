@@ -7,9 +7,9 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
 import os
-from main_v2 import SpectrometerController  # Importing SpectrometerController from the other module
-from main_v2 import MotorController  # Importing MotorController from the other module
-from main_v2 import MeasurementController  # Importing MeasurementController from the other module
+from main_v2 import SpectrometerController
+from main_v2 import MotorController
+from main_v2 import MeasurementController
 
 class App:
     def __init__(self, root):
@@ -63,7 +63,7 @@ class App:
         self.delay_time_entry.grid(row=3, column=1, padx=5, pady=5)
 
         # Create a figure and axes to display the plot
-        self.fig = Figure(figsize=(7, 5), dpi=100)
+        self.fig = Figure(figsize=(6, 5), dpi=100)
         self.ax = self.fig.add_subplot(111)
 
         self.canvas = FigureCanvasTkAgg(self.fig, master=self.root)
@@ -71,11 +71,16 @@ class App:
         self.canvas_widget.grid(row=1, column=0, columnspan=2, pady=10)
 
         # Button to start measurement
-        ttk.Button(self.root, text="Start Measurement", command=self.start_measurement).grid(row=2, column=0, pady=10)
+        ttk.Button(self.root, text="Start Measurement", command=self.start_measurement_thread).grid(row=2, column=0, pady=10)
         # Quit button
         ttk.Button(self.root, text="Quit", command=self.quit_application).grid(row=2, column=1, pady=10)
         # Bind the close button to the quit_application method
         self.root.protocol("WM_DELETE_WINDOW", self.quit_application)
+
+    def start_measurement_thread(self):
+        # Start a new thread for the measurement to avoid blocking the main thread
+        thread = Thread(target=self.start_measurement)
+        thread.start()
 
     def start_measurement(self):
         try:
@@ -120,17 +125,12 @@ class App:
         except Exception as e:
             print(f"An error occurred: {e}")
 
-        # finally:
-        #     # Disconnect spectrometer and close motor
-        #     self.spectrometer_controller.disconnect_spectrometer()
-        #     self.motor_controller.close_motor()
-        #     root.quit()
-
     def quit_application(self):
         # Disconnect spectrometer and close motor when quitting the application
         self.spectrometer_controller.disconnect_spectrometer()
         self.motor_controller.close_motor()
-        # self.root.destroy()
+        self.root.quit()
+        self.root.destroy()
         sys.exit()
 
 # Create the main application window
