@@ -19,11 +19,11 @@ else:
     print("No devices available.")
 
 
-# # Move to zero and recalibrate
-# inst.move_home()
+# Move to zero and recalibrate
+inst.move_home()
 
-# # Read position
-# print("Position:", inst.position())
+# Read position
+print("Position:", inst.position())
 
 spec = Spectrometer(devices[0])
 

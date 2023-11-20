@@ -26,53 +26,54 @@ class App:
         self.create_widgets()
 
     def create_widgets(self):
-        # Labels and Entry widgets for user input
-        ttk.Label(self.root, text="Initial Angle (degrees):").grid(row=0, column=0, padx=10, pady=5, sticky=tk.E)
-        self.initial_angle_entry = ttk.Entry(self.root)
-        self.initial_angle_entry.grid(row=0, column=1, padx=10, pady=5)
+        # Create frame for the first set of parameters
+        frame1 = ttk.Frame(self.root, padding="10")
+        frame1.grid(row=0, column=0, padx=10, pady=10)
 
-        ttk.Label(self.root, text="Step Size (degrees):").grid(row=1, column=0, padx=10, pady=5, sticky=tk.E)
-        self.step_size_entry = ttk.Entry(self.root)
-        self.step_size_entry.grid(row=1, column=1, padx=10, pady=5)
+        ttk.Label(frame1, text="Initial Angle (degrees):").grid(row=0, column=0, padx=5, pady=5, sticky=tk.E)
+        self.initial_angle_entry = ttk.Entry(frame1)
+        self.initial_angle_entry.grid(row=0, column=1, padx=5, pady=5)
 
-        ttk.Label(self.root, text="Final Angle (degrees):").grid(row=2, column=0, padx=10, pady=5, sticky=tk.E)
-        self.final_angle_entry = ttk.Entry(self.root)
-        self.final_angle_entry.grid(row=2, column=1, padx=10, pady=5)
+        ttk.Label(frame1, text="Final Angle (degrees):").grid(row=1, column=0, padx=5, pady=5, sticky=tk.E)
+        self.final_angle_entry = ttk.Entry(frame1)
+        self.final_angle_entry.grid(row=1, column=1, padx=5, pady=5)
 
-        ttk.Label(self.root, text="Num Accumulations:").grid(row=3, column=0, padx=10, pady=5, sticky=tk.E)
-        self.num_accumulations_entry = ttk.Entry(self.root)
-        self.num_accumulations_entry.grid(row=3, column=1, padx=10, pady=5)
+        ttk.Label(frame1, text="Step Size (degrees):").grid(row=2, column=0, padx=5, pady=5, sticky=tk.E)
+        self.step_size_entry = ttk.Entry(frame1)
+        self.step_size_entry.grid(row=2, column=1, padx=5, pady=5)
 
-        ttk.Label(self.root, text="Exposure Time (microseconds):").grid(row=4, column=0, padx=10, pady=5, sticky=tk.E)
-        self.exposure_time_entry = ttk.Entry(self.root)
-        self.exposure_time_entry.grid(row=4, column=1, padx=10, pady=5)
+        # Create frame for the second set of parameters
+        frame2 = ttk.Frame(self.root, padding="10")
+        frame2.grid(row=0, column=1, padx=10, pady=10)
 
-        ttk.Label(self.root, text="Delay Time (seconds):").grid(row=5, column=0, padx=10, pady=5, sticky=tk.E)
-        self.delay_time_entry = ttk.Entry(self.root)
-        self.delay_time_entry.grid(row=5, column=1, padx=10, pady=5)
+        ttk.Label(frame2, text="Target Velocity (deg/s):").grid(row=0, column=0, padx=5, pady=5, sticky=tk.E)
+        self.target_velocity_entry = ttk.Entry(frame2)
+        self.target_velocity_entry.grid(row=0, column=1, padx=5, pady=5)
 
-        ttk.Label(self.root, text="Target Velocity (deg/s):").grid(row=6, column=0, padx=10, pady=5, sticky=tk.E)
-        self.target_velocity_entry = ttk.Entry(self.root)
-        self.target_velocity_entry.grid(row=6, column=1, padx=10, pady=5)
+        ttk.Label(frame2, text="Exposure Time (microseconds):").grid(row=1, column=0, padx=5, pady=5, sticky=tk.E)
+        self.exposure_time_entry = ttk.Entry(frame2)
+        self.exposure_time_entry.grid(row=1, column=1, padx=5, pady=5)
 
-        # Create a Figure and axes for the plot
-        self.fig = Figure(figsize=(5, 4), dpi=100)
+        ttk.Label(frame2, text="Num Accumulations:").grid(row=2, column=0, padx=5, pady=5, sticky=tk.E)
+        self.num_accumulations_entry = ttk.Entry(frame2)
+        self.num_accumulations_entry.grid(row=2, column=1, padx=5, pady=5)
+
+        ttk.Label(frame2, text="Delay Time (seconds):").grid(row=3, column=0, padx=5, pady=5, sticky=tk.E)
+        self.delay_time_entry = ttk.Entry(frame2)
+        self.delay_time_entry.grid(row=3, column=1, padx=5, pady=5)
+
+        # Create a figure and axes to display the plot
+        self.fig = Figure(figsize=(7, 5), dpi=100)
         self.ax = self.fig.add_subplot(111)
 
         self.canvas = FigureCanvasTkAgg(self.fig, master=self.root)
         self.canvas_widget = self.canvas.get_tk_widget()
-        self.canvas_widget.grid(row=10, column=0, columnspan=2, pady=10) 
-        # # Button to start measurement
-        # ttk.Button(self.root, text="Start Measurement", command=self.start_measurement).grid(row=7, column=0, columnspan=2, pady=10)
-        # # Quit button
-        # ttk.Button(self.root, text="Quit", command=self.quit_application).grid(row=8, column=0, columnspan=2, pady=10)
-        # # Bind the close button to the quit_application method
-        # self.root.protocol("WM_DELETE_WINDOW", self.quit_application)
+        self.canvas_widget.grid(row=1, column=0, columnspan=2, pady=10)
 
         # Button to start measurement
-        ttk.Button(self.root, text="Start Measurement", command=self.start_measurement).grid(row=9, column=0, columnspan=2, pady=10)
+        ttk.Button(self.root, text="Start Measurement", command=self.start_measurement).grid(row=2, column=0, pady=10)
         # Quit button
-        ttk.Button(self.root, text="Quit", command=self.quit_application).grid(row=11, column=0, columnspan=2, pady=10)
+        ttk.Button(self.root, text="Quit", command=self.quit_application).grid(row=2, column=1, pady=10)
         # Bind the close button to the quit_application method
         self.root.protocol("WM_DELETE_WINDOW", self.quit_application)
 
@@ -103,8 +104,6 @@ class App:
             
             # Access the current_csv_filename from the MeasurementController
             current_csv_filename = measurement_controller.current_csv_filename
-            print(f"Current CSV filename: {current_csv_filename}")
-
             # Dynamically generate the plot filename based on the current angle
             output_plot_filename = current_csv_filename.replace('.csv', '.png')
             # Save the plot as an image file in the "plot" folder

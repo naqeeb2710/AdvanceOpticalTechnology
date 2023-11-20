@@ -71,6 +71,11 @@ class SpectrometerController:
         ax.set_xlabel('Wavelength (nm)')
         ax.set_ylabel('Intensity')
 
+        # Add angle and exposure time information inside the plot
+
+        info_text = f"Angle: {MeasurementController.current_angle}°\nExp Time: {exposure_time_micros} µs"
+        ax.text(0.95, 0.95, info_text, transform=ax.transAxes, verticalalignment='top', horizontalalignment='right', bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.5))
+
         plt.savefig(output_plot_filepath, bbox_inches='tight', pad_inches=0)
         time.sleep(1.0)
 
@@ -105,6 +110,7 @@ class MeasurementController:
     def __init__(self, spectrometer_controller, motor_controller):
         self.spectrometer_controller = spectrometer_controller
         self.motor_controller = motor_controller
+        self.current_csv_filename = None
 
     def measure_at_angles(self, initial_angle, final_angle, step_size, num_accumulations, exposure_time_micros, delay_seconds):
         current_angle = initial_angle
@@ -116,8 +122,11 @@ class MeasurementController:
             print(f"Position: {current_position} degrees at angle: {current_angle} degrees")
             time.sleep(delay_seconds)
 
-            current_csv_filename = f'angle_{current_angle}_integrationtime_{exposure_time_micros}_acc_{num_accumulations}.csv'
-            self.spectrometer_controller.perform_accumulation(num_accumulations, exposure_time_micros, current_csv_filename)
+            # Update the class variable
+            MeasurementController.current_angle = current_angle
+
+            self.current_csv_filename = f'angle_{current_angle}_integrationtime_{exposure_time_micros}_acc_{num_accumulations}.csv'
+            self.spectrometer_controller.perform_accumulation(num_accumulations, exposure_time_micros, self.current_csv_filename)
 
             current_angle += step_size
 
