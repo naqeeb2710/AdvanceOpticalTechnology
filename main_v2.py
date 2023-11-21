@@ -10,14 +10,20 @@ from qcodes_contrib_drivers.drivers.Thorlabs.K10CR1 import Thorlabs_K10CR1
 class SpectrometerController:
     def __init__(self):
         self.spec = None
-
-    def connect_spectrometer(self):
         devices = list_devices()
         if devices:
             self.spec = Spectrometer(devices[0])
             print(devices[0])
         else:
             print("No spectrometer devices available.")
+
+    # def connect_spectrometer(self):
+    #     devices = list_devices()
+    #     if devices:
+    #         self.spec = Spectrometer(devices[0])
+    #         # print(devices[0])
+    #     else:
+    #         print("No spectrometer devices available.")
 
     def perform_accumulation(self, num_accumulations, exposure_time_micros, output_csv_filename):
         if self.spec is None:
@@ -118,7 +124,7 @@ class MeasurementController:
         while current_angle <= final_angle:
             self.motor_controller.move_to_angle(current_angle)
             current_position = self.motor_controller.inst.position()
-
+            time.sleep(0.5)  # Pause the execution for 0.5 seconds
             print(f"Position: {current_position} degrees at angle: {current_angle} degrees")
             time.sleep(delay_seconds)
 
@@ -144,7 +150,7 @@ def main():
 
     try:
         # Connect to spectrometer
-        spectrometer_controller.connect_spectrometer()
+        # spectrometer_controller.connect_spectrometer()
         
 
         # Input parameters

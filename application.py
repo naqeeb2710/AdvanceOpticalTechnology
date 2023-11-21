@@ -44,9 +44,10 @@ class App:
         # Progress bar
         ttk.Label(frame1, text="Progress:").grid(row=3, column=0, padx=5, pady=5, sticky=tk.E)
         self.progress_label = ttk.Label(frame1, text="0%")
-        self.progress_label.grid(row=3, column=1, padx=5, pady=5, sticky=tk.W)
+        self.progress_label.grid(row=3, column=2, padx=5, pady=5, sticky=tk.W)
         self.progress_bar = ttk.Progressbar(frame1, orient='horizontal', length=130, mode='determinate')
-        self.progress_bar.grid(row=3, column=2, padx=(0, 5), pady=5)  # Adjusted the padx to shift the progress bar to the left
+        self.progress_bar.grid(row=3, column=1, padx=(0, 0), pady=5)  # Adjusted the padx to shift the progress bar to the left
+        
 
         # Create a frame for the second set of parameters
         frame2 = ttk.Frame(self.root, padding="10")
@@ -100,7 +101,7 @@ class App:
             target_velocity = float(self.target_velocity_entry.get())
 
             # Connect to spectrometer
-            self.spectrometer_controller.connect_spectrometer()
+            # self.spectrometer_controller.connect_spectrometer()
 
             # Configure motor
             self.motor_controller.configure_motor(target_velocity=target_velocity)
