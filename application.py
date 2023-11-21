@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
 from threading import Thread
-import queue
 import sys
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
@@ -42,9 +41,16 @@ class App:
         self.step_size_entry = ttk.Entry(frame1)
         self.step_size_entry.grid(row=2, column=1, padx=5, pady=5)
 
-        # Create frame for the second set of parameters
+        # Progress bar
+        ttk.Label(frame1, text="Progress:").grid(row=3, column=0, padx=5, pady=5, sticky=tk.E)
+        self.progress_label = ttk.Label(frame1, text="0%")
+        self.progress_label.grid(row=3, column=1, padx=5, pady=5, sticky=tk.W)
+        self.progress_bar = ttk.Progressbar(frame1, orient='horizontal', length=130, mode='determinate')
+        self.progress_bar.grid(row=3, column=2, padx=(0, 5), pady=5)  # Adjusted the padx to shift the progress bar to the left
+
+        # Create a frame for the second set of parameters
         frame2 = ttk.Frame(self.root, padding="10")
-        frame2.grid(row=0, column=1, padx=10, pady=10)
+        frame2.grid(row=0, column=3, padx=10, pady=10)
 
         ttk.Label(frame2, text="Target Velocity (deg/s):").grid(row=0, column=0, padx=5, pady=5, sticky=tk.E)
         self.target_velocity_entry = ttk.Entry(frame2)
@@ -68,12 +74,12 @@ class App:
 
         self.canvas = FigureCanvasTkAgg(self.fig, master=self.root)
         self.canvas_widget = self.canvas.get_tk_widget()
-        self.canvas_widget.grid(row=1, column=0, columnspan=2, pady=10)
+        self.canvas_widget.grid(row=4, column=0, columnspan=4, pady=10)
 
         # Button to start measurement
-        ttk.Button(self.root, text="Start Measurement", command=self.start_measurement_thread).grid(row=2, column=0, pady=10)
+        ttk.Button(self.root, text="Start Measurement", command=self.start_measurement_thread).grid(row=5, column=0, pady=10)
         # Quit button
-        ttk.Button(self.root, text="Quit", command=self.quit_application).grid(row=2, column=1, pady=10)
+        ttk.Button(self.root, text="Quit", command=self.quit_application).grid(row=5, column=3, pady=10)
         # Bind the close button to the quit_application method
         self.root.protocol("WM_DELETE_WINDOW", self.quit_application)
 
@@ -102,25 +108,39 @@ class App:
             # Create measurement controller
             measurement_controller = MeasurementController(self.spectrometer_controller, self.motor_controller)
 
+            # Clear previous plot
+            self.ax.clear()
+
             # Measure at angles with default velocity
-            measurement_controller.measure_at_angles(
-                initial_angle, final_angle, step_size, num_accumulations, exposure_time_micros, delay_seconds
-            )
-            
-            # Access the current_csv_filename from the MeasurementController
-            current_csv_filename = measurement_controller.current_csv_filename
-            # Dynamically generate the plot filename based on the current angle
-            output_plot_filename = current_csv_filename.replace('.csv', '.png')
-            # Save the plot as an image file in the "plot" folder
-            output_plot_filepath = os.path.join("plot", output_plot_filename)
+            total_steps = int((final_angle - initial_angle) / step_size) + 1
+            for step, angle in enumerate(range(int(initial_angle), int(final_angle) + 1, int(step_size)), 1):
+                measurement_controller.measure_at_angles(
+                    angle, angle, 1, num_accumulations, exposure_time_micros, delay_seconds
+                )
 
-            # Display the latest graph in the Tkinter application
-            img = plt.imread(output_plot_filepath)
-            self.ax.imshow(img)
-            self.ax.axis('off')  # Turn off axis labels
+                # Access the current_csv_filename from the MeasurementController
+                current_csv_filename = measurement_controller.current_csv_filename
+                # Dynamically generate the plot filename based on the current angle
+                output_plot_filename = current_csv_filename.replace('.csv', '.png')
+                # Save the plot as an image file in the "plot" folder
+                output_plot_filepath = os.path.join("plot", output_plot_filename)
 
-            # Update the canvas
-            self.canvas.draw()
+                # Display the latest graph in the Tkinter application
+                img = plt.imread(output_plot_filepath)
+                self.ax.imshow(img)
+                self.ax.axis('off')  # Turn off axis labels
+
+                # Update the canvas
+                self.canvas.draw()
+
+                # Update the progress bar
+                progress_value = step / total_steps * 100
+                self.progress_label.config(text=f"{progress_value:.1f}%")
+                self.progress_bar['value'] = progress_value
+                self.root.update()
+
+                # Delay for a short time before the next measurement
+                self.root.after(100)  # Adjust the delay time as needed
 
         except Exception as e:
             print(f"An error occurred: {e}")
