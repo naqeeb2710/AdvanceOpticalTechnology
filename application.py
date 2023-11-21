@@ -112,9 +112,13 @@ class App:
             # Clear previous plot
             self.ax.clear()
 
-            # Measure at angles with default velocity
-            total_steps = int((final_angle - initial_angle) / step_size) + 1
-            for step, angle in enumerate(range(int(initial_angle), int(final_angle) + 1, int(step_size)), 1):
+            # Measure at angles with default velocity using a while loop
+            total_steps = ((final_angle - initial_angle) / step_size) + 1
+            current_step = 1
+
+            while current_step <= total_steps:
+                angle = (initial_angle + (current_step - 1) * step_size)
+                
                 measurement_controller.measure_at_angles(
                     angle, angle, 1, num_accumulations, exposure_time_micros, delay_seconds
                 )
@@ -135,7 +139,7 @@ class App:
                 self.canvas.draw()
 
                 # Update the progress bar
-                progress_value = step / total_steps * 100
+                progress_value = current_step / total_steps * 100
                 self.progress_label.config(text=f"{progress_value:.1f}%")
                 self.progress_bar['value'] = progress_value
                 self.root.update()
@@ -143,8 +147,26 @@ class App:
                 # Delay for a short time before the next measurement
                 self.root.after(100)  # Adjust the delay time as needed
 
+                # Increment the current_step for the next iteration
+                current_step += 1
+
+                
+            # Clear input fields after the calculation
+            self.initial_angle_entry.delete(0, tk.END)
+            self.final_angle_entry.delete(0, tk.END)
+            self.step_size_entry.delete(0, tk.END)
+            self.target_velocity_entry.delete(0, tk.END)
+            self.exposure_time_entry.delete(0, tk.END)
+            self.num_accumulations_entry.delete(0, tk.END)
+            self.delay_time_entry.delete(0, tk.END)
+
         except Exception as e:
             print(f"An error occurred: {e}")
+            # Close motor and spectrometer in case of an error
+            self.motor_controller.close_motor()
+            self.spectrometer_controller.disconnect_spectrometer()
+        
+        
 
     def quit_application(self):
         # Disconnect spectrometer and close motor when quitting the application
