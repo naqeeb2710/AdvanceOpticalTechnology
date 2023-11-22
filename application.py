@@ -70,7 +70,7 @@ class App:
         self.delay_time_entry.grid(row=3, column=1, padx=5, pady=5)
 
         # Create a figure and axes to display the plot
-        self.fig = Figure(figsize=(6, 5), dpi=100)
+        self.fig = Figure(figsize=(7, 5), dpi=100)
         self.ax = self.fig.add_subplot(111)
 
         self.canvas = FigureCanvasTkAgg(self.fig, master=self.root)

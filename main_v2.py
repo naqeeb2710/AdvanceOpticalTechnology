@@ -69,7 +69,7 @@ class SpectrometerController:
         output_plot_filename = output_csv_filename.replace('.csv', '.png')
         # Save the plot as an image file in the "plot" folder
         output_plot_filepath = os.path.join(plot_folder, output_plot_filename)
-        fig = plt.figure()
+        fig = plt.figure(figsize=(12, 8))
         ax = fig.add_subplot(111)
         ax.plot(wavelengths[:len(current_wavelengths)], intensities[0])
 
@@ -78,11 +78,10 @@ class SpectrometerController:
         ax.set_ylabel('Intensity')
 
         # Add angle and exposure time information inside the plot
-
         info_text = f"Angle: {MeasurementController.current_angle}°\nExp Time: {exposure_time_micros} µs"
-        ax.text(0.95, 0.95, info_text, transform=ax.transAxes, verticalalignment='top', horizontalalignment='right', bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.5))
+        ax.text(0.98, 0.98, info_text, transform=ax.transAxes, verticalalignment='top', horizontalalignment='right', bbox=dict(boxstyle='round', facecolor='wheat', alpha=1))
 
-        plt.savefig(output_plot_filepath, bbox_inches='tight', pad_inches=0)
+        plt.savefig(output_plot_filepath, bbox_inches='tight', pad_inches=0.5)
         time.sleep(1.0)
 
     def disconnect_spectrometer(self):
