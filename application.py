@@ -19,7 +19,7 @@ class App:
         self.spectrometer_controller = SpectrometerController()
         self.motor_controller = MotorController()
         # Move to zero and recalibrate
-        self.motor_controller.move_home()
+        # self.motor_controller.move_home()
 
         # Set up GUI components
         self.create_widgets()
@@ -41,13 +41,8 @@ class App:
         self.step_size_entry = ttk.Entry(frame1)
         self.step_size_entry.grid(row=2, column=1, padx=5, pady=5)
 
-        # Progress bar
-        ttk.Label(frame1, text="Progress:").grid(row=3, column=0, padx=5, pady=5, sticky=tk.E)
-        self.progress_label = ttk.Label(frame1, text="0%")
-        self.progress_label.grid(row=3, column=2, padx=5, pady=5, sticky=tk.W)
-        self.progress_bar = ttk.Progressbar(frame1, orient='horizontal', length=130, mode='determinate')
-        self.progress_bar.grid(row=3, column=1, padx=(0, 0), pady=5)  # Adjusted the padx to shift the progress bar to the left
-        
+        # Home button
+        # ttk.Button(frame1, text="Home", command=self.motor_controller.move_home).grid(row=3, column=1, padx=5, pady=5)
 
         # Create a frame for the second set of parameters
         frame2 = ttk.Frame(self.root, padding="10")
@@ -65,9 +60,33 @@ class App:
         self.num_accumulations_entry = ttk.Entry(frame2)
         self.num_accumulations_entry.grid(row=2, column=1, padx=5, pady=5)
 
-        ttk.Label(frame2, text="Delay Time (seconds):").grid(row=3, column=0, padx=5, pady=5, sticky=tk.E)
-        self.delay_time_entry = ttk.Entry(frame2)
-        self.delay_time_entry.grid(row=3, column=1, padx=5, pady=5)
+        # # Progress bar
+        # ttk.Label(frame2, text="Progress:").grid(row=3, column=0, padx=5, pady=5, sticky=tk.E)
+        # self.progress_label = ttk.Label(frame2, text="0%")
+        # self.progress_label.grid(row=3, column=2, padx=5, pady=5, sticky=tk.W)
+        # self.progress_bar = ttk.Progressbar(frame2, orient='horizontal', length=130, mode='determinate')
+        # self.progress_bar.grid(row=3, column=1, padx=(0, 0), pady=5)  # Adjusted the padx to shift the progress bar to the left
+
+
+        # Create a horizontal frame for buttons and progress bar
+        button_frame = ttk.Frame(self.root)
+        button_frame.grid(row=1, column=0, columnspan=4, pady=10)
+
+        # Home button
+        ttk.Button(button_frame, text="Home", command=self.motor_controller.move_home).grid(row=0, column=0, padx=(5, 5), pady=5)
+
+        # Start Measurement button
+        ttk.Button(button_frame, text="Start Measurement", command=self.start_measurement_thread).grid(row=0, column=1, padx=(5, 5), pady=5)
+
+        # Progress bar
+        ttk.Label(button_frame, text="Progress:").grid(row=0, column=2, padx=5, pady=5, sticky=tk.E)
+        self.progress_label = ttk.Label(button_frame, text="0%")
+        self.progress_label.grid(row=0, column=3, padx=5, pady=5, sticky=tk.W)
+        self.progress_bar = ttk.Progressbar(button_frame, orient='horizontal', length=130, mode='determinate')
+        self.progress_bar.grid(row=0, column=4, padx=(0, 5), pady=5)  # Adjusted the padx to shift the progress bar to the left
+
+        # Quit button
+        ttk.Button(button_frame, text="Quit", command=self.quit_application).grid(row=0, column=5, padx=(5, 5), pady=5)
 
         # Create a figure and axes to display the plot
         self.fig = Figure(figsize=(7, 5), dpi=100)
@@ -77,12 +96,13 @@ class App:
         self.canvas_widget = self.canvas.get_tk_widget()
         self.canvas_widget.grid(row=4, column=0, columnspan=4, pady=10)
 
-        # Button to start measurement
-        ttk.Button(self.root, text="Start Measurement", command=self.start_measurement_thread).grid(row=5, column=0, pady=10)
-        # Quit button
-        ttk.Button(self.root, text="Quit", command=self.quit_application).grid(row=5, column=3, pady=10)
-        # Bind the close button to the quit_application method
-        self.root.protocol("WM_DELETE_WINDOW", self.quit_application)
+        # # Button to start measurement
+        # ttk.Button(self.root, text="Start Measurement", command=self.start_measurement_thread).grid(row=5, column=0, pady=10)
+        # # Quit button
+        # ttk.Button(self.root, text="Quit", command=self.quit_application).grid(row=5, column=3, pady=10)
+        # # Bind the close button to the quit_application method
+        # self.root.protocol("WM_DELETE_WINDOW", self.quit_application)
+
 
     def start_measurement_thread(self):
         # Start a new thread for the measurement to avoid blocking the main thread
@@ -97,7 +117,6 @@ class App:
             final_angle = float(self.final_angle_entry.get())
             num_accumulations = int(self.num_accumulations_entry.get())
             exposure_time_micros = float(self.exposure_time_entry.get())
-            delay_seconds = float(self.delay_time_entry.get())
             target_velocity = float(self.target_velocity_entry.get())
 
             # Connect to spectrometer
@@ -120,7 +139,7 @@ class App:
                 angle = (initial_angle + (current_step - 1) * step_size)
                 
                 measurement_controller.measure_at_angles(
-                    angle, angle, 1, num_accumulations, exposure_time_micros, delay_seconds
+                    angle, angle, 1, num_accumulations, exposure_time_micros, 3  # Fixed delay of 3 seconds
                 )
 
                 # Access the current_csv_filename from the MeasurementController
@@ -150,7 +169,6 @@ class App:
                 # Increment the current_step for the next iteration
                 current_step += 1
 
-                
             # Clear input fields after the calculation
             self.initial_angle_entry.delete(0, tk.END)
             self.final_angle_entry.delete(0, tk.END)
@@ -158,7 +176,6 @@ class App:
             self.target_velocity_entry.delete(0, tk.END)
             self.exposure_time_entry.delete(0, tk.END)
             self.num_accumulations_entry.delete(0, tk.END)
-            self.delay_time_entry.delete(0, tk.END)
 
         except Exception as e:
             print(f"An error occurred: {e}")
@@ -166,8 +183,6 @@ class App:
             self.motor_controller.close_motor()
             self.spectrometer_controller.disconnect_spectrometer()
         
-        
-
     def quit_application(self):
         # Disconnect spectrometer and close motor when quitting the application
         self.spectrometer_controller.disconnect_spectrometer()

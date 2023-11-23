@@ -121,23 +121,29 @@ class MeasurementController:
         current_angle = initial_angle
 
         while current_angle <= final_angle:
-            self.motor_controller.move_to_angle(current_angle)
+            # Convert the angle to be within the range [0, 360)
+            current_angle_normalized = current_angle % 360
+
+            self.motor_controller.move_to_angle(current_angle_normalized)
             current_position = self.motor_controller.inst.position()
             time.sleep(0.5)  # Pause the execution for 0.5 seconds
-            print(f"Position: {current_position} degrees at angle: {current_angle} degrees")
+            print(f"Position: {current_position} degrees at angle: {current_angle_normalized} degrees")
             time.sleep(delay_seconds)
 
             # Update the class variable
-            MeasurementController.current_angle = current_angle
+            MeasurementController.current_angle = current_angle_normalized
 
-            self.current_csv_filename = f'angle_{current_angle}_integrationtime_{exposure_time_micros}_acc_{num_accumulations}.csv'
+            self.current_csv_filename = f'angle_{current_angle_normalized}_integrationtime_{exposure_time_micros}_acc_{num_accumulations}.csv'
             self.spectrometer_controller.perform_accumulation(num_accumulations, exposure_time_micros, self.current_csv_filename)
 
             current_angle += step_size
 
-        self.motor_controller.move_to_angle(final_angle)
+        # Move to the final angle after completing the loop
+        final_angle_normalized = final_angle % 360
+        self.motor_controller.move_to_angle(final_angle_normalized)
         final_position = self.motor_controller.inst.position()
         print(f"Final Position: {final_position} degrees")
+
 
 
 def main():
@@ -145,13 +151,11 @@ def main():
     motor_controller = MotorController()
 
     # Move to zero and recalibrate
-    motor_controller.move_home()
+    # do you want to go home 
+    if input("Do you want to go home? (y/n): ") == 'y':
+        motor_controller.move_home()
 
     try:
-        # Connect to spectrometer
-        # spectrometer_controller.connect_spectrometer()
-        
-
         # Input parameters
         initial_angle = float(input("Enter the initial angle in degrees: "))
         step_size = float(input("Enter the step size in degrees: "))
