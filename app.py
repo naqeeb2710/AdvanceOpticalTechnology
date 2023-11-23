@@ -18,14 +18,18 @@ class App:
         # Initialize controllers
         self.spectrometer_controller = SpectrometerController()
         self.motor_controller = MotorController()
+        # Move to zero and recalibrate
+        self.motor_controller.move_home()
 
         # Set up GUI components
         self.create_widgets()
 
     def create_widgets(self):
         # Create frame for the first set of parameters
-        frame1 = ttk.Frame(self.root, padding="10")
+        # name the below frame1
+        frame1 = ttk.Frame(self.root, padding="10", name="frame1")
         frame1.grid(row=0, column=0, padx=10, pady=10)
+        # frame1.configure(name="frame1")
 
         ttk.Label(frame1, text="Initial Angle (degrees):").grid(row=0, column=0, padx=5, pady=5, sticky=tk.E)
         self.initial_angle_entry = ttk.Entry(frame1)
@@ -55,7 +59,23 @@ class App:
         self.num_accumulations_entry = ttk.Entry(frame2)
         self.num_accumulations_entry.grid(row=2, column=1, padx=5, pady=5)
 
-        # Create a horizontal frame for buttons and progress bar
+        # Create a frame for the third set of parameters (single test)
+        frame3 = ttk.Frame(self.root, padding="10")
+        frame3.grid(row=0, column=6, padx=10, pady=10)
+
+        ttk.Label(frame3, text="Single Test Angle (degrees):").grid(row=0, column=0, padx=5, pady=5, sticky=tk.E)
+        self.single_test_angle_entry = ttk.Entry(frame3)
+        self.single_test_angle_entry.grid(row=0, column=1, padx=5, pady=5)
+
+        ttk.Label(frame3, text="Single Test Accumulations:").grid(row=1, column=0, padx=5, pady=5, sticky=tk.E)
+        self.single_test_accumulations_entry = ttk.Entry(frame3)
+        self.single_test_accumulations_entry.grid(row=1, column=1, padx=5, pady=5)
+
+        ttk.Label(frame3, text="Single Test Exposure Time (µs):").grid(row=2, column=0, padx=5, pady=5, sticky=tk.E)
+        self.single_test_exposure_time_entry = ttk.Entry(frame3)
+        self.single_test_exposure_time_entry.grid(row=2, column=1, padx=5, pady=5)
+
+                # Create a horizontal frame for buttons and progress bar
         button_frame = ttk.Frame(self.root)
         button_frame.grid(row=1, column=0, columnspan=4, pady=10)
 
@@ -73,10 +93,13 @@ class App:
         self.progress_bar.grid(row=0, column=4, padx=(0, 5), pady=5)  # Adjusted the padx to shift the progress bar to the left
 
         # Quit button
-        ttk.Button(button_frame, text="Quit", command=self.quit_application).grid(row=0, column=5, padx=(5, 5), pady=5)
+        ttk.Button(button_frame, text="Quit", command=self.quit_application).grid(row=0, column=6, padx=(5, 5), pady=5)
         # Bind the close button to the quit_application method
         self.root.protocol("WM_DELETE_WINDOW", self.quit_application)
-        
+
+        # Button for performing a single test
+        ttk.Button(button_frame, text="Single Test", command=self.perform_single_test).grid(row=0, column=5, pady=5)
+
         # Create a figure and axes to display the plot
         self.fig = Figure(figsize=(7, 5), dpi=100)
         self.ax = self.fig.add_subplot(111)
@@ -84,7 +107,6 @@ class App:
         self.canvas = FigureCanvasTkAgg(self.fig, master=self.root)
         self.canvas_widget = self.canvas.get_tk_widget()
         self.canvas_widget.grid(row=4, column=0, columnspan=4, pady=10)
-
 
     def start_measurement_thread(self):
         # Start a new thread for the measurement to avoid blocking the main thread
@@ -100,6 +122,9 @@ class App:
             num_accumulations = int(self.num_accumulations_entry.get())
             exposure_time_micros = float(self.exposure_time_entry.get())
             target_velocity = float(self.target_velocity_entry.get())
+
+            # Connect to spectrometer
+            # self.spectrometer_controller.connect_spectrometer()
 
             # Configure motor
             self.motor_controller.configure_motor(target_velocity=target_velocity)
@@ -162,6 +187,49 @@ class App:
             self.motor_controller.close_motor()
             self.spectrometer_controller.disconnect_spectrometer()
         
+    def perform_single_test(self):
+        try:
+        # Get user input values for single test
+            single_test_angle = float(self.single_test_angle_entry.get())
+            single_test_accumulations = int(self.single_test_accumulations_entry.get())
+            single_test_exposure_time_micros = float(self.single_test_exposure_time_entry.get())
+
+            # Connect to spectrometer
+            # self.spectrometer_controller.connect_spectrometer()
+
+            # Configure motor
+            # self.motor_controller.configure_motor(target_velocity=target_velocity)
+
+            # Create measurement controller
+            measurement_controller = MeasurementController(self.spectrometer_controller, self.motor_controller)
+
+            # Clear previous plot
+            self.ax.clear()
+
+            # Perform a single test at the specified angle
+            measurement_controller.measure_at_angles(
+                single_test_angle, single_test_angle, 1, single_test_accumulations, single_test_exposure_time_micros, 3
+            )  # Fixed delay of 3 seconds
+
+            # Access the current_csv_filename from the MeasurementController
+            current_csv_filename = measurement_controller.current_csv_filename
+            # Dynamically generate the plot filename based on the current angle
+            output_plot_filename = current_csv_filename.replace('.csv', '.png')
+            # Save the plot as an image file in the "plot" folder
+            output_plot_filepath = os.path.join("plot", output_plot_filename)
+
+            # Display the latest graph in the Tkinter application
+            img = plt.imread(output_plot_filepath)
+            self.ax.imshow(img)
+            self.ax.axis('off')  # Turn off axis labels
+
+            # Update the canvas
+            self.canvas.draw()
+
+        except Exception as e:
+            print(f"An error occurred during single test: {e}")
+            # Handle the error as needed
+
     def quit_application(self):
         # Disconnect spectrometer and close motor when quitting the application
         self.spectrometer_controller.disconnect_spectrometer()
