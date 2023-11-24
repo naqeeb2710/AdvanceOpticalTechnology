@@ -18,18 +18,14 @@ class App:
         # Initialize controllers
         self.spectrometer_controller = SpectrometerController()
         self.motor_controller = MotorController()
-        # Move to zero and recalibrate
-        self.motor_controller.move_home()
 
         # Set up GUI components
         self.create_widgets()
 
     def create_widgets(self):
         # Create frame for the first set of parameters
-        # name the below frame1
-        frame1 = ttk.Frame(self.root, padding="10", name="frame1")
+        frame1 = ttk.Frame(self.root, padding="10", name="frame1", borderwidth=2, relief="groove")
         frame1.grid(row=0, column=0, padx=10, pady=10)
-        # frame1.configure(name="frame1")
 
         ttk.Label(frame1, text="Initial Angle (degrees):").grid(row=0, column=0, padx=5, pady=5, sticky=tk.E)
         self.initial_angle_entry = ttk.Entry(frame1)
@@ -44,7 +40,7 @@ class App:
         self.step_size_entry.grid(row=2, column=1, padx=5, pady=5)
 
         # Create a frame for the second set of parameters
-        frame2 = ttk.Frame(self.root, padding="10")
+        frame2 = ttk.Frame(self.root, padding="10", name="frame2", borderwidth=2, relief="groove")
         frame2.grid(row=0, column=3, padx=10, pady=10)
 
         ttk.Label(frame2, text="Target Velocity (deg/s):").grid(row=0, column=0, padx=5, pady=5, sticky=tk.E)
@@ -60,7 +56,7 @@ class App:
         self.num_accumulations_entry.grid(row=2, column=1, padx=5, pady=5)
 
         # Create a frame for the third set of parameters (single test)
-        frame3 = ttk.Frame(self.root, padding="10")
+        frame3 = ttk.Frame(self.root, padding="10", name="frame3", borderwidth=2, relief="groove")
         frame3.grid(row=0, column=6, padx=10, pady=10)
 
         ttk.Label(frame3, text="Single Test Angle (degrees):").grid(row=0, column=0, padx=5, pady=5, sticky=tk.E)
@@ -75,9 +71,9 @@ class App:
         self.single_test_exposure_time_entry = ttk.Entry(frame3)
         self.single_test_exposure_time_entry.grid(row=2, column=1, padx=5, pady=5)
 
-                # Create a horizontal frame for buttons and progress bar
-        button_frame = ttk.Frame(self.root)
-        button_frame.grid(row=1, column=0, columnspan=4, pady=10)
+        # Create a horizontal frame for buttons and progress bar (2:1 ratio)
+        button_frame = ttk.Frame(self.root, padding="10", name="button_frame", borderwidth=2, relief="groove")
+        button_frame.grid(row=1, column=0, columnspan=3, pady=10)
 
         # Home button
         ttk.Button(button_frame, text="Home", command=self.motor_controller.move_home).grid(row=0, column=0, padx=(5, 5), pady=5)
@@ -100,6 +96,17 @@ class App:
         # Button for performing a single test
         ttk.Button(button_frame, text="Single Test", command=self.perform_single_test).grid(row=0, column=5, pady=5)
 
+        # Create a frame for angle adjustment
+        angle_adjust_frame = ttk.Frame(self.root, padding="10", name="angle_adjust_frame", borderwidth=2, relief="groove")
+        angle_adjust_frame.grid(row=1, column=3, pady=10)
+
+        ttk.Label(angle_adjust_frame, text="Angle Size:").grid(row=0, column=0, padx=5, pady=5, sticky=tk.E)
+        self.angle_size_entry = ttk.Entry(angle_adjust_frame)
+        self.angle_size_entry.grid(row=0, column=1, padx=5, pady=5)
+
+        ttk.Button(angle_adjust_frame, text="Up Angle", command=self.up_angle).grid(row=0, column=2, padx=(5, 5), pady=5)
+        ttk.Button(angle_adjust_frame, text="Down Angle", command=self.down_angle).grid(row=0, column=3, padx=(5, 5), pady=5)
+
         # Create a figure and axes to display the plot
         self.fig = Figure(figsize=(7, 5), dpi=100)
         self.ax = self.fig.add_subplot(111)
@@ -107,6 +114,16 @@ class App:
         self.canvas = FigureCanvasTkAgg(self.fig, master=self.root)
         self.canvas_widget = self.canvas.get_tk_widget()
         self.canvas_widget.grid(row=4, column=0, columnspan=4, pady=10)
+    
+    def up_angle(self):
+        # Implement the logic for increasing the angle
+        current_angle = self.motor_controller.inst.position()
+        self.motor_controller.move_to_angle(current_angle + float(self.angle_size_entry.get()))
+
+    def down_angle(self):
+        # Implement the logic for decreasing the angle
+        current_angle = self.motor_controller.inst.position()
+        self.motor_controller.move_to_angle(current_angle - float(self.angle_size_entry.get()))
 
     def start_measurement_thread(self):
         # Start a new thread for the measurement to avoid blocking the main thread
@@ -122,9 +139,6 @@ class App:
             num_accumulations = int(self.num_accumulations_entry.get())
             exposure_time_micros = float(self.exposure_time_entry.get())
             target_velocity = float(self.target_velocity_entry.get())
-
-            # Connect to spectrometer
-            # self.spectrometer_controller.connect_spectrometer()
 
             # Configure motor
             self.motor_controller.configure_motor(target_velocity=target_velocity)
@@ -194,12 +208,6 @@ class App:
             single_test_accumulations = int(self.single_test_accumulations_entry.get())
             single_test_exposure_time_micros = float(self.single_test_exposure_time_entry.get())
 
-            # Connect to spectrometer
-            # self.spectrometer_controller.connect_spectrometer()
-
-            # Configure motor
-            # self.motor_controller.configure_motor(target_velocity=target_velocity)
-
             # Create measurement controller
             measurement_controller = MeasurementController(self.spectrometer_controller, self.motor_controller)
 
@@ -228,7 +236,8 @@ class App:
 
         except Exception as e:
             print(f"An error occurred during single test: {e}")
-            # Handle the error as needed
+            self.spectrometer_controller.disconnect_spectrometer()
+            self.motor_controller.close_motor()
 
     def quit_application(self):
         # Disconnect spectrometer and close motor when quitting the application

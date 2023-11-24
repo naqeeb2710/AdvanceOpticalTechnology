@@ -17,14 +17,6 @@ class SpectrometerController:
         else:
             print("No spectrometer devices available.")
 
-    # def connect_spectrometer(self):
-    #     devices = list_devices()
-    #     if devices:
-    #         self.spec = Spectrometer(devices[0])
-    #         # print(devices[0])
-    #     else:
-    #         print("No spectrometer devices available.")
-
     def perform_accumulation(self, num_accumulations, exposure_time_micros, output_csv_filename):
         if self.spec is None:
             print("Spectrometer not connected. Please connect first.")
