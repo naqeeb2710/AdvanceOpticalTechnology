@@ -13,7 +13,7 @@ from main_v2 import MeasurementController
 class App:
     def __init__(self, root):
         self.root = root
-        self.root.title("Spectrometer Measurement App")
+        self.root.title("ASE")
 
         # Initialize controllers
         self.spectrometer_controller = SpectrometerController()
@@ -23,8 +23,12 @@ class App:
         self.create_widgets()
 
     def create_widgets(self):
+        # Create a container frame for the layout
+        container_frame = ttk.Frame(self.root, padding="10")
+        container_frame.grid(row=0, column=0, rowspan=2, columnspan=4, padx=10, pady=10)
+
         # Create frame for the first set of parameters
-        frame1 = ttk.Frame(self.root, padding="10", name="frame1", borderwidth=2, relief="groove")
+        frame1 = ttk.Frame(container_frame, padding="10", name="frame1", borderwidth=2, relief="groove")
         frame1.grid(row=0, column=0, padx=10, pady=10)
 
         ttk.Label(frame1, text="Initial Angle (degrees):").grid(row=0, column=0, padx=5, pady=5, sticky=tk.E)
@@ -40,8 +44,8 @@ class App:
         self.step_size_entry.grid(row=2, column=1, padx=5, pady=5)
 
         # Create a frame for the second set of parameters
-        frame2 = ttk.Frame(self.root, padding="10", name="frame2", borderwidth=2, relief="groove")
-        frame2.grid(row=0, column=3, padx=10, pady=10)
+        frame2 = ttk.Frame(container_frame, padding="10", name="frame2", borderwidth=2, relief="groove")
+        frame2.grid(row=0, column=1, padx=10, pady=10)
 
         ttk.Label(frame2, text="Target Velocity (deg/s):").grid(row=0, column=0, padx=5, pady=5, sticky=tk.E)
         self.target_velocity_entry = ttk.Entry(frame2)
@@ -56,8 +60,8 @@ class App:
         self.num_accumulations_entry.grid(row=2, column=1, padx=5, pady=5)
 
         # Create a frame for the third set of parameters (single test)
-        frame3 = ttk.Frame(self.root, padding="10", name="frame3", borderwidth=2, relief="groove")
-        frame3.grid(row=0, column=6, padx=10, pady=10)
+        frame3 = ttk.Frame(container_frame, padding="10", name="frame3", borderwidth=2, relief="groove")
+        frame3.grid(row=0, column=2, padx=10, pady=10)
 
         ttk.Label(frame3, text="Single Test Angle (degrees):").grid(row=0, column=0, padx=5, pady=5, sticky=tk.E)
         self.single_test_angle_entry = ttk.Entry(frame3)
@@ -73,7 +77,7 @@ class App:
 
         # Create a horizontal frame for buttons and progress bar (2:1 ratio)
         button_frame = ttk.Frame(self.root, padding="10", name="button_frame", borderwidth=2, relief="groove")
-        button_frame.grid(row=1, column=0, columnspan=3, pady=10)
+        button_frame.grid(row=2, column=0, columnspan=3, padx=5,pady=2)
 
         # Home button
         ttk.Button(button_frame, text="Home", command=self.motor_controller.move_home).grid(row=0, column=0, padx=(5, 5), pady=5)
@@ -98,7 +102,7 @@ class App:
 
         # Create a frame for angle adjustment
         angle_adjust_frame = ttk.Frame(self.root, padding="10", name="angle_adjust_frame", borderwidth=2, relief="groove")
-        angle_adjust_frame.grid(row=1, column=3, pady=10)
+        angle_adjust_frame.grid(row=2, column=3, pady=2)
 
         ttk.Label(angle_adjust_frame, text="Angle Size:").grid(row=0, column=0, padx=5, pady=5, sticky=tk.E)
         self.angle_size_entry = ttk.Entry(angle_adjust_frame)
@@ -114,7 +118,7 @@ class App:
         self.canvas = FigureCanvasTkAgg(self.fig, master=self.root)
         self.canvas_widget = self.canvas.get_tk_widget()
         self.canvas_widget.grid(row=4, column=0, columnspan=4, pady=10)
-    
+
     def up_angle(self):
         # Implement the logic for increasing the angle
         current_angle = self.motor_controller.inst.position()
