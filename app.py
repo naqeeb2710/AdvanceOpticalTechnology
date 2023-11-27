@@ -78,9 +78,13 @@ class App:
         # Create a horizontal frame for buttons and progress bar (2:1 ratio)
         button_frame = ttk.Frame(self.root, padding="10", name="button_frame", borderwidth=2, relief="groove")
         button_frame.grid(row=2, column=0, columnspan=3, padx=5,pady=2)
+        
+        # Create a style to configure the button color
+        style = ttk.Style()
+        style.configure("Green.TButton", background="green")
 
         # Home button
-        ttk.Button(button_frame, text="Home", command=self.motor_controller.move_home).grid(row=0, column=0, padx=(5, 5), pady=5)
+        ttk.Button(button_frame, text="Home", command=self.motor_controller.move_home,style="Green.TButton").grid(row=0, column=0, padx=(5, 5), pady=5)
 
         # Start Measurement button
         ttk.Button(button_frame, text="Start Measurement", command=self.start_measurement_thread).grid(row=0, column=1, padx=(5, 5), pady=5)
@@ -92,8 +96,11 @@ class App:
         self.progress_bar = ttk.Progressbar(button_frame, orient='horizontal', length=130, mode='determinate')
         self.progress_bar.grid(row=0, column=4, padx=(0, 5), pady=5)  # Adjusted the padx to shift the progress bar to the left
 
+        # Create a style to configure the button color
+        style = ttk.Style()
+        style.configure("Red.TButton", background="red")
         # Quit button
-        ttk.Button(button_frame, text="Quit", command=self.quit_application).grid(row=0, column=6, padx=(5, 5), pady=5)
+        ttk.Button(button_frame, text="Quit", command=self.quit_application,style="Red.TButton").grid(row=0, column=6, padx=(5, 5), pady=5)
         # Bind the close button to the quit_application method
         self.root.protocol("WM_DELETE_WINDOW", self.quit_application)
 
@@ -121,11 +128,17 @@ class App:
 
     def up_angle(self):
         # Implement the logic for increasing the angle
+        if hasattr(self.motor_controller.inst, 'velocity_max'):
+            self.motor_controller.inst.velocity_max(0) # Set velocity to 0 before cleanup
+        self.motor_controller.inst.velocity_max(25)
         current_angle = self.motor_controller.inst.position()
         self.motor_controller.move_to_angle(current_angle + float(self.angle_size_entry.get()))
 
     def down_angle(self):
         # Implement the logic for decreasing the angle
+        if hasattr(self.motor_controller.inst, 'velocity_max'):
+            self.motor_controller.inst.velocity_max(0) # Set velocity to 0 before cleanup
+        self.motor_controller.inst.velocity_max(25)
         current_angle = self.motor_controller.inst.position()
         self.motor_controller.move_to_angle(current_angle - float(self.angle_size_entry.get()))
 

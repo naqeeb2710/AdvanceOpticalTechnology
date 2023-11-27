@@ -87,6 +87,9 @@ class MotorController:
         self.inst = Thorlabs_K10CR1("K10CR1", 0, self.apt)
     
     def move_home(self):
+        if hasattr(self.inst, 'velocity_max'):
+            self.inst.velocity_max(0) # Set velocity to 0 before cleanup
+        self.inst.velocity_max(25)
         self.inst.move_home()
 
     def configure_motor(self, target_velocity):
