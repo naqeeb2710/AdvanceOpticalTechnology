@@ -39,7 +39,7 @@ The application automatically saves the collected data in CSV files within the "
 3. **Run the Application:**
    - Type the following command and press Enter to run the application:
      ```
-     python application.py
+     python app.py
      ```
 
 4. **GUI Interface:**
