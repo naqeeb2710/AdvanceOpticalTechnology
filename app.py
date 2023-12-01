@@ -43,6 +43,11 @@ class App:
         self.step_size_entry = ttk.Entry(frame1)
         self.step_size_entry.grid(row=2, column=1, padx=5, pady=5)
 
+        #create a input for experiment name
+        ttk.Label(frame1, text="Sample name:").grid(row=3, column=0, padx=5, pady=5, sticky=tk.E)
+        self.experiment_name_entry = ttk.Entry(frame1)
+        self.experiment_name_entry.grid(row=3, column=1, padx=5, pady=5)
+
         # Create a frame for the second set of parameters
         frame2 = ttk.Frame(container_frame, padding="10", name="frame2", borderwidth=2, relief="groove")
         frame2.grid(row=0, column=1, padx=10, pady=10)
@@ -156,12 +161,13 @@ class App:
             num_accumulations = int(self.num_accumulations_entry.get())
             exposure_time_micros = float(self.exposure_time_entry.get())
             target_velocity = float(self.target_velocity_entry.get())
+            experiment_name = self.experiment_name_entry.get()
 
             # Configure motor
             self.motor_controller.configure_motor(target_velocity=target_velocity)
 
             # Create measurement controller
-            measurement_controller = MeasurementController(self.spectrometer_controller, self.motor_controller)
+            measurement_controller = MeasurementController(self.spectrometer_controller, self.motor_controller,experiment_name)
 
             # Clear previous plot
             self.ax.clear()

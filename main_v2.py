@@ -107,10 +107,11 @@ class MotorController:
         self.apt.apt_clean_up()
 
 class MeasurementController:
-    def __init__(self, spectrometer_controller, motor_controller):
+    def __init__(self, spectrometer_controller, motor_controller, experiment_name):
         self.spectrometer_controller = spectrometer_controller
         self.motor_controller = motor_controller
         self.current_csv_filename = None
+        self.experiment_name = experiment_name  # Add an experiment name attribute
 
     def measure_at_angles(self, initial_angle, final_angle, step_size, num_accumulations, exposure_time_micros, delay_seconds):
         current_angle = initial_angle
@@ -128,7 +129,7 @@ class MeasurementController:
             # Update the class variable
             MeasurementController.current_angle = current_angle_normalized
 
-            self.current_csv_filename = f'angle_{current_angle_normalized}_integrationtime_{exposure_time_micros}_acc_{num_accumulations}.csv'
+            self.current_csv_filename = f'{self.experiment_name}_angle_{int(current_angle_normalized)}_integrationtime_{int(exposure_time_micros)}_acc_{num_accumulations}.csv'
             self.spectrometer_controller.perform_accumulation(num_accumulations, exposure_time_micros, self.current_csv_filename)
 
             current_angle += step_size
@@ -138,7 +139,6 @@ class MeasurementController:
         self.motor_controller.move_to_angle(final_angle_normalized)
         final_position = self.motor_controller.inst.position()
         print(f"Final Position: {final_position} degrees")
-
 
 
 def main():
@@ -152,19 +152,20 @@ def main():
 
     try:
         # Input parameters
+        experiment_name = input("Enter the experiment name: ")  # Add an experiment name input
         initial_angle = float(input("Enter the initial angle in degrees: "))
         step_size = float(input("Enter the step size in degrees: "))
         final_angle = float(input("Enter the final angle in degrees: "))
         num_accumulations = int(input("Enter number of accumulations: "))
         exposure_time_micros = float(input("Enter integration time in microseconds: "))
-        delay_seconds = 5
+        delay_seconds = 3
 
         # Take target velocity from the user
         target_velocity = float(input("Enter the target velocity in deg/s: "))
         motor_controller.configure_motor(target_velocity=target_velocity)
 
         # Create measurement controller
-        measurement_controller = MeasurementController(spectrometer_controller, motor_controller)
+        measurement_controller = MeasurementController(spectrometer_controller, motor_controller,experiment_name)
 
         # Measure at angles with default velocity
         measurement_controller.measure_at_angles(
