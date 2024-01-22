@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, IntVar
 from threading import Thread
 import sys
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -13,11 +13,14 @@ from main_v2 import MeasurementController
 class App:
     def __init__(self, root):
         self.root = root
-        self.root.title("ASE")
+        self.root.title("Amplified Spontaneous Emission Measurement App")
 
         # Initialize controllers
         self.spectrometer_controller = SpectrometerController()
         self.motor_controller = MotorController()
+
+        # Create IntVar to store checkbox state
+        self.go_home_var = IntVar(value=1)  # Default to checked
 
         # Set up GUI components
         self.create_widgets()
@@ -63,6 +66,10 @@ class App:
         ttk.Label(frame2, text="Num Accumulations:").grid(row=2, column=0, padx=5, pady=5, sticky=tk.E)
         self.num_accumulations_entry = ttk.Entry(frame2)
         self.num_accumulations_entry.grid(row=2, column=1, padx=5, pady=5)
+
+        # Create a checkbox for "Go Home" or "After Measurement" in frame2
+        self.go_home_checkbox = ttk.Checkbutton(frame2, text="Go Home After Measurement", variable=self.go_home_var)
+        self.go_home_checkbox.grid(row=3, column=0, columnspan=2, pady=5, sticky=tk.W) 
 
         # Create a frame for the third set of parameters (single test)
         frame3 = ttk.Frame(container_frame, padding="10", name="frame3", borderwidth=2, relief="groove")
@@ -134,18 +141,22 @@ class App:
     def up_angle(self):
         # Implement the logic for increasing the angle
         if hasattr(self.motor_controller.inst, 'velocity_max'):
-            self.motor_controller.inst.velocity_max(0) # Set velocity to 0 before cleanup
+            self.motor_controller.inst.velocity_max(0)  # Set velocity to 0 before cleanup
         self.motor_controller.inst.velocity_max(25)
         current_angle = self.motor_controller.inst.position()
-        self.motor_controller.move_to_angle(current_angle + float(self.angle_size_entry.get()))
+        angle_size = float(self.angle_size_entry.get())
+        new_angle = (current_angle + angle_size) % 360  # Ensure the angle stays within [0, 360)
+        self.motor_controller.move_to_angle(new_angle)
 
     def down_angle(self):
         # Implement the logic for decreasing the angle
         if hasattr(self.motor_controller.inst, 'velocity_max'):
-            self.motor_controller.inst.velocity_max(0) # Set velocity to 0 before cleanup
+            self.motor_controller.inst.velocity_max(0)  # Set velocity to 0 before cleanup
         self.motor_controller.inst.velocity_max(25)
         current_angle = self.motor_controller.inst.position()
-        self.motor_controller.move_to_angle(current_angle - float(self.angle_size_entry.get()))
+        angle_size = float(self.angle_size_entry.get())
+        new_angle = (current_angle - angle_size) % 360  # Ensure the angle stays within [0, 360)
+        self.motor_controller.move_to_angle(new_angle)
 
     def start_measurement_thread(self):
         # Start a new thread for the measurement to avoid blocking the main thread
@@ -209,7 +220,7 @@ class App:
 
                 # Increment the current_step for the next iteration
                 current_step += 1
-
+            
             # Clear input fields after the calculation
             self.initial_angle_entry.delete(0, tk.END)
             self.final_angle_entry.delete(0, tk.END)
@@ -218,12 +229,17 @@ class App:
             self.exposure_time_entry.delete(0, tk.END)
             self.num_accumulations_entry.delete(0, tk.END)
 
+            # Check the checkbox state
+            if self.go_home_var.get():
+                # Go Home if the checkbox is checked
+                self.motor_controller.move_home()
+
         except Exception as e:
             print(f"An error occurred: {e}")
             # Close motor and spectrometer in case of an error
             self.motor_controller.close_motor()
             self.spectrometer_controller.disconnect_spectrometer()
-        
+
     def perform_single_test(self):
         try:
         # Get user input values for single test
