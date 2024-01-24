@@ -9,6 +9,8 @@ import os
 from main_v2 import SpectrometerController
 from main_v2 import MotorController
 from main_v2 import MeasurementController
+from powermeterr import OphirDevice
+
 
 class App:
     def __init__(self, root):
@@ -18,6 +20,7 @@ class App:
         # Initialize controllers
         self.spectrometer_controller = SpectrometerController()
         self.motor_controller = MotorController()
+        self.ophir_device = OphirDevice()  # Add this line
 
         # Create IntVar to store checkbox state
         self.go_home_var = IntVar(value=1)  # Default to checked
@@ -87,6 +90,26 @@ class App:
         self.single_test_exposure_time_entry = ttk.Entry(frame3)
         self.single_test_exposure_time_entry.grid(row=2, column=1, padx=5, pady=5)
 
+        # Create a frame for range and wavelength
+        range_wavelength_frame = ttk.Frame(self.root, padding="10", name="range_wavelength_frame", borderwidth=2, relief="groove")
+        range_wavelength_frame.grid(row=2, column=4, pady=2, padx=10)
+
+        # Range scrollbar
+        ttk.Label(range_wavelength_frame, text="Range:").grid(row=0, column=0, padx=5, pady=5, sticky=tk.E)
+        self.range_scrollbar = ttk.Scrollbar(range_wavelength_frame, orient="horizontal", command=self.on_range_scroll)
+        self.range_scrollbar.grid(row=0, column=1, padx=5, pady=5)
+        self.range_var = tk.StringVar()
+        self.range_entry = ttk.Entry(range_wavelength_frame, textvariable=self.range_var)
+        self.range_entry.grid(row=0, column=2, padx=5, pady=5)
+
+        # Wavelength scrollbar
+        ttk.Label(range_wavelength_frame, text="Wavelength:").grid(row=1, column=0, padx=5, pady=5, sticky=tk.E)
+        self.wavelength_scrollbar = ttk.Scrollbar(range_wavelength_frame, orient="horizontal", command=self.on_wavelength_scroll)
+        self.wavelength_scrollbar.grid(row=1, column=1, padx=5, pady=5)
+        self.wavelength_var = tk.StringVar()
+        self.wavelength_entry = ttk.Entry(range_wavelength_frame, textvariable=self.wavelength_var)
+        self.wavelength_entry.grid(row=1, column=2, padx=5, pady=5)
+
         # Create a horizontal frame for buttons and progress bar (2:1 ratio)
         button_frame = ttk.Frame(self.root, padding="10", name="button_frame", borderwidth=2, relief="groove")
         button_frame.grid(row=2, column=0, columnspan=3, padx=5,pady=2)
@@ -96,7 +119,7 @@ class App:
         style.configure("Green.TButton", background="green")
 
         # Home button
-        ttk.Button(button_frame, text="Home", command=self.home_angle,style="Green.TButton").grid(row=0, column=0, padx=(5, 5), pady=5)
+        ttk.Button(button_frame, text="Home", command=self.motor_controller.move_home,style="Green.TButton").grid(row=0, column=0, padx=(5, 5), pady=5)
 
         # Start Measurement button
         ttk.Button(button_frame, text="Start Measurement", command=self.start_measurement_thread).grid(row=0, column=1, padx=(5, 5), pady=5)
@@ -138,6 +161,20 @@ class App:
         self.canvas_widget = self.canvas.get_tk_widget()
         self.canvas_widget.grid(row=4, column=0, columnspan=4, pady=10)
 
+    def on_range_scroll(self, *args):
+        # Update the range entry when the scrollbar is moved
+        current_value = float(self.range_scrollbar.get()[0])  # Extract the first element from the tuple
+        self.range_var.set(current_value)
+        self.range_entry.delete(0, tk.END)
+        self.range_entry.insert(0, current_value)
+
+    def on_wavelength_scroll(self, *args):
+        # Update the wavelength entry when the scrollbar is moved
+        current_value = float(self.wavelength_scrollbar.get()[0])  # Extract the first element from the tuple
+        self.wavelength_var.set(current_value)
+        self.wavelength_entry.delete(0, tk.END)
+        self.wavelength_entry.insert(0, current_value)
+
     def up_angle(self):
         # Implement the logic for increasing the angle
         if hasattr(self.motor_controller.inst, 'velocity_max'):
@@ -158,12 +195,40 @@ class App:
         new_angle = (current_angle - angle_size) % 360  # Ensure the angle stays within [0, 360)
         self.motor_controller.move_to_angle(new_angle)
 
-    def home_angle(self):
-        # Implement the logic for moving the angle to 0
-        if hasattr(self.motor_controller.inst, 'velocity_max'):
-            self.motor_controller.inst.velocity_max(0)
-        self.motor_controller.inst.velocity_max(25)
-        self.motor_controller.move_to_angle(0)
+    def configure_power_meter(self):
+        try:
+            # Scan for connected Ophir devices
+            self.ophir_device.scan_usb_devices()
+
+            if not self.ophir_device.DeviceList:
+                print("No Ophir device found.")
+                return
+
+            selected_device_index = 0
+            device_handle = self.ophir_device.open_device(selected_device_index)
+
+            # Configure the power meter with user input (you can modify this as needed)
+            mode = 1  # 0 for power, 1 for energy, 2 for exposure
+            ranges = list(self.ophir_device.OphirCOM.GetRanges(device_handle, 0))
+            wavelengths = list(self.ophir_device.OphirCOM.GetWavelengths(device_handle, 0))
+
+            # Update the range scrollbar and entry
+            self.range_scrollbar.configure(from_=min(ranges), to=max(ranges))
+            self.range_var.set(ranges[0])  # Set an initial value
+            self.range_entry.delete(0, tk.END)
+            self.range_entry.insert(0, ranges[0])
+
+            # Update the wavelength scrollbar and entry
+            self.wavelength_scrollbar.configure(from_=min(wavelengths), to=max(wavelengths))
+            self.wavelength_var.set(wavelengths[0])  # Set an initial value
+            self.wavelength_entry.delete(0, tk.END)
+            self.wavelength_entry.insert(0, wavelengths[0])
+
+            self.ophir_device.configure_device(device_handle, mode, wavelengths[0], ranges[0])
+            self.ophir_device.start_stream(device_handle)
+
+        except Exception as e:
+            print(f"Error configuring power meter: {e}")
 
     def start_measurement_thread(self):
         # Start a new thread for the measurement to avoid blocking the main thread
@@ -296,4 +361,5 @@ class App:
 # Create the main application window
 root = tk.Tk()
 app = App(root)
+app.configure_power_meter()  # Call this method to configure the power meter
 root.mainloop()

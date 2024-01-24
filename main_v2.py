@@ -21,16 +21,20 @@ class SpectrometerController:
         if self.spec is None:
             print("Spectrometer not connected. Please connect first.")
             return
-
+        
+        time.sleep(2.0)
         # Set integration time
         self.spec.integration_time_micros(exposure_time_micros)
 
         # Initialize lists to store wavelengths and intensities
         wavelengths = []
         intensities = [[] for _ in range(num_accumulations)]
+        
+        
 
         # Perform accumulation
         for i in range(num_accumulations):
+            time.sleep(0.5)
             current_wavelengths = self.spec.wavelengths()
             current_intensities = self.spec.intensities()
 
@@ -148,7 +152,7 @@ def main():
     # Move to zero and recalibrate
     # do you want to go home 
     if input("Do you want to go home? (y/n): ") == 'y':
-        motor_controller.move_home()
+        motor_controller.move_to_angle(0)
 
     try:
         # Input parameters
@@ -158,7 +162,7 @@ def main():
         final_angle = float(input("Enter the final angle in degrees: "))
         num_accumulations = int(input("Enter number of accumulations: "))
         exposure_time_micros = float(input("Enter integration time in microseconds: "))
-        delay_seconds = 3
+        delay_seconds = 1
 
         # Take target velocity from the user
         target_velocity = float(input("Enter the target velocity in deg/s: "))
