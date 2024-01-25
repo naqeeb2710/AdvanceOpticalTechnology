@@ -59,7 +59,7 @@ class App:
         self.target_velocity_entry = ttk.Entry(frame2)
         self.target_velocity_entry.grid(row=0, column=1, padx=5, pady=5)
 
-        ttk.Label(frame2, text="Exposure Time (microseconds):").grid(row=1, column=0, padx=5, pady=5, sticky=tk.E)
+        ttk.Label(frame2, text="Exposure Time (ms):").grid(row=1, column=0, padx=5, pady=5, sticky=tk.E)
         self.exposure_time_entry = ttk.Entry(frame2)
         self.exposure_time_entry.grid(row=1, column=1, padx=5, pady=5)
 
@@ -86,7 +86,7 @@ class App:
         ttk.Label(frame3, text="Single Test Exposure Time (µs):").grid(row=2, column=0, padx=5, pady=5, sticky=tk.E)
         self.single_test_exposure_time_entry = ttk.Entry(frame3)
         self.single_test_exposure_time_entry.grid(row=2, column=1, padx=5, pady=5)
-
+                
         # Create a horizontal frame for buttons and progress bar (2:1 ratio)
         button_frame = ttk.Frame(self.root, padding="10", name="button_frame", borderwidth=2, relief="groove")
         button_frame.grid(row=2, column=0, columnspan=3, padx=5,pady=2)
@@ -96,9 +96,10 @@ class App:
         style.configure("Green.TButton", background="green")
 
         # Home button
-        ttk.Button(button_frame, text="Home", command=self.home_angle,style="Green.TButton").grid(row=0, column=0, padx=(5, 5), pady=5)
+        ttk.Button(button_frame, text="Home", command=self.motor_controller.move_home,style="Green.TButton").grid(row=0, column=0, padx=(5, 5), pady=5)
 
         # Start Measurement button
+
         ttk.Button(button_frame, text="Start Measurement", command=self.start_measurement_thread).grid(row=0, column=1, padx=(5, 5), pady=5)
 
         # Progress bar
@@ -123,12 +124,12 @@ class App:
         angle_adjust_frame = ttk.Frame(self.root, padding="10", name="angle_adjust_frame", borderwidth=2, relief="groove")
         angle_adjust_frame.grid(row=2, column=3, pady=2)
 
-        ttk.Label(angle_adjust_frame, text="Angle Size:").grid(row=0, column=0, padx=5, pady=5, sticky=tk.E)
+        ttk.Label(angle_adjust_frame, text="Jog:").grid(row=0, column=0, padx=5, pady=5, sticky=tk.E)
         self.angle_size_entry = ttk.Entry(angle_adjust_frame)
         self.angle_size_entry.grid(row=0, column=1, padx=5, pady=5)
 
-        ttk.Button(angle_adjust_frame, text="Up Angle", command=self.up_angle).grid(row=0, column=2, padx=(5, 5), pady=5)
-        ttk.Button(angle_adjust_frame, text="Down Angle", command=self.down_angle).grid(row=0, column=3, padx=(5, 5), pady=5)
+        ttk.Button(angle_adjust_frame, text="+", command=self.up_angle).grid(row=0, column=2, padx=(5, 5), pady=5)
+        ttk.Button(angle_adjust_frame, text="-", command=self.down_angle).grid(row=0, column=3, padx=(5, 5), pady=5)
 
         # Create a figure and axes to display the plot
         self.fig = Figure(figsize=(7, 5), dpi=100)
@@ -177,7 +178,9 @@ class App:
             step_size = float(self.step_size_entry.get())
             final_angle = float(self.final_angle_entry.get())
             num_accumulations = int(self.num_accumulations_entry.get())
-            exposure_time_micros = float(self.exposure_time_entry.get())
+            exposure_time_mili= float(self.exposure_time_entry.get())
+            exposure_time_micros = exposure_time_mili * 1000.0
+
             target_velocity = float(self.target_velocity_entry.get())
             experiment_name = self.experiment_name_entry.get()
 
@@ -198,7 +201,7 @@ class App:
                 angle = (initial_angle + (current_step - 1) * step_size)
                 
                 measurement_controller.measure_at_angles(
-                    angle, angle, 1, num_accumulations, exposure_time_micros, 3  # Fixed delay of 3 seconds
+                    angle, angle, 1, num_accumulations, exposure_time_micros, 0.5
                 )
 
                 # Access the current_csv_filename from the MeasurementController
@@ -232,14 +235,14 @@ class App:
             self.initial_angle_entry.delete(0, tk.END)
             self.final_angle_entry.delete(0, tk.END)
             self.step_size_entry.delete(0, tk.END)
-            self.target_velocity_entry.delete(0, tk.END)
+            # self.target_velocity_entry.delete(0, tk.END)
             self.exposure_time_entry.delete(0, tk.END)
             self.num_accumulations_entry.delete(0, tk.END)
 
             # Check the checkbox state
             if self.go_home_var.get():
                 # Go Home if the checkbox is checked
-                self.motor_controller.move_home()
+                self.motor_controller.move_to_angle(0)
 
         except Exception as e:
             print(f"An error occurred: {e}")
@@ -252,7 +255,8 @@ class App:
         # Get user input values for single test
             single_test_angle = float(self.single_test_angle_entry.get())
             single_test_accumulations = int(self.single_test_accumulations_entry.get())
-            single_test_exposure_time_micros = float(self.single_test_exposure_time_entry.get())
+            single_test_exposure_time_mili = float(self.single_test_exposure_time_entry.get())
+            single_test_exposure_time_micros = single_test_exposure_time_mili * 1000.0
 
             # Create measurement controller
             measurement_controller = MeasurementController(self.spectrometer_controller, self.motor_controller)

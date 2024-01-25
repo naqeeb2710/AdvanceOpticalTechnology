@@ -6,6 +6,10 @@ from seabreeze.spectrometers import list_devices, Spectrometer
 from qcodes_contrib_drivers.drivers.Thorlabs.APT import Thorlabs_APT
 from qcodes_contrib_drivers.drivers.Thorlabs.K10CR1 import Thorlabs_K10CR1
 
+def time_counter(start_time, end_time, operation_name):
+    elapsed_time = end_time - start_time
+    print(f"{operation_name} took {elapsed_time:.2f} seconds")
+
 
 class SpectrometerController:
     def __init__(self):
@@ -21,20 +25,16 @@ class SpectrometerController:
         if self.spec is None:
             print("Spectrometer not connected. Please connect first.")
             return
-        
-        time.sleep(2.0)
+
         # Set integration time
         self.spec.integration_time_micros(exposure_time_micros)
 
         # Initialize lists to store wavelengths and intensities
         wavelengths = []
         intensities = [[] for _ in range(num_accumulations)]
-        
-        
 
         # Perform accumulation
         for i in range(num_accumulations):
-            time.sleep(0.5)
             current_wavelengths = self.spec.wavelengths()
             current_intensities = self.spec.intensities()
 
@@ -74,12 +74,12 @@ class SpectrometerController:
         ax.set_ylabel('Intensity')
 
         # Add angle and exposure time information inside the plot
-        info_text = f"Angle: {MeasurementController.current_angle}°\nExp Time: {exposure_time_micros} µs"
+        info_text = f"Angle: {MeasurementController.current_angle}°\nExp Time: {exposure_time_micros/1000.0} ms"
         ax.text(0.98, 0.98, info_text, transform=ax.transAxes, verticalalignment='top', horizontalalignment='right', bbox=dict(boxstyle='round', facecolor='wheat', alpha=1))
 
         plt.savefig(output_plot_filepath, bbox_inches='tight', pad_inches=0.5)
         time.sleep(1.0)
-
+        
     def disconnect_spectrometer(self):
         if self.spec is not None:
             self.spec.close()
@@ -126,7 +126,7 @@ class MeasurementController:
 
             self.motor_controller.move_to_angle(current_angle_normalized)
             current_position = self.motor_controller.inst.position()
-            time.sleep(0.5)  # Pause the execution for 0.5 seconds
+            # time.sleep(0.5)  # Pause the execution for 0.5 seconds
             print(f"Position: {current_position} degrees at angle: {current_angle_normalized} degrees")
             time.sleep(delay_seconds)
 
@@ -161,8 +161,10 @@ def main():
         step_size = float(input("Enter the step size in degrees: "))
         final_angle = float(input("Enter the final angle in degrees: "))
         num_accumulations = int(input("Enter number of accumulations: "))
-        exposure_time_micros = float(input("Enter integration time in microseconds: "))
-        delay_seconds = 1
+        exposure_time_ms = float(input("Enter integration time in milliseconds: "))
+        # Convert milliseconds to microseconds
+        exposure_time_micros = exposure_time_ms * 1000.0
+        delay_seconds = 0.5
 
         # Take target velocity from the user
         target_velocity = float(input("Enter the target velocity in deg/s: "))
