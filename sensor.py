@@ -43,11 +43,11 @@ class Sensor:
         self.DeviceHandle = self.OphirCOM.OpenUSBDevice(Device)  # open first device
         exists = self.OphirCOM.IsSensorExists(self.DeviceHandle, 0)
         if exists:
-            print('diffuser', self.OphirCOM.GetDiffuser(self.DeviceHandle, 0))
-            print('MeasMode', self.OphirCOM.GetMeasurementMode(self.DeviceHandle, 0))
-            print('PulseLengths', self.OphirCOM.GetPulseLengths(self.DeviceHandle, 0))
-            print('Ranges', self.OphirCOM.GetRanges(self.DeviceHandle, 0))
-            print('Wavelengths', self.OphirCOM.GetWavelengths(self.DeviceHandle, 0))
+            # print('diffuser', self.OphirCOM.GetDiffuser(self.DeviceHandle, 0))
+            # print('MeasMode', self.OphirCOM.GetMeasurementMode(self.DeviceHandle, 0))
+            # print('PulseLengths', self.OphirCOM.GetPulseLengths(self.DeviceHandle, 0))
+            # print('Ranges', self.OphirCOM.GetRanges(self.DeviceHandle, 0))
+            # print('Wavelengths', self.OphirCOM.GetWavelengths(self.DeviceHandle, 0))
 
             #self.OphirCOM.StopStream(self.DeviceHandle, 0)
             #self.OphirCOM.SetDiffuser(self.DeviceHandle, 0, self.diffuser)
@@ -99,7 +99,7 @@ class Sensor:
                 print(f"Average Power: {average_power_nanojoules:.2f} nanojoules")
                 self.ready = True
                 # print(events)
-                return events
+                return events, average_power_nanojoules
             print('Not exists!')
         else:
             print('Sensor is not connected!')

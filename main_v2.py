@@ -2,6 +2,7 @@ import os
 import time
 import matplotlib.pyplot as plt
 import csv
+from sensor import Sensor
 from seabreeze.spectrometers import list_devices, Spectrometer
 from qcodes_contrib_drivers.drivers.Thorlabs.APT import Thorlabs_APT
 from qcodes_contrib_drivers.drivers.Thorlabs.K10CR1 import Thorlabs_K10CR1
@@ -117,10 +118,14 @@ class MeasurementController:
         self.spectrometer_controller = spectrometer_controller
         self.motor_controller = motor_controller
         self.current_csv_filename = None
+        self.power_meter = Sensor()
         self.experiment_name = experiment_name  # Add an experiment name attribute
 
     def measure_at_angles(self, initial_angle, final_angle, step_size, num_accumulations, exposure_time_micros, delay_seconds):
         current_angle = initial_angle
+        angle_power_list = []  # Initialize an empty list to store angle-power pairs
+        dump_folder = 'dump'
+        os.makedirs(dump_folder, exist_ok=True)  
 
         while current_angle <= final_angle:
             # Convert the angle to be within the range [0, 360)
@@ -137,7 +142,23 @@ class MeasurementController:
 
             self.current_csv_filename = f'{self.experiment_name}_angle_{int(current_angle_normalized)}_integrationtime_{int(exposure_time_micros)}_acc_{num_accumulations}.csv'
             self.spectrometer_controller.perform_accumulation(num_accumulations, exposure_time_micros, self.current_csv_filename)
+            self.power_meter.connect()
+            self.power_meter.arm()
+            power_data, average_power = self.power_meter.disarm()  # Unpack the tuple to get power data and average power
+            if power_data:
+                print("Power data recorded:")
+                power_meter_filename = os.path.join(dump_folder, f'power_meter_dump_{self.experiment_name}_angle_{current_angle_normalized}.csv')
+                with open(power_meter_filename, 'w') as power_dump:
+                    # Write header
+                    power_dump.write('time, power, status\n')
+                    # Write data rows
+                    for event in power_data:
+                        power_dump.write('%.3f, %.2e, %.2f\n' % (event[0], event[1], event[2]))
+            else:
+                print("No power data recorded.")
 
+            
+            angle_power_list.append([current_angle, average_power])
             current_angle += step_size
 
         # Move to the final angle after completing the loop
@@ -145,7 +166,20 @@ class MeasurementController:
         self.motor_controller.move_to_angle(final_angle_normalized)
         final_position = self.motor_controller.inst.position()
         print(f"Final Position: {final_position} degrees")
+        # print(angle_power_list)
+        # Save the angle-power list to a CSV file
 
+        with open(f'{self.experiment_name}_angle_power.csv', 'w', newline='') as csvfile:
+            csv_writer = csv.writer(csvfile)
+            header = ['Angle (deg)', 'Average Power (nJ)']
+            csv_writer.writerow(header)
+            for row in angle_power_list:
+                csv_writer.writerow(row)
+        plt.figure(figsize=(12, 8))
+        plt.plot(*zip(*angle_power_list))
+        plt.xlabel('Angle (deg)')
+        plt.ylabel('Average Power (nJ)')
+        plt.savefig(f'{self.experiment_name}_angle_power.png', bbox_inches='tight', pad_inches=0.5)
 
 def main():
     spectrometer_controller = SpectrometerController()
@@ -154,7 +188,7 @@ def main():
     # Move to zero and recalibrate
     # do you want to go home 
     if input("Do you want to go home? (y/n): ") == 'y':
-        motor_controller.move_to_angle(0)
+        motor_controller.move_home()
 
     try:
         # Input parameters
