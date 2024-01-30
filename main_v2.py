@@ -89,6 +89,8 @@ class MotorController:
     def __init__(self):
         self.apt = Thorlabs_APT()
         self.inst = Thorlabs_K10CR1("K10CR1", 0, self.apt)
+        self.inst.velocity_max(25)
+        self.inst._set_velocity_acceleration(25)
     
     def move_home(self):
         if hasattr(self.inst, 'velocity_max'):
