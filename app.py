@@ -144,20 +144,6 @@ class App:
         self.canvas_widget = self.canvas.get_tk_widget()
         self.canvas_widget.grid(row=4, column=0, columnspan=4, pady=10)
 
-        
-        # # Create a frame for displaying current velocity and angle
-        # current_info_frame = ttk.Frame(self.root, padding="10", name="current_info_frame", borderwidth=2, relief="groove")
-        # current_info_frame.grid(row=1, column=3, pady=2)
-
-        # ttk.Label(current_info_frame, text="Current Velocity:").grid(row=0, column=0, padx=5, pady=5, sticky=tk.E)
-        # self.current_velocity_label = ttk.Label(current_info_frame, text="0 deg/s")
-        # self.current_velocity_label.grid(row=0, column=1, padx=5, pady=5)
-
-        # ttk.Label(current_info_frame, text="Current Angle:").grid(row=1, column=0, padx=5, pady=5, sticky=tk.E)
-        # self.current_angle_label = ttk.Label(current_info_frame, text="0 degrees")
-        # self.current_angle_label.grid(row=1, column=1, padx=5, pady=5)
-
-
     def up_angle(self):
         # Implement the logic for increasing the angle
         if hasattr(self.motor_controller.inst, 'velocity_max'):
@@ -177,19 +163,6 @@ class App:
         angle_size = float(self.angle_size_entry.get())
         new_angle = (current_angle - angle_size) % 360  # Ensure the angle stays within [0, 360)
         self.motor_controller.move_to_angle(new_angle)
-    
-    # def update_current_info(self):
-    # # Method to update the current velocity and angle labels
-    #     current_velocity = self.motor_controller.inst.velocity()
-    #     current_angle = self.motor_controller.inst.position()
-
-    #     self.current_velocity_label.config(text=f"{current_velocity:.2f} deg/s")
-    #     self.current_angle_label.config(text=f"{current_angle:.2f} degrees")
-
-    #     # Schedule the update after a short delay
-    #     self.current_velocity_label.config(text="10 deg/s")
-    #     self.current_angle_label.config(text="45 degrees")
-    #     self.root.after(500, self.update_current_info)
 
     def home_angle(self):
         # Implement the logic for moving the angle to 0
@@ -264,9 +237,9 @@ class App:
                 current_step += 1
             
             # Clear input fields after the calculation
-            self.initial_angle_entry.delete(0, tk.END)
-            self.final_angle_entry.delete(0, tk.END)
-            self.step_size_entry.delete(0, tk.END)
+            # self.initial_angle_entry.delete(0, tk.END)
+            # self.final_angle_entry.delete(0, tk.END)
+            # self.step_size_entry.delete(0, tk.END)
             # self.target_velocity_entry.delete(0, tk.END)
             self.exposure_time_entry.delete(0, tk.END)
             self.num_accumulations_entry.delete(0, tk.END)
@@ -299,7 +272,7 @@ class App:
             # Perform a single test at the specified angle
             measurement_controller.measure_at_angles(
                 single_test_angle, single_test_angle, 1, single_test_accumulations, single_test_exposure_time_micros,0.5
-                )  # Fixed delay of 3 seconds
+                )  
 
             # Access the current_csv_filename from the MeasurementController
             current_csv_filename = measurement_controller.current_csv_filename
