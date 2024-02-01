@@ -6,9 +6,9 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
 import os
-from main_v2 import SpectrometerController
-from main_v2 import MotorController
-from main_v2 import MeasurementController
+from main_v3 import SpectrometerController
+from main_v3 import MotorController
+from main_v3 import MeasurementController
 from powermeterr import OphirDevice
 
 

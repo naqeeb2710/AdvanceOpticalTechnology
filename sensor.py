@@ -83,15 +83,16 @@ class Sensor:
                 events: list[(float, float, float)] = []
                 total_power = 0.0  # Initialize total power
                 num_events = 0  # Initialize number of events
-                status_counter = 0 
 
                 for i in range(0, len(data[0]), 2):
-                    events.append((data[1][i] - data[1][0], data[0][i], data[2][i]))
-                    total_power += data[0][i]  # Accumulate power for each event
-                    num_events += 1
-        
-                average_power_watts = total_power / num_events
-                average_power_nanojoules = average_power_watts * 1e9
+                    if i>=60 :
+                        events.append((data[1][i] - data[1][0], data[0][i], data[2][i]))
+                        total_power += data[0][i]  # Accumulate power for each event
+                        num_events += 1
+
+                average_power = total_power / num_events
+                print(f"Number of Events: {num_events}", average_power)
+                average_power_nanojoules = average_power * 1e9
                 print(f"Average Power: {average_power_nanojoules:.2f} nanojoules")
                 self.ready = True
 
