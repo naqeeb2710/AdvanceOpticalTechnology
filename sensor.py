@@ -6,7 +6,7 @@ class Sensor:
     diffuser: int = 1  # diffuser (0, ('N/A',))
     measurement_mode: int = 1  # MeasMode (1, ('Power', 'Energy'))
     pulse_length: int = 0 # PulseLengths (0, ('30uS', '1.0mS'))
-    measurement_range: int = 2  #Ranges (2, ('20.0uJ', '2.00uJ', '200nJ', '20.0nJ'))
+    measurement_range: int = 3 #Ranges (2, ('20.0uJ', '2.00uJ', '200nJ', '20.0nJ'))
     wavelength: int = 3  #Wavelengths (1, ('640', '400', '355', '532', '905', '1064'))
 
     def __init__(self):
@@ -17,6 +17,9 @@ class Sensor:
         self.armed: bool = False
         self.is_plasma: bool = False
         self.shotn: int = 0
+    
+    def set_measurement_range(self, measurement_range):
+        self.measurement_range = measurement_range
 
     def status(self) -> int:
         if not self.connected:
@@ -43,14 +46,6 @@ class Sensor:
         self.DeviceHandle = self.OphirCOM.OpenUSBDevice(Device)  # open first device
         exists = self.OphirCOM.IsSensorExists(self.DeviceHandle, 0)
         if exists:
-            # print('diffuser', self.OphirCOM.GetDiffuser(self.DeviceHandle, 0))
-            # print('MeasMode', self.OphirCOM.GetMeasurementMode(self.DeviceHandle, 0))
-            # print('PulseLengths', self.OphirCOM.GetPulseLengths(self.DeviceHandle, 0))
-            # print('Ranges', self.OphirCOM.GetRanges(self.DeviceHandle, 0))
-            # print('Wavelengths', self.OphirCOM.GetWavelengths(self.DeviceHandle, 0))
-
-            #self.OphirCOM.StopStream(self.DeviceHandle, 0)
-            #self.OphirCOM.SetDiffuser(self.DeviceHandle, 0, self.diffuser)
             self.OphirCOM.SetMeasurementMode(self.DeviceHandle, 0, self.measurement_mode)
             self.OphirCOM.SetPulseLength(self.DeviceHandle, 0, self.pulse_length)
             self.OphirCOM.SetRange(self.DeviceHandle, 0, self.measurement_range)
@@ -88,17 +83,18 @@ class Sensor:
                 events: list[(float, float, float)] = []
                 total_power = 0.0  # Initialize total power
                 num_events = 0  # Initialize number of events
+                status_counter = 0 
 
                 for i in range(0, len(data[0]), 2):
                     events.append((data[1][i] - data[1][0], data[0][i], data[2][i]))
                     total_power += data[0][i]  # Accumulate power for each event
                     num_events += 1
-
+        
                 average_power_watts = total_power / num_events
                 average_power_nanojoules = average_power_watts * 1e9
                 print(f"Average Power: {average_power_nanojoules:.2f} nanojoules")
                 self.ready = True
-                # print(events)
+
                 return events, average_power_nanojoules
             print('Not exists!')
         else:
@@ -112,45 +108,46 @@ class Sensor:
             self.OphirCOM.CloseAll()
             self.OphirCOM = None
 
-def main():
-    import time
+# Function to test the sensor
+# def main():
+#     import time
     
-    # Create an instance of the Sensor class
-    Start_time = time.time()
-    sensor = Sensor()
+#     # Create an instance of the Sensor class
+#     Start_time = time.time()
+#     sensor = Sensor()
     
-    # Connect to the sensor
-    if sensor.connect():
-        print("Sensor connected successfully.")
+#     # Connect to the sensor
+#     if sensor.connect():
+#         print("Sensor connected successfully.")
         
-        # Arm the sensor
-        if sensor.arm():
-            print("Sensor armed successfully.")
+#         # Arm the sensor
+#         if sensor.arm():
+#             print("Sensor armed successfully.")
             
-            # Disarm the sensor and get events
-            events = sensor.disarm()
-            if events:
-                print("Events recorded:")
-                with open('dump.csv', 'w') as dump:
-                    # Write header
-                    dump.write('time, power, status\n')
+#             # Disarm the sensor and get events
+#             events = sensor.disarm()
+#             if events:
+#                 print("Events recorded:")
+#                 with open('dump.csv', 'w') as dump:
+#                     # Write header
+#                     dump.write('time, power, status\n')
                     
-                    # Write data rows
-                    for event in events:
-                        dump.write('%.3f, %.2e, %.2f\n' % (event[0], event[1], event[2]))
+#                     # Write data rows
+#                     for event in events:
+#                         dump.write('%.3f, %.2e, %.2f\n' % (event[0], event[1], event[2]))
 
-                print('File written')
+#                 print('File written')
 
-            else:
-                print("No events recorded.")
-        else:
-            print("Failed to arm the sensor.")
-    else:
-        print("Failed to connect to the sensor.")
+#             else:
+#                 print("No events recorded.")
+#         else:
+#             print("Failed to arm the sensor.")
+#     else:
+#         print("Failed to connect to the sensor.")
     
-    # Print the total time taken
-    print(f"Total time: {time.time() - Start_time}s")
+#     # Print the total time taken
+#     print(f"Total time: {time.time() - Start_time}s")
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
 

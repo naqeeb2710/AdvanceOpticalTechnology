@@ -1,6 +1,7 @@
 import os
 import time
 import matplotlib.pyplot as plt
+from matplotlib.ticker import FormatStrFormatter
 import csv
 from sensor import Sensor
 from seabreeze.spectrometers import list_devices, Spectrometer
@@ -21,6 +22,7 @@ class SpectrometerController:
             print(devices[0])
         else:
             print("No spectrometer devices available.")
+        
 
     def perform_accumulation(self, num_accumulations, exposure_time_micros, output_csv_filename):
         if self.spec is None:
@@ -95,14 +97,14 @@ class MotorController:
     
     def move_home(self):
         if hasattr(self.inst, 'velocity_max'):
-            self.inst.velocity_max(0) # Set velocity to 0 before cleanup
+            self.inst.velocity_max(25) # Set velocity to 0 before cleanup
         self.inst.velocity_max(25)
         self.inst.move_home()
 
     def configure_motor(self, target_velocity):
         if hasattr(self.inst, 'velocity_max'):
             self.inst.velocity_max(0) # Set velocity to 0 before cleanup
-        self.inst.velocity_max(target_velocity)
+        self.inst.velocity_max(25)
 
     def move_to_angle(self, angle):
         self.inst.position(angle)
@@ -120,12 +122,20 @@ class MeasurementController:
         self.current_csv_filename = None
         self.power_meter = Sensor()
         self.experiment_name = experiment_name  # Add an experiment name attribute
+        self.default_measurement_range = 3  # Default measurement range is 20.0nJ
+        self.threshold_status_count = 10  # Threshold for status count
+        
 
     def measure_at_angles(self, initial_angle, final_angle, step_size, num_accumulations, exposure_time_micros, delay_seconds):
         current_angle = initial_angle
         angle_power_list = []  # Initialize an empty list to store angle-power pairs
         dump_folder = 'dump'
-        os.makedirs(dump_folder, exist_ok=True)  
+        os.makedirs(dump_folder, exist_ok=True)
+        measurement_range = self.default_measurement_range  # Initialize measurement range 
+        self.power_meter.measurement_range = measurement_range
+        print(self.power_meter.measurement_range)
+        status_counter = 0  # Initialize status counter
+        self.power_meter.connect()
 
         while current_angle <= final_angle:
             # Convert the angle to be within the range [0, 360)
@@ -143,6 +153,7 @@ class MeasurementController:
             self.current_csv_filename = f'{self.experiment_name}_angle_{int(current_angle_normalized)}_integrationtime_{int(exposure_time_micros)}_acc_{num_accumulations}.csv'
             self.spectrometer_controller.perform_accumulation(num_accumulations, exposure_time_micros, self.current_csv_filename)
             self.power_meter.connect()
+            # time.sleep(0.5)
             self.power_meter.arm()
             power_data, average_power = self.power_meter.disarm()  # Unpack the tuple to get power data and average power
             if power_data:
@@ -154,10 +165,23 @@ class MeasurementController:
                     # Write data rows
                     for event in power_data:
                         power_dump.write('%.3f, %.2e, %.2f\n' % (event[0], event[1], event[2]))
+                        if self.power_meter.measurement_range == 3:  # Check if not already in 200nJ range
+                            if event[2] == 1:  # Check if data indicates status change
+                                status_counter += 1
+                                print('status counter = ', status_counter)
             else:
                 print("No power data recorded.")
+            # Check if status counter exceeds threshold
+            if status_counter > self.threshold_status_count:
+                measurement_range = 2  # Change to 200nJ range
+                self.power_meter.measurement_range = measurement_range
+                status_counter = 0  # Reset status counter after changing the range
+                self.power_meter.connect()
+                self.power_meter.arm()
+                power_data, average_power = self.power_meter.disarm()  # Unpack the tuple to get power data and average power
+            else:
+                status_counter = 0  # Reset status counter if not exceeded threshold
 
-            
             angle_power_list.append([current_angle, average_power])
             current_angle += step_size
 
@@ -166,7 +190,7 @@ class MeasurementController:
         self.motor_controller.move_to_angle(final_angle_normalized)
         final_position = self.motor_controller.inst.position()
         print(f"Final Position: {final_position} degrees")
-        # print(angle_power_list)
+        print(angle_power_list)
         # Save the angle-power list to a CSV file
 
         with open(f'{self.experiment_name}_angle_power.csv', 'w', newline='') as csvfile:
@@ -175,11 +199,22 @@ class MeasurementController:
             csv_writer.writerow(header)
             for row in angle_power_list:
                 csv_writer.writerow(row)
+
+        angles, powers = zip(*angle_power_list)
         plt.figure(figsize=(12, 8))
-        plt.plot(*zip(*angle_power_list))
+        plt.scatter(angles, powers)
         plt.xlabel('Angle (deg)')
         plt.ylabel('Average Power (nJ)')
+        # plt.gca().xaxis.set_major_formatter(FormatStrFormatter('%.2f'))  # Set x-axis formatter
+        # plt.gca().yaxis.set_major_formatter(FormatStrFormatter('%.2f'))  # Set y-axis formatter
+        plt.yticks([i for i in range(0, int(max(powers)) + 5, 5)])  # Set ticks at intervals of 2
+        # plt.ylim(0, max(powers) * 1.2)  # Increase y-axis scale by 20%
         plt.savefig(f'{self.experiment_name}_angle_power.png', bbox_inches='tight', pad_inches=0.5)
+        measurement_range = self.default_measurement_range  # Reset measurement range to default
+        self.power_meter.measurement_range = measurement_range
+        self.power_meter.connect()
+        self.power_meter.arm()
+        self.power_meter.disarm()  
 
 def main():
     spectrometer_controller = SpectrometerController()
@@ -221,6 +256,7 @@ def main():
         # Close both spectrometer and motor controller
         spectrometer_controller.disconnect_spectrometer()
         motor_controller.close_motor()
+
 
 if __name__ == "__main__":
     main()
