@@ -167,7 +167,7 @@ def main():
         delay_seconds = 0.5
 
         # Take target velocity from the user
-        target_velocity = float(input("Enter the target velocity in deg/s: "))
+        target_velocity = 25
         motor_controller.configure_motor(target_velocity=target_velocity)
 
         # Create measurement controller

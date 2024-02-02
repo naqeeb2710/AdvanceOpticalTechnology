@@ -130,8 +130,8 @@ class MeasurementController:
         self.experiment_name = experiment_name  # Add an experiment name attribute
         self.default_measurement_range = 3  # Default measurement range is 20.0nJ
         self.threshold_status_count = 5  # Threshold for status count
-        
-    def measure_at_angles(self, initial_angle, final_angle, step_size, num_accumulations, exposure_time_micros, delay_seconds):
+
+    def measure_power_at_angles(self, initial_angle, final_angle,step_size, delay_seconds):
         current_angle = initial_angle
         angle_power_list = []  # Initialize an empty list to store angle-power pairs
         dump_folder = 'dump'
@@ -141,6 +141,97 @@ class MeasurementController:
         print(self.power_meter.measurement_range)
         status_counter = 0  # Initialize status counter
         self.power_meter.connect()
+
+        while current_angle <= final_angle:
+            # Convert the angle to be within the range [0, 360)
+            current_angle_normalized = current_angle % 360
+
+            self.motor_controller.move_to_angle(current_angle_normalized)
+            current_position = self.motor_controller.inst.position()
+            # time.sleep(0.5)  # Pause the execution for 0.5 seconds
+            print(f"Position: {current_position} degrees at angle: {current_angle_normalized} degrees")
+            time.sleep(delay_seconds)
+
+            # Update the class variable
+            MeasurementController.current_angle = current_angle_normalized
+
+            self.power_meter.connect()
+            # time.sleep(0.1)
+            self.power_meter.arm()
+            power_data, average_power = self.power_meter.disarm()  # Unpack the tuple to get power data and average power
+            if power_data:
+                print("Power data recorded:")
+                power_meter_filename = os.path.join(dump_folder, f'power_meter_dump_{self.experiment_name}_angle_{current_angle_normalized}.csv')
+                with open(power_meter_filename, 'w') as power_dump:
+                    # Write header
+                    power_dump.write('time, power, status\n')
+                    # Write data rows
+                    for event in power_data:
+                        power_dump.write('%.3f, %.2e, %.2f\n' % (event[0], event[1], event[2]))
+                        if self.power_meter.measurement_range == 3:  # Check if not already in 200nJ range
+                            if event[2] == 1:  # Check if data indicates status change
+                                status_counter += 1
+                                print('status counter = ', status_counter)
+            else:
+                print("No power data recorded.")
+            # Check if status counter exceeds threshold
+            if status_counter > self.threshold_status_count:
+                measurement_range = 2  # Change to 200nJ range
+                self.power_meter.measurement_range = measurement_range
+                status_counter = 0  # Reset status counter after changing the range
+                self.power_meter.connect()
+                # time.sleep(0.1)
+                self.power_meter.arm()
+                power_data, average_power = self.power_meter.disarm()
+                if power_data:
+                    print("Power data recorded:")
+                    power_meter_filename = os.path.join(dump_folder, f'power_meter_dump_{self.experiment_name}_angle_{current_angle_normalized}.csv')
+                    with open(power_meter_filename, 'w') as power_dump:
+                        # Write header
+                        power_dump.write('time, power, status\n')
+                        # Write data rows
+                        for event in power_data:
+                            power_dump.write('%.3f, %.2e, %.2f\n' % (event[0], event[1], event[2]))
+                  # Unpack the tuple to get power data and average power
+            else:
+                status_counter = 0  # Reset status counter if not exceeded threshold
+
+            angle_power_list.append([current_angle, average_power])
+            current_angle += step_size
+
+        # Move to the final angle after completing the loop
+        final_angle_normalized = final_angle % 360
+        self.motor_controller.move_to_angle(final_angle_normalized)
+        final_position = self.motor_controller.inst.position()
+        print(f"Final Position: {final_position} degrees")
+        print(angle_power_list)
+        # Save the angle-power list to a CSV file
+
+        with open(f'{self.experiment_name}_angle_power.csv', 'w', newline='') as csvfile:
+            csv_writer = csv.writer(csvfile)
+            header = ['Angle (deg)', 'Average Power (nJ)']
+            csv_writer.writerow(header)
+            for row in angle_power_list:
+                csv_writer.writerow(row)
+
+        angles, powers = zip(*angle_power_list)
+        plt.figure(figsize=(12, 8))
+        plt.scatter(angles, powers)
+        plt.xlabel('Angle (deg)')
+        plt.ylabel('Average Power (nJ)')
+        plt.yticks([i for i in range(0, int(max(powers)) + 5, 5)])  # Set ticks at intervals of 2
+        plt.savefig(f'{self.experiment_name}_angle_power.png', bbox_inches='tight', pad_inches=0.5)
+
+    def measure_at_angles(self, initial_angle, final_angle, step_size, num_accumulations, exposure_time_micros, delay_seconds):
+        current_angle = initial_angle
+        # angle_power_list = []  # Initialize an empty list to store angle-power pairs
+        # dump_folder = 'dump'
+        # os.makedirs(dump_folder, exist_ok=True)
+        # measurement_range = self.default_measurement_range  # Initialize measurement range 
+        # self.power_meter.measurement_range = measurement_range
+        # print(self.power_meter.measurement_range)
+        # status_counter = 0  # Initialize status counter
+        # self.power_meter.connect()
 
         while current_angle <= final_angle:
             # Convert the angle to be within the range [0, 360)

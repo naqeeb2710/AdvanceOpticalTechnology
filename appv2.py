@@ -139,29 +139,58 @@ class App:
         ttk.Button(angle_adjust_frame, text="+", command=self.up_angle).grid(row=0, column=2, padx=(5, 5), pady=5)
         ttk.Button(angle_adjust_frame, text="-", command=self.down_angle).grid(row=0, column=3, padx=(5, 5), pady=5)
 
-       # Create a figure and axes to display the plot
+    #    # Create a figure and axes to display the plot
+    #     self.fig = Figure(figsize=(7, 5), dpi=100)
+    #     self.ax = self.fig.add_subplot(111)
+
+    #     self.canvas = FigureCanvasTkAgg(self.fig, master=self.root)
+    #     self.canvas_widget = self.canvas.get_tk_widget()
+    #     self.canvas_widget.grid(row=4, column=0, columnspan=3, pady=10)  # Adjusted columnspan to 3
+
+    #     # Create a frame for displaying current velocity and angle
+    #     current_info_frame = ttk.Frame(self.root, padding="10", name="current_info_frame", borderwidth=2, relief="groove")
+    #     current_info_frame.grid(row=4, column=2, pady=2, columnspan=1, sticky=tk.W)  # Adjusted column and columnspan
+
+    #     ttk.Label(current_info_frame, text="Current Velocity:").grid(row=0, column=0, padx=5, pady=5, sticky=tk.E)
+    #     self.current_velocity_label = ttk.Label(current_info_frame, text="0 deg/s")
+    #     self.current_velocity_label.grid(row=0, column=1, padx=5, pady=5)
+
+    #     ttk.Label(current_info_frame, text="Current Accleration:").grid(row=2, column=0, padx=5, pady=5, sticky=tk.E)
+    #     self.current_acceleration_label = ttk.Label(current_info_frame, text="0 deg/s^2")
+    #     self.current_acceleration_label.grid(row=2, column=1, padx=5, pady=5)
+
+    #     ttk.Label(current_info_frame, text="Current Angle:").grid(row=1, column=0, padx=5, pady=5, sticky=tk.E)
+    #     self.current_angle_label = ttk.Label(current_info_frame, text="0 degrees")
+    #     self.current_angle_label.grid(row=1, column=1, padx=5, pady=5)
+    
+        # Create a frame for displaying current velocity, acceleration, and angle
+        current_info_frame = ttk.Frame(self.root, padding="10", name="current_info_frame", borderwidth=2, relief="groove")
+        current_info_frame.grid(row=4, column=0, pady=2, sticky="nsew")
+
+        # Divide the frame into two columns: 3:1 ratio
+        current_info_frame.grid_columnconfigure(0, weight=3)
+        current_info_frame.grid_columnconfigure(1, weight=1)
+
+        # Create a figure and axes to display the plot
         self.fig = Figure(figsize=(7, 5), dpi=100)
         self.ax = self.fig.add_subplot(111)
 
-        self.canvas = FigureCanvasTkAgg(self.fig, master=self.root)
+        self.canvas = FigureCanvasTkAgg(self.fig, master=current_info_frame)
         self.canvas_widget = self.canvas.get_tk_widget()
-        self.canvas_widget.grid(row=4, column=0, columnspan=3, pady=10)  # Adjusted columnspan to 3
+        self.canvas_widget.grid(row=0, column=0, pady=10, sticky="nsew")  # Adjusted sticky
 
-        # Create a frame for displaying current velocity and angle
-        current_info_frame = ttk.Frame(self.root, padding="10", name="current_info_frame", borderwidth=2, relief="groove")
-        current_info_frame.grid(row=4, column=2, pady=2, columnspan=1, sticky=tk.W)  # Adjusted column and columnspan
-
-        ttk.Label(current_info_frame, text="Current Velocity:").grid(row=0, column=0, padx=5, pady=5, sticky=tk.E)
+        # Create labels for current velocity, acceleration, and angle
+        ttk.Label(current_info_frame, text="Current Velocity:").grid(row=1, column=1, padx=5, pady=5, sticky="e")
         self.current_velocity_label = ttk.Label(current_info_frame, text="0 deg/s")
-        self.current_velocity_label.grid(row=0, column=1, padx=5, pady=5)
+        self.current_velocity_label.grid(row=1, column=0, padx=5, pady=5, sticky="w")
 
-        ttk.Label(current_info_frame, text="Current Accleration:").grid(row=2, column=0, padx=5, pady=5, sticky=tk.E)
-        self.current_velocity_label = ttk.Label(current_info_frame, text="0 deg/s^2")
-        self.current_velocity_label.grid(row=2, column=1, padx=5, pady=5)
+        ttk.Label(current_info_frame, text="Current Acceleration:").grid(row=2, column=1, padx=5, pady=5, sticky="e")
+        self.current_acceleration_label = ttk.Label(current_info_frame, text="0 deg/s^2")
+        self.current_acceleration_label.grid(row=2, column=0, padx=5, pady=5, sticky="w")
 
-        ttk.Label(current_info_frame, text="Current Angle:").grid(row=1, column=0, padx=5, pady=5, sticky=tk.E)
+        ttk.Label(current_info_frame, text="Current Angle:").grid(row=3, column=1, padx=5, pady=5, sticky="e")
         self.current_angle_label = ttk.Label(current_info_frame, text="0 degrees")
-        self.current_angle_label.grid(row=1, column=1, padx=5, pady=5)
+        self.current_angle_label.grid(row=3, column=0, padx=5, pady=5, sticky="w")
 
 
     def update_current_info(self):
@@ -170,9 +199,10 @@ class App:
         current_angle = self.motor_controller.inst.position()
         current_acceleration = self.motor_controller.inst._get_velocity_acceleration()
 
-        # self.current_velocity_label.config(text=f"{current_velocity:.2f} deg/s")
+        self.current_velocity_label.config(text=f"{current_velocity:.2f} deg/s")
         self.current_angle_label.config(text=f"{current_angle:.2f} degrees")
-        self.current_velocity_label.config(text=f"{current_acceleration:.2f} deg/s^2")
+        self.current_acceleration_label.config(text=f"{current_acceleration:.2f} deg/s^2")
+
 
         # Schedule the update after a short delay
         self.root.after(500, self.update_current_info)
@@ -219,11 +249,11 @@ class App:
             exposure_time_mili= float(self.exposure_time_entry.get())
             exposure_time_micros = exposure_time_mili * 1000.0
 
-            target_velocity = float(self.target_velocity_entry.get())
+            # target_velocity = float(self.target_velocity_entry.get())
             experiment_name = self.experiment_name_entry.get()
 
             # Configure motor
-            self.motor_controller.configure_motor(target_velocity=target_velocity)
+            self.motor_controller.configure_motor(25)
 
             # Create measurement controller
             measurement_controller = MeasurementController(self.spectrometer_controller, self.motor_controller,experiment_name)
