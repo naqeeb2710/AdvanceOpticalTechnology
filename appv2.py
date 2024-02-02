@@ -6,10 +6,12 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
 import os
-from main_v3 import SpectrometerController
-from main_v3 import MotorController
-from main_v3 import MeasurementController
-# import sensor
+from main_v4 import SpectrometerController
+from main_v4 import MotorController
+from main_v4 import MeasurementController
+import time
+import sensor
+import csv
 
 class App:
     def __init__(self, root):
@@ -62,7 +64,7 @@ class App:
         self.target_velocity_entry = ttk.Entry(frame2)
         self.target_velocity_entry.grid(row=0, column=1, padx=5, pady=5)
 
-        ttk.Label(frame2, text="Exposure Time (ms):").grid(row=1, column=0, padx=5, pady=5, sticky=tk.E)
+        ttk.Label(frame2, text="Int. Time (ms):").grid(row=1, column=0, padx=5, pady=5, sticky=tk.E)
         self.exposure_time_entry = ttk.Entry(frame2)
         self.exposure_time_entry.grid(row=1, column=1, padx=5, pady=5)
 
@@ -109,6 +111,8 @@ class App:
         # Start Measurement button
 
         ttk.Button(button_frame, text="Start Measurement", command=self.start_measurement_thread).grid(row=0, column=1, padx=(5, 5), pady=5)
+
+        ttk.Button(button_frame, text="Start Power Measurement", command=self.start_power_measurement).grid(row=0, column=2, padx=(5, 5), pady=5)
 
         # Progress bar
         ttk.Label(button_frame, text="Progress:").grid(row=0, column=2, padx=5, pady=5, sticky=tk.E)
@@ -167,9 +171,9 @@ class App:
         current_info_frame = ttk.Frame(self.root, padding="10", name="current_info_frame", borderwidth=2, relief="groove")
         current_info_frame.grid(row=4, column=0, pady=2, sticky="nsew")
 
-        # Divide the frame into two columns: 3:1 ratio
-        current_info_frame.grid_columnconfigure(0, weight=3)
-        current_info_frame.grid_columnconfigure(1, weight=1)
+        # Divide the frame into two columns: plot and info
+        current_info_frame.grid_columnconfigure(0, weight=3)  # Plot column
+        current_info_frame.grid_columnconfigure(1, weight=1)  # Info column
 
         # Create a figure and axes to display the plot
         self.fig = Figure(figsize=(7, 5), dpi=100)
@@ -177,21 +181,24 @@ class App:
 
         self.canvas = FigureCanvasTkAgg(self.fig, master=current_info_frame)
         self.canvas_widget = self.canvas.get_tk_widget()
-        self.canvas_widget.grid(row=0, column=0, pady=10, sticky="nsew")  # Adjusted sticky
+        self.canvas_widget.grid(row=0, column=0, pady=10, sticky="nsew")
+
+        # Create a frame for the current info labels
+        info_labels_frame = ttk.Frame(current_info_frame, padding="10")
+        info_labels_frame.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
 
         # Create labels for current velocity, acceleration, and angle
-        ttk.Label(current_info_frame, text="Current Velocity:").grid(row=1, column=1, padx=5, pady=5, sticky="e")
-        self.current_velocity_label = ttk.Label(current_info_frame, text="0 deg/s")
-        self.current_velocity_label.grid(row=1, column=0, padx=5, pady=5, sticky="w")
+        ttk.Label(info_labels_frame, text="Current Velocity:").grid(row=0, column=0, padx=5, pady=5, sticky="e")
+        self.current_velocity_label = ttk.Label(info_labels_frame, text="0 deg/s")
+        self.current_velocity_label.grid(row=0, column=1, padx=5, pady=5, sticky="w")
 
-        ttk.Label(current_info_frame, text="Current Acceleration:").grid(row=2, column=1, padx=5, pady=5, sticky="e")
-        self.current_acceleration_label = ttk.Label(current_info_frame, text="0 deg/s^2")
-        self.current_acceleration_label.grid(row=2, column=0, padx=5, pady=5, sticky="w")
+        ttk.Label(info_labels_frame, text="Current Acceleration:").grid(row=1, column=0, padx=5, pady=5, sticky="e")
+        self.current_acceleration_label = ttk.Label(info_labels_frame, text="0 deg/s^2")
+        self.current_acceleration_label.grid(row=1, column=1, padx=5, pady=5, sticky="w")
 
-        ttk.Label(current_info_frame, text="Current Angle:").grid(row=3, column=1, padx=5, pady=5, sticky="e")
-        self.current_angle_label = ttk.Label(current_info_frame, text="0 degrees")
-        self.current_angle_label.grid(row=3, column=0, padx=5, pady=5, sticky="w")
-
+        ttk.Label(info_labels_frame, text="Current Angle:").grid(row=2, column=0, padx=5, pady=5, sticky="e")
+        self.current_angle_label = ttk.Label(info_labels_frame, text="0 degrees")
+        self.current_angle_label.grid(row=2, column=1, padx=5, pady=5, sticky="w")
 
     def update_current_info(self):
     # Method to update the current velocity and angle labels
@@ -318,6 +325,223 @@ class App:
             # Close motor and spectrometer in case of an error
             self.motor_controller.close_motor()
             self.spectrometer_controller.disconnect_spectrometer()
+    
+    # def start_power_measurement(self):
+    #     try:
+    #         # Get user input values
+    #         initial_angle = float(self.initial_angle_entry.get())
+    #         step_size = float(self.step_size_entry.get())
+    #         final_angle = float(self.final_angle_entry.get())
+    #         # num_accumulations = int(self.num_accumulations_entry.get())
+    #         # exposure_time_mili= float(self.exposure_time_entry.get())
+    #         # exposure_time_micros = exposure_time_mili * 1000.0
+
+    #         # target_velocity = float(self.target_velocity_entry.get())
+    #         experiment_name = self.experiment_name_entry.get()
+
+    #         # Configure motor
+    #         self.motor_controller.configure_motor(25)
+
+    #         # Create measurement controller
+    #         measurement_controller = MeasurementController(self.spectrometer_controller, self.motor_controller,experiment_name)
+
+    #         # Clear previous plot
+    #         self.ax.clear()
+
+    #         angle_power_list=[]
+
+    #         # # Measure at angles with default velocity using a while loop
+    #         # total_steps = ((final_angle - initial_angle) / step_size) + 1
+    #         # current_step = 1
+
+    #         while current_step <= total_steps:
+    #             angle = (initial_angle + (current_step - 1) * step_size)
+                
+    #             measurement_controller.measure_power_at_angles(
+    #                 angle, angle, 1, 0.5,
+    #             )
+
+    #             # # Access the current_csv_filename from the MeasurementController
+    #             # current_csv_filename = measurement_controller.current_csv_filename
+    #             # # Dynamically generate the plot filename based on the current angle
+    #             # output_plot_filename = current_csv_filename.replace('.csv', '.png')
+    #             # # Save the plot as an image file in the "plot" folder
+    #             # output_plot_filepath = os.path.join("plot", output_plot_filename)/
+    #             # Assuming you're saving plots in the current directory
+    #             angle_power_list=MeasurementController.measure_power_at_angles.
+    #             experiment_name=measurement_controller.experiment_name
+    #             plot_filename = f"{experiment_name}_angle_power.png"
+
+    #             # Construct the full path (in the current working directory)
+    #             output_plot_filepath = os.path.join(os.getcwd(), plot_filename)                
+
+    #             # Display the latest graph in the Tkinter application
+    #             img = plt.imread(output_plot_filepath)
+    #             self.ax.imshow(img)
+    #             self.ax.axis('off')  # Turn off axis labels
+
+    #             # Update the canvas
+    #             self.canvas.draw()
+
+    #             # Update the progress bar
+    #             progress_value = current_step / total_steps * 100
+    #             self.progress_label.config(text=f"{progress_value:.1f}%")
+    #             self.progress_bar['value'] = progress_value
+    #             self.root.update()
+
+    #             # Delay for a short time before the next measurement
+    #             self.root.after(100)  # Adjust the delay time as needed
+
+    #             # Increment the current_step for the next iteration
+    #             angle_power_list.append([angle, average_power])
+    #             current_step += 1
+            
+    #         # Clear input fields after the calculation
+    #         # self.initial_angle_entry.delete(0, tk.END)
+    #         # self.final_angle_entry.delete(0, tk.END)
+    #         # self.step_size_entry.delete(0, tk.END)
+    #         # self.target_velocity_entry.delete(0, tk.END)
+    #         # self.exposure_time_entry.delete(0, tk.END)
+    #         # self.num_accumulations_entry.delete(0, tk.END)
+
+    #         # Check the checkbox state
+    #         if self.go_home_var.get():
+    #             # Go Home if the checkbox is checked\
+                
+    #             self.motor_controller.move_to_angle(0)
+
+    #     except Exception as e:
+    #         print(f"An error occurred: {e}")
+    #         # Close motor and spectrometer in case of an error
+    #         self.motor_controller.close_motor()
+    #         # self.spectrometer_controller.disconnect_spectrometer()
+    
+    def start_power_measurement(self):
+        try:
+            # Get user input values
+            initial_angle = float(self.initial_angle_entry.get())
+            step_size = float(self.step_size_entry.get())
+            final_angle = float(self.final_angle_entry.get())
+            # num_accumulations = int(self.num_accumulations_entry.get())
+            # exposure_time_mili= float(self.exposure_time_entry.get())
+            # exposure_time_micros = exposure_time_mili * 1000.0
+
+            # target_velocity = float(self.target_velocity_entry.get())
+            experiment_name = self.experiment_name_entry.get()
+
+            # Configure motor
+            self.motor_controller.configure_motor(25)
+
+            # Create measurement controller
+            measurement_controller = MeasurementController(self.spectrometer_controller, self.motor_controller, experiment_name)
+
+            # Clear previous plot
+            self.ax.clear()
+
+            angle_power_list = []  # Initialize an empty list to store angle-power pairs
+            dump_folder = 'dump'
+            os.makedirs(dump_folder, exist_ok=True)
+            measurement_range = measurement_controller.default_measurement_range  # Initialize measurement range
+            status_counter = 0  # Initialize status counter
+            measurement_controller.power_meter.connect()
+
+            # Measure at angles with default velocity using a while loop
+            current_angle = initial_angle
+            while current_angle <= final_angle:
+                angle = current_angle % 360  # Convert angle to be within the range [0, 360)
+                measurement_controller.motor_controller.move_to_angle(angle)
+                current_position = measurement_controller.motor_controller.inst.position()
+                print(f"Position: {current_position} degrees at angle: {angle} degrees")
+                time.sleep(0.5)  # Pause the execution for 0.5 seconds
+                measurement_controller.power_meter.connect()
+                measurement_controller.power_meter.arm()
+                power_data, average_power = measurement_controller.power_meter.disarm()  # Unpack the tuple to get power data and average power
+                if power_data:
+                    print("Power data recorded:")
+                    power_meter_filename = os.path.join(dump_folder, f'power_meter_dump_{experiment_name}_angle_{angle}.csv')
+                    with open(power_meter_filename, 'w') as power_dump:
+                        # Write header
+                        power_dump.write('time, power, status\n')
+                        # Write data rows
+                        for event in power_data:
+                            power_dump.write('%.3f, %.2e, %.2f\n' % (event[0], event[1], event[2]))
+                            if measurement_controller.power_meter.measurement_range == 3:  # Check if not already in 200nJ range
+                                if event[2] == 1:  # Check if data indicates status change
+                                    status_counter += 1
+                                    print('status counter = ', status_counter)
+                else:
+                    print("No power data recorded.")
+                
+                # Check if status counter exceeds threshold
+                if status_counter > measurement_controller.threshold_status_count:
+                    measurement_range = 2  # Change to 200nJ range
+                    measurement_controller.power_meter.measurement_range = measurement_range
+                    status_counter = 0  # Reset status counter after changing the range
+                    measurement_controller.power_meter.connect()
+                    measurement_controller.power_meter.arm()
+                    power_data, average_power = measurement_controller.power_meter.disarm()
+                    if power_data:
+                        print("Power data recorded:")
+                        power_meter_filename = os.path.join(dump_folder, f'power_meter_dump_{experiment_name}_angle_{angle}.csv')
+                        with open(power_meter_filename, 'w') as power_dump:
+                            # Write header
+                            power_dump.write('time, power, status\n')
+                            # Write data rows
+                            for event in power_data:
+                                power_dump.write('%.3f, %.2e, %.2f\n' % (event[0], event[1], event[2]))
+                else:
+                    status_counter = 0  # Reset status counter if not exceeded threshold
+                
+                angle_power_list.append([angle, average_power])
+                current_angle += step_size
+
+            # Move to the final angle after completing the loop
+            final_angle_normalized = final_angle % 360
+            measurement_controller.motor_controller.move_to_angle(final_angle_normalized)
+            final_position = measurement_controller.motor_controller.inst.position()
+            print(f"Final Position: {final_position} degrees")
+            print(angle_power_list)
+            # Save the angle-power list to a CSV file
+            with open(f'{experiment_name}_angle_power.csv', 'w', newline='') as csvfile:
+                csv_writer = csv.writer(csvfile)
+                header = ['Angle (deg)', 'Average Power (nJ)']
+                csv_writer.writerow(header)
+                for row in angle_power_list:
+                    csv_writer.writerow(row)
+
+            angles, powers = zip(*angle_power_list)
+            plt.figure(figsize=(12, 8))
+            plt.scatter(angles, powers)
+            plt.xlabel('Angle (deg)')
+            plt.ylabel('Average Power (nJ)')
+            plt.yticks([i for i in range(0, int(max(powers)) + 5, 5)])  # Set ticks at intervals of 2
+            plt.savefig(f'{experiment_name}_angle_power.png', bbox_inches='tight', pad_inches=0.5)
+
+            # Display the latest graph in the Tkinter application
+            img = plt.imread(f'{experiment_name}_angle_power.png')
+            self.ax.imshow(img)
+            self.ax.axis('off')  # Turn off axis labels
+            # Update the canvas
+            self.canvas.draw()
+
+            # Clear input fields after the calculation
+            # self.initial_angle_entry.delete(0, tk.END)
+            # self.final_angle_entry.delete(0, tk.END)
+            # self.step_size_entry.delete(0, tk.END)
+            # self.target_velocity_entry.delete(0, tk.END)
+            # self.exposure_time_entry.delete(0, tk.END)
+            # self.num_accumulations_entry.delete(0, tk.END)
+
+            # Check the checkbox state
+            if self.go_home_var.get():
+                # Go Home if the checkbox is checked
+                measurement_controller.motor_controller.move_to_angle(0)
+
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            # Close motor and spectrometer in case of an error
+            self.motor_controller.close_motor()
+            # self.spectrometer_controller.disconnect_spectrometer()
 
     def perform_single_test(self):
         try:
