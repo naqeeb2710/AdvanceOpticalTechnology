@@ -15,3 +15,8 @@
 
 # Ignore dump files
 /dump/
+
+/experiment_data/
+
+/New folder/
+/New folder2/

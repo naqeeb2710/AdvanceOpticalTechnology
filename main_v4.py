@@ -46,7 +46,7 @@ class SpectrometerController:
             intensities[i] = current_intensities
 
         # Create the "data" folder if it doesn't exist
-        data_folder = 'data'
+        data_folder = 'experiment_data'
         os.makedirs(data_folder, exist_ok=True)
 
         # Save the data to a CSV file in the "data" folder
@@ -61,7 +61,7 @@ class SpectrometerController:
         
 
         # Create the "plot" folder if it doesn't exist
-        plot_folder = 'plot'
+        plot_folder = 'experiment_data'
         if not os.path.exists(plot_folder):
             os.makedirs(plot_folder)
 
@@ -160,43 +160,51 @@ class MeasurementController:
             self.power_meter.connect()
             # time.sleep(0.1)
             self.power_meter.arm()
-            power_data, average_power = self.power_meter.disarm()  # Unpack the tuple to get power data and average power
-            if power_data:
-                print("Power data recorded:")
-                power_meter_filename = os.path.join(dump_folder, f'power_meter_dump_{self.experiment_name}_angle_{current_angle_normalized}.csv')
-                with open(power_meter_filename, 'w') as power_dump:
-                    # Write header
-                    power_dump.write('time, power, status\n')
-                    # Write data rows
-                    for event in power_data:
-                        power_dump.write('%.3f, %.2e, %.2f\n' % (event[0], event[1], event[2]))
-                        if self.power_meter.measurement_range == 3:  # Check if not already in 200nJ range
-                            if event[2] == 1:  # Check if data indicates status change
-                                status_counter += 1
-                                print('status counter = ', status_counter)
+            power_data, average_power = self.power_meter.disarm() # Unpack the tuple to get power data and average power
+            if print(power_data):
+                print(power_data)
             else:
-                print("No power data recorded.")
-            # Check if status counter exceeds threshold
-            if status_counter > self.threshold_status_count:
-                measurement_range = 2  # Change to 200nJ range
-                self.power_meter.measurement_range = measurement_range
-                status_counter = 0  # Reset status counter after changing the range
-                self.power_meter.connect()
-                # time.sleep(0.1)
-                self.power_meter.arm()
-                power_data, average_power = self.power_meter.disarm()
-                if power_data:
-                    print("Power data recorded:")
-                    power_meter_filename = os.path.join(dump_folder, f'power_meter_dump_{self.experiment_name}_angle_{current_angle_normalized}.csv')
-                    with open(power_meter_filename, 'w') as power_dump:
-                        # Write header
-                        power_dump.write('time, power, status\n')
-                        # Write data rows
-                        for event in power_data:
-                            power_dump.write('%.3f, %.2e, %.2f\n' % (event[0], event[1], event[2]))
-                  # Unpack the tuple to get power data and average power
-            else:
-                status_counter = 0  # Reset status counter if not exceeded threshold
+                print("no data")
+            # if power_data:
+            #     print(power_data)
+            #     print("Power data recorded:")
+            #     power_meter_filename = os.path.join(dump_folder, f'power_meter_dump_{self.experiment_name}_angle_{current_angle_normalized}.csv')
+            #     with open(power_meter_filename, 'w') as power_dump:
+            #         # Write header
+            #         power_dump.write('time, power, status\n')
+            #         # Write data rows
+            #         for event in power_data:
+            #             print(power_data)
+            #             if event[2]==0:
+            #                 power_dump.write('%.3f, %.2e, %.2f\n' % (event[0], event[1], event[2]))
+            #             if self.power_meter.measurement_range == 3:  # Check if not already in 200nJ range
+            #                 if event[2] == 1:  # Check if data indicates status change
+            #                     status_counter += 1
+            #                     print('status counter = ', status_counter)
+            # else:
+            #     print("No power data recorded.")
+            # # Check if status counter exceeds threshold
+            # if status_counter > self.threshold_status_count:
+            #     measurement_range = 2  # Change to 200nJ range
+            #     self.power_meter.measurement_range = measurement_range
+            #     status_counter = 0  # Reset status counter after changing the range
+            #     self.power_meter.connect()
+            #     # time.sleep(0.1)
+            #     self.power_meter.arm()
+            #     power_data, average_power = self.power_meter.disarm()
+            #     if power_data:
+            #         print(power_data)
+            #         print("Power data recorded:")
+            #         power_meter_filename = os.path.join(dump_folder, f'power_meter_dump_{self.experiment_name}_angle_{current_angle_normalized}.csv')
+            #         with open(power_meter_filename, 'w') as power_dump:
+            #             # Write header
+            #             power_dump.write('time, power, status\n')
+            #             # Write data rows
+            #             for event in power_data:
+            #                 power_dump.write('%.3f, %.2e, %.2f\n' % (event[0], event[1], event[2]))
+            #       # Unpack the tuple to get power data and average power
+            # else:
+            #     status_counter = 0  # Reset status counter if not exceeded threshold
 
             angle_power_list.append([current_angle, average_power])
             current_angle += step_size
@@ -240,7 +248,7 @@ class MeasurementController:
             # Update the class variable
             MeasurementController.current_angle = current_angle_normalized
 
-            self.current_csv_filename = f'{self.experiment_name}_angle_{int(current_angle_normalized)}_integrationtime_{int(exposure_time_micros)}_acc_{num_accumulations}.csv'
+            self.current_csv_filename = f'{self.experiment_name}_angle_{int(current_angle_normalized)}_integrationtime_{int(exposure_time_micros/1000.0)}_acc_{num_accumulations}.csv'
             self.spectrometer_controller.perform_accumulation(num_accumulations, exposure_time_micros, self.current_csv_filename)
             
             current_angle += step_size
