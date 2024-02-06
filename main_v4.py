@@ -8,6 +8,8 @@ from seabreeze.spectrometers import list_devices, Spectrometer
 from qcodes_contrib_drivers.drivers.Thorlabs.APT import Thorlabs_APT
 from qcodes_contrib_drivers.drivers.Thorlabs.K10CR1 import Thorlabs_K10CR1
 import csv
+import numpy as np
+from matplotlib.widgets import Button
 
 def time_counter(start_time, end_time, operation_name):
     elapsed_time = end_time - start_time
@@ -83,6 +85,79 @@ class SpectrometerController:
 
         plt.savefig(output_plot_filepath, bbox_inches='tight', pad_inches=0.5)
         time.sleep(1.0)
+    
+    # def live_spectrum(self, exposure_time_micros):
+    #     if self.spec is None:
+    #         print("Spectrometer not connected. Please connect first.")
+    #         return
+        
+
+    
+    def live_spectrum(self, exposure_time_micros):
+        if self.spec is None:
+            print("Spectrometer not connected. Please connect first.")
+            return
+
+        try:
+            plt.ion()  # Turn on interactive mode
+            fig, ax = plt.subplots()
+            line, = ax.plot([], [])  # Empty line for the plot
+
+            # Set the labels for the plot
+            ax.set_xlabel('Wavelength (nm)')
+            ax.set_ylabel('Intensity')
+
+            # Define function to handle plot window close event
+            def on_close(event):
+                nonlocal live_spectrum_running
+                live_spectrum_running = False
+                plt.close(fig)  # Close the plot window
+
+            # Connect the close event of the plot window to the handler
+            # fig.canvas.mpl_connect('close_event', on_close)
+
+            def on_save(event):
+                # Save the data to a file (you need to implement this)
+                # For example, you can use numpy.savetxt to save the data to a text file
+                np.savetxt('BG_spectrometer_data.csv', np.column_stack((wavelengths, intensities)), delimiter=',', header='Wavelength (nm), Intensity', comments='')
+                # Save the plot image
+                fig.savefig('BG_spectrometer_plot.png', bbox_inches='tight', pad_inches=0.5)
+
+            # # Add a button to the plot window for saving data
+            # save_button_ax = plt.axes([0.81, 0.01, 0.1, 0.075])
+            # save_button = Button(save_button_ax, 'Save')
+            # save_button.on_clicked(on_save)
+            
+                        # Add a button outside the plot window for saving data
+            save_button_ax = plt.axes([0.85, 0.01, 0.1, 0.065])
+            save_button = Button(save_button_ax, 'Save')
+            save_button.on_clicked(on_save)
+
+
+            # Connect the close event of the plot window to the handler
+            fig.canvas.mpl_connect('close_event', on_close)
+
+            live_spectrum_running = True
+            while live_spectrum_running:
+                # Acquire spectrum data
+                wavelengths, intensities = self.spec.spectrum()
+
+                # Update the plot with new data
+                line.set_xdata(wavelengths)
+                line.set_ydata(intensities)
+                ax.relim()  # Update the limits of the axes
+                ax.autoscale_view()  # Auto-scale the axes
+                fig.canvas.draw()  # Redraw the plot
+                fig.canvas.flush_events()  # Flush the GUI events to update the plot
+
+                time.sleep(exposure_time_micros / 1e6)  # Wait for exposure time
+
+        except Exception as e:
+            print(f"An error occurred during live spectrum measurement: {e}")
+
+        finally:
+            # Close the spectrometer when finished
+            self.spec.close()
         
     def disconnect_spectrometer(self):
         if self.spec is not None:
@@ -161,50 +236,46 @@ class MeasurementController:
             # time.sleep(0.1)
             self.power_meter.arm()
             power_data, average_power = self.power_meter.disarm() # Unpack the tuple to get power data and average power
-            if print(power_data):
+            if power_data:
                 print(power_data)
+                print("Power data recorded:")
+                power_meter_filename = os.path.join(dump_folder, f'power_meter_dump_{self.experiment_name}_angle_{current_angle_normalized}.csv')
+                with open(power_meter_filename, 'w') as power_dump:
+                    # Write header
+                    power_dump.write('time, power, status\n')
+                    # Write data rows
+                    for event in power_data:
+                        print(power_data)
+                        if event[2]==0:
+                            power_dump.write('%.3f, %.2e, %.2f\n' % (event[0], event[1], event[2]))
+                        if self.power_meter.measurement_range == 3:  # Check if not already in 200nJ range
+                            if event[2] == 1:  # Check if data indicates status change
+                                status_counter += 1
+                                print('status counter = ', status_counter)
             else:
-                print("no data")
-            # if power_data:
-            #     print(power_data)
-            #     print("Power data recorded:")
-            #     power_meter_filename = os.path.join(dump_folder, f'power_meter_dump_{self.experiment_name}_angle_{current_angle_normalized}.csv')
-            #     with open(power_meter_filename, 'w') as power_dump:
-            #         # Write header
-            #         power_dump.write('time, power, status\n')
-            #         # Write data rows
-            #         for event in power_data:
-            #             print(power_data)
-            #             if event[2]==0:
-            #                 power_dump.write('%.3f, %.2e, %.2f\n' % (event[0], event[1], event[2]))
-            #             if self.power_meter.measurement_range == 3:  # Check if not already in 200nJ range
-            #                 if event[2] == 1:  # Check if data indicates status change
-            #                     status_counter += 1
-            #                     print('status counter = ', status_counter)
-            # else:
-            #     print("No power data recorded.")
-            # # Check if status counter exceeds threshold
-            # if status_counter > self.threshold_status_count:
-            #     measurement_range = 2  # Change to 200nJ range
-            #     self.power_meter.measurement_range = measurement_range
-            #     status_counter = 0  # Reset status counter after changing the range
-            #     self.power_meter.connect()
-            #     # time.sleep(0.1)
-            #     self.power_meter.arm()
-            #     power_data, average_power = self.power_meter.disarm()
-            #     if power_data:
-            #         print(power_data)
-            #         print("Power data recorded:")
-            #         power_meter_filename = os.path.join(dump_folder, f'power_meter_dump_{self.experiment_name}_angle_{current_angle_normalized}.csv')
-            #         with open(power_meter_filename, 'w') as power_dump:
-            #             # Write header
-            #             power_dump.write('time, power, status\n')
-            #             # Write data rows
-            #             for event in power_data:
-            #                 power_dump.write('%.3f, %.2e, %.2f\n' % (event[0], event[1], event[2]))
-            #       # Unpack the tuple to get power data and average power
-            # else:
-            #     status_counter = 0  # Reset status counter if not exceeded threshold
+                print("No power data recorded.")
+            # Check if status counter exceeds threshold
+            if status_counter > self.threshold_status_count:
+                measurement_range = 2  # Change to 200nJ range
+                self.power_meter.measurement_range = measurement_range
+                status_counter = 0  # Reset status counter after changing the range
+                self.power_meter.connect()
+                # time.sleep(0.1)
+                self.power_meter.arm()
+                power_data, average_power = self.power_meter.disarm()
+                if power_data:
+                    print(power_data)
+                    print("Power data recorded:")
+                    power_meter_filename = os.path.join(dump_folder, f'power_meter_dump_{self.experiment_name}_angle_{current_angle_normalized}.csv')
+                    with open(power_meter_filename, 'w') as power_dump:
+                        # Write header
+                        power_dump.write('time, power, status\n')
+                        # Write data rows
+                        for event in power_data:
+                            power_dump.write('%.3f, %.2e, %.2f\n' % (event[0], event[1], event[2]))
+                  # Unpack the tuple to get power data and average power
+            else:
+                status_counter = 0  # Reset status counter if not exceeded threshold
 
             angle_power_list.append([current_angle, average_power])
             current_angle += step_size
@@ -300,11 +371,6 @@ def main():
             )
         else:
             print("Invalid action selected. Please choose 'a' for accumulation or 'p' for power measurement.")
-
-        # # Measure at angles with default velocity
-        # measurement_controller.measure_at_angles(
-        #     initial_angle, final_angle, step_size, num_accumulations, exposure_time_micros, delay_seconds
-        # )
 
     except Exception as e:
         print(f"An error occurred: {e}")

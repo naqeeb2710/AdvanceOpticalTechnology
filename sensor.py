@@ -55,14 +55,14 @@ class Sensor:
             print('Ophir connect OK')
             return True
 
-    def arm(self, is_plasma=False, shotn=0):
+    def arm(self, is_plasma=False, shotn=0,delay_seconds=0.05):
         self.is_plasma = is_plasma
         self.shotn = shotn
         if self.connected and self.ready:
             exists = self.OphirCOM.IsSensorExists(self.DeviceHandle, 0)
             if exists:
                 self.OphirCOM.StartStream(self.DeviceHandle, 0)  # start measuring
-                time.sleep(0.05)
+                time.sleep(delay_seconds)
                 self.ready = False
                 self.armed = True
                 #print('Armed OK')

@@ -26,154 +26,8 @@ class App:
 
         # Set up GUI components
         self.create_widgets()
-        self.update_current_info()
+        # self.update_current_info()
 
-    # def create_widgets(self):
-    #     # Create a container frame for the layout
-    #     container_frame = ttk.Frame(self.root, padding="10")
-    #     container_frame.grid(row=0, column=0, rowspan=2, columnspan=4, padx=10, pady=10)
-
-    #     # Create frame for the first set of parameters
-    #     frame1 = ttk.Frame(container_frame, padding="10", name="frame1", borderwidth=2, relief="groove")
-    #     frame1.grid(row=0, column=0, padx=10, pady=10)
-
-    #     ttk.Label(frame1, text="Initial Angle (degrees):").grid(row=0, column=0, padx=5, pady=5, sticky=tk.E)
-    #     self.initial_angle_entry = ttk.Entry(frame1)
-    #     self.initial_angle_entry.grid(row=0, column=1, padx=5, pady=5)
-
-    #     ttk.Label(frame1, text="Final Angle (degrees):").grid(row=1, column=0, padx=5, pady=5, sticky=tk.E)
-    #     self.final_angle_entry = ttk.Entry(frame1)
-    #     self.final_angle_entry.grid(row=1, column=1, padx=5, pady=5)
-
-    #     ttk.Label(frame1, text="Step Size (degrees):").grid(row=2, column=0, padx=5, pady=5, sticky=tk.E)
-    #     self.step_size_entry = ttk.Entry(frame1)
-    #     self.step_size_entry.grid(row=2, column=1, padx=5, pady=5)
-
-    #     #create a input for experiment name
-    #     ttk.Label(frame1, text="Sample name:").grid(row=3, column=0, padx=5, pady=5, sticky=tk.E)
-    #     self.experiment_name_entry = ttk.Entry(frame1)
-    #     self.experiment_name_entry.grid(row=3, column=1, padx=5, pady=5)
-
-    #     # Create a frame for the second set of parameters
-    #     frame2 = ttk.Frame(container_frame, padding="10", name="frame2", borderwidth=2, relief="groove")
-    #     frame2.grid(row=0, column=1, padx=10, pady=10)
-
-    #     ttk.Label(frame2, text="Target Velocity (deg/s):").grid(row=0, column=0, padx=5, pady=5, sticky=tk.E)
-    #     self.target_velocity_entry = ttk.Entry(frame2)
-    #     self.target_velocity_entry.grid(row=0, column=1, padx=5, pady=5)
-
-    #     ttk.Label(frame2, text="Int. Time (ms):").grid(row=1, column=0, padx=5, pady=5, sticky=tk.E)
-    #     self.exposure_time_entry = ttk.Entry(frame2)
-    #     self.exposure_time_entry.grid(row=1, column=1, padx=5, pady=5)
-
-    #     ttk.Label(frame2, text="Num Accumulations:").grid(row=2, column=0, padx=5, pady=5, sticky=tk.E)
-    #     self.num_accumulations_entry = ttk.Entry(frame2)
-    #     self.num_accumulations_entry.grid(row=2, column=1, padx=5, pady=5)
-
-    #     # Create a checkbox for "Go Home" or "After Measurement" in frame2
-    #     self.go_home_checkbox = ttk.Checkbutton(frame2, text="Go Home After Measurement", variable=self.go_home_var)
-    #     self.go_home_checkbox.grid(row=3, column=0, columnspan=2, pady=5, sticky=tk.W) 
-
-    #     # Create a frame for the third set of parameters (single test)
-    #     frame3 = ttk.Frame(container_frame, padding="10", name="frame3", borderwidth=2, relief="groove")
-    #     frame3.grid(row=0, column=2, padx=10, pady=10)
-
-    #     ttk.Label(frame3, text="Single Test Angle:").grid(row=0, column=0, padx=5, pady=5, sticky=tk.E)
-    #     self.single_test_angle_entry = ttk.Entry(frame3)
-    #     self.single_test_angle_entry.grid(row=0, column=1, padx=5, pady=5)
-
-    #     ttk.Label(frame3, text="Single Test Accumulations:").grid(row=1, column=0, padx=5, pady=5, sticky=tk.E)
-    #     self.single_test_accumulations_entry = ttk.Entry(frame3)
-    #     self.single_test_accumulations_entry.grid(row=1, column=1, padx=5, pady=5)
-
-    #     ttk.Label(frame3, text=" ExposTime (ms):").grid(row=2, column=0, padx=5, pady=5, sticky=tk.E)
-    #     self.single_test_exposure_time_entry = ttk.Entry(frame3)
-    #     self.single_test_exposure_time_entry.grid(row=2, column=1, padx=5, pady=5)
-
-    #     ttk.Label(frame3, text="Move to Angle:").grid(row=3, column=0, padx=5, pady=5, sticky=tk.E)
-    #     self.move_to_angle_entry = ttk.Entry(frame3)
-    #     self.move_to_angle_entry.grid(row=3, column=1, padx=5, pady=5)
-    #     ttk.Button(frame3, text="Go", command=lambda: self.motor_controller.move_to_angle(float(self.move_to_angle_entry.get()))).grid(row=3, column=2, padx=(5, 5), pady=5)
-
-    #     # Create a horizontal frame for buttons and progress bar (2:1 ratio)
-    #     button_frame = ttk.Frame(self.root, padding="10", name="button_frame", borderwidth=2, relief="groove")
-    #     button_frame.grid(row=2, column=0, columnspan=3, padx=5,pady=2)
-        
-    #     # Create a style to configure the button color
-    #     style = ttk.Style()
-    #     style.configure("Green.TButton", background="green")
-
-    #     # Home button
-    #     ttk.Button(button_frame, text="Home", command=self.motor_controller.move_home,style="Green.TButton").grid(row=0, column=0, padx=(5, 5), pady=5)
-
-    #     # Start Measurement button
-
-    #     ttk.Button(button_frame, text="Start Measurement", command=self.start_measurement_thread).grid(row=0, column=1, padx=(5, 5), pady=5)
-
-    #     ttk.Button(button_frame, text="Start Power Measurement", command=self.start_power_measurement).grid(row=0, column=2, padx=(5, 5), pady=5)
-
-    #     # Progress bar
-    #     ttk.Label(button_frame, text="Progress:").grid(row=0, column=2, padx=5, pady=5, sticky=tk.E)
-    #     self.progress_label = ttk.Label(button_frame, text="0%")
-    #     self.progress_label.grid(row=0, column=3, padx=5, pady=5, sticky=tk.W)
-    #     self.progress_bar = ttk.Progressbar(button_frame, orient='horizontal', length=130, mode='determinate')
-    #     self.progress_bar.grid(row=0, column=4, padx=(0, 5), pady=5)  # Adjusted the padx to shift the progress bar to the left
-
-    #     # Create a style to configure the button color
-    #     style = ttk.Style()
-    #     style.configure("Red.TButton", background="red")
-    #     # Quit button
-    #     ttk.Button(button_frame, text="Quit", command=self.quit_application,style="Red.TButton").grid(row=0, column=6, padx=(5, 5), pady=5)
-    #     # Bind the close button to the quit_application method
-    #     self.root.protocol("WM_DELETE_WINDOW", self.quit_application)
-
-    #     # Button for performing a single test
-    #     ttk.Button(button_frame, text="Single Test", command=self.perform_single_test).grid(row=0, column=5, pady=5)
-
-    #     # Create a frame for angle adjustment
-    #     angle_adjust_frame = ttk.Frame(self.root, padding="10", name="angle_adjust_frame", borderwidth=2, relief="groove")
-    #     angle_adjust_frame.grid(row=2, column=3, pady=2)
-
-    #     ttk.Label(angle_adjust_frame, text="Jog:").grid(row=0, column=0, padx=5, pady=5, sticky=tk.E)
-    #     self.angle_size_entry = ttk.Entry(angle_adjust_frame)
-    #     self.angle_size_entry.grid(row=0, column=1, padx=5, pady=5)
-
-    #     ttk.Button(angle_adjust_frame, text="+", command=self.up_angle).grid(row=0, column=2, padx=(5, 5), pady=5)
-    #     ttk.Button(angle_adjust_frame, text="-", command=self.down_angle).grid(row=0, column=3, padx=(5, 5), pady=5)
-    
-    #     # Create a frame for displaying current velocity, acceleration, and angle
-    #     current_info_frame = ttk.Frame(self.root, padding="10", name="current_info_frame", borderwidth=2, relief="groove")
-    #     current_info_frame.grid(row=4, column=0, pady=2, sticky="nsew")
-
-    #     # Divide the frame into two columns: plot and info
-    #     current_info_frame.grid_columnconfigure(0, weight=3)  # Plot column
-    #     current_info_frame.grid_columnconfigure(1, weight=1)  # Info column
-
-    #     # Create a figure and axes to display the plot
-    #     self.fig = Figure(figsize=(7, 5), dpi=100)
-    #     self.ax = self.fig.add_subplot(111)
-
-    #     self.canvas = FigureCanvasTkAgg(self.fig, master=current_info_frame)
-    #     self.canvas_widget = self.canvas.get_tk_widget()
-    #     self.canvas_widget.grid(row=0, column=0, pady=10, sticky="nsew")
-
-    #     # Create a frame for the current info labels
-    #     info_labels_frame = ttk.Frame(current_info_frame, padding="10")
-    #     info_labels_frame.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
-
-    #     # Create labels for current velocity, acceleration, and angle
-    #     ttk.Label(info_labels_frame, text="Current Velocity:").grid(row=0, column=0, padx=5, pady=5, sticky="e")
-    #     self.current_velocity_label = ttk.Label(info_labels_frame, text="0 deg/s")
-    #     self.current_velocity_label.grid(row=0, column=1, padx=5, pady=5, sticky="w")
-
-    #     ttk.Label(info_labels_frame, text="Current Acceleration:").grid(row=1, column=0, padx=5, pady=5, sticky="e")
-    #     self.current_acceleration_label = ttk.Label(info_labels_frame, text="0 deg/s^2")
-    #     self.current_acceleration_label.grid(row=1, column=1, padx=5, pady=5, sticky="w")
-
-    #     ttk.Label(info_labels_frame, text="Current Angle:").grid(row=2, column=0, padx=5, pady=5, sticky="e")
-    #     self.current_angle_label = ttk.Label(info_labels_frame, text="0 degrees")
-    #     self.current_angle_label.grid(row=2, column=1, padx=5, pady=5, sticky="w")
-    
     def create_widgets(self):
         # Create a container frame for the layout
         container_frame = ttk.Frame(self.root, padding="5")
@@ -204,9 +58,9 @@ class App:
         frame2 = ttk.Frame(container_frame, padding="5", name="frame2", borderwidth=2, relief="groove")
         frame2.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
 
-        # ttk.Label(frame2, text="Target Velocity (deg/s):").grid(row=0, column=0, padx=5, pady=5, sticky=tk.E)
-        # self.target_velocity_entry = ttk.Entry(frame2)
-        # self.target_velocity_entry.grid(row=0, column=1, padx=5, pady=5)
+        ttk.Label(frame2, text="Int. time power(S)").grid(row=0, column=0, padx=5, pady=5, sticky=tk.E)
+        self.int_time_power = ttk.Entry(frame2)
+        self.int_time_power.grid(row=0, column=1, padx=5, pady=5)
 
         ttk.Label(frame2, text="Int. Time (ms):").grid(row=1, column=0, padx=5, pady=5, sticky=tk.E)
         self.exposure_time_entry = ttk.Entry(frame2)
@@ -225,22 +79,14 @@ class App:
         frame3 = ttk.Frame(container_frame, padding="5", name="frame3", borderwidth=2, relief="groove")
         frame3.grid(row=0, column=2, padx=10, pady=10, sticky="nsew")
 
-        ttk.Label(frame3, text="Single Test Angle:").grid(row=0, column=0, padx=5, pady=5, sticky=tk.E)
-        self.single_test_angle_entry = ttk.Entry(frame3)
-        self.single_test_angle_entry.grid(row=0, column=1, padx=5, pady=5)
-
-        ttk.Label(frame3, text="Single Test Accumulations:").grid(row=1, column=0, padx=5, pady=5, sticky=tk.E)
-        self.single_test_accumulations_entry = ttk.Entry(frame3)
-        self.single_test_accumulations_entry.grid(row=1, column=1, padx=5, pady=5)
-
-        ttk.Label(frame3, text=" ExposTime (ms):").grid(row=2, column=0, padx=5, pady=5, sticky=tk.E)
-        self.single_test_exposure_time_entry = ttk.Entry(frame3)
-        self.single_test_exposure_time_entry.grid(row=2, column=1, padx=5, pady=5)
-
-        ttk.Label(frame3, text="Move to Angle:").grid(row=3, column=0, padx=5, pady=5, sticky=tk.E)
+        ttk.Label(frame3, text="Move to Angle:").grid(row=1, column=0, padx=5, pady=5, sticky=tk.E)
         self.move_to_angle_entry = ttk.Entry(frame3)
-        self.move_to_angle_entry.grid(row=3, column=1, padx=5, pady=5)
-        ttk.Button(frame3, text="Go", command=lambda: self.motor_controller.move_to_angle(float(self.move_to_angle_entry.get()))).grid(row=3, column=2, padx=(5, 5), pady=5)
+        self.move_to_angle_entry.grid(row=1, column=1, padx=5, pady=5)
+        ttk.Button(frame3, text="Go", command=lambda: self.motor_controller.move_to_angle(float(self.move_to_angle_entry.get()))).grid(row=1, column=2, padx=(5, 5), pady=5)
+
+
+        ttk.Button(frame3, text="Live", command=self.live_spectrum_thread).grid(row=2, column=0, pady=5)
+        ttk.Button(frame3, text="Save Live", command=self.stop_live_spectrum).grid(row=2, column=1, padx=(5, 5), pady=5)
 
         # Create a horizontal frame for buttons and progress bar (2:1 ratio)
         button_frame = ttk.Frame(self.root, padding="5", name="button_frame", borderwidth=2, relief="groove")
@@ -273,19 +119,12 @@ class App:
         # Bind the close button to the quit_application method
         self.root.protocol("WM_DELETE_WINDOW", self.quit_application)
 
-        # Button for performing a single test
-        ttk.Button(button_frame, text="Single Test", command=self.perform_single_test).grid(row=0, column=7, pady=5)
-
-        # # Create a frame for angle adjustment
-        # angle_adjust_frame = ttk.Frame(self.root, padding="10", name="angle_adjust_frame", borderwidth=2, relief="groove")
-        # angle_adjust_frame.grid(row=2, column=0, columnspan=3, pady=5, sticky="nsew")
-
-        ttk.Label(button_frame, text="Jog:").grid(row=0, column=8, padx=5, pady=5, sticky=tk.E)
+        ttk.Label(button_frame, text="Jog:").grid(row=0, column=7, padx=5, pady=5, sticky=tk.E)
         self.angle_size_entry = ttk.Entry(button_frame)
-        self.angle_size_entry.grid(row=0, column=9, padx=5, pady=5)
+        self.angle_size_entry.grid(row=0, column=8, padx=5, pady=5)
 
-        ttk.Button(button_frame, text="+", command=self.up_angle).grid(row=0, column=10, padx=(5, 5), pady=5)
-        ttk.Button(button_frame, text="-", command=self.down_angle).grid(row=0, column=11, padx=(5, 5), pady=5)
+        ttk.Button(button_frame, text="+", command=self.up_angle).grid(row=0, column=9, padx=(5, 5), pady=5)
+        ttk.Button(button_frame, text="-", command=self.down_angle).grid(row=0, column=10, padx=(5, 5), pady=5)
 
         # Create a frame for displaying current velocity, acceleration, and angle
         current_info_frame = ttk.Frame(self.root, padding="10", name="current_info_frame", borderwidth=2, relief="groove")
@@ -429,12 +268,7 @@ class App:
             
             # Clear input fields after the calculation
             # self.initial_angle_entry.delete(0, tk.END)
-            # self.final_angle_entry.delete(0, tk.END)
-            # self.step_size_entry.delete(0, tk.END)
-            # self.target_velocity_entry.delete(0, tk.END)
-            self.exposure_time_entry.delete(0, tk.END)
-            self.num_accumulations_entry.delete(0, tk.END)
-
+                
             # Check the checkbox state
             if self.go_home_var.get():
                 # Go Home if the checkbox is checked\
@@ -453,6 +287,7 @@ class App:
             initial_angle = float(self.initial_angle_entry.get())
             step_size = float(self.step_size_entry.get())
             final_angle = float(self.final_angle_entry.get())
+            power_delay = float(self.int_time_power.get())
             
             # target_velocity = float(self.target_velocity_entry.get())
             experiment_name = self.experiment_name_entry.get()
@@ -482,7 +317,7 @@ class App:
                 print(f"Position: {current_position} degrees at angle: {angle} degrees")
                 time.sleep(0.5)  # Pause the execution for 0.5 seconds
                 measurement_controller.power_meter.connect()
-                measurement_controller.power_meter.arm()
+                measurement_controller.power_meter.arm(delay_seconds=power_delay)
                 power_data, average_power = measurement_controller.power_meter.disarm()  # Unpack the tuple to get power data and average power
                 if power_data:
                     print("Power data recorded:")
@@ -558,11 +393,6 @@ class App:
 
             # Clear input fields after the calculation
             # self.initial_angle_entry.delete(0, tk.END)
-            # self.final_angle_entry.delete(0, tk.END)
-            # self.step_size_entry.delete(0, tk.END)
-            # self.target_velocity_entry.delete(0, tk.END)
-            # self.exposure_time_entry.delete(0, tk.END)
-            # self.num_accumulations_entry.delete(0, tk.END)
 
             # Check the checkbox state
             if self.go_home_var.get():
@@ -574,45 +404,87 @@ class App:
             # Close motor and spectrometer in case of an error
             self.motor_controller.close_motor()
             # self.spectrometer_controller.disconnect_spectrometer()
-
-    def perform_single_test(self):
+    
+    # def live_spectrum(self):
+    #     # Create a new thread for the live spectrum
+    #     thread = Thread(target=self.live_spectrum_thread)
+    #     thread.start()
+    
+    # 
+    
+    def live_spectrum_thread(self):
         try:
-        # Get user input values for single test
-            single_test_angle = float(self.single_test_angle_entry.get())
-            single_test_accumulations = int(self.single_test_accumulations_entry.get())
-            single_test_exposure_time_mili = float(self.single_test_exposure_time_entry.get())
-            single_test_exposure_time_micros = single_test_exposure_time_mili * 1000.0
-
-            # Create measurement controller
-            measurement_controller = MeasurementController(self.spectrometer_controller, self.motor_controller)
-
-            # Clear previous plot
-            self.ax.clear()
-
-            # Perform a single test at the specified angle
-            measurement_controller.measure_at_angles(
-                single_test_angle, single_test_angle, 1, single_test_accumulations, single_test_exposure_time_micros,0.5
-                )  
-
-            # Access the current_csv_filename from the MeasurementController
-            current_csv_filename = measurement_controller.current_csv_filename
-            # Dynamically generate the plot filename based on the current angle
-            output_plot_filename = current_csv_filename.replace('.csv', '.png')
-            # Save the plot as an image file in the "plot" folder
-            output_plot_filepath = os.path.join("plot", output_plot_filename)
-
-            # Display the latest graph in the Tkinter application
-            img = plt.imread(output_plot_filepath)
-            self.ax.imshow(img)
-            self.ax.axis('off')  # Turn off axis labels
-
-            # Update the canvas
-            self.canvas.draw()
-
+            exposure_time_mili= float(self.exposure_time_entry.get())
+            exposure_time_micros = exposure_time_mili * 1000.0
+            self.spectrometer_controller.live_spectrum(exposure_time_micros)
         except Exception as e:
-            print(f"An error occurred during single test: {e}")
-            self.spectrometer_controller.disconnect_spectrometer()
-            self.motor_controller.close_motor()
+            print(f"An error occurred: {e}")
+
+            # Handle any exceptions gracefully
+    # def live_spectrum_thread(self):
+    #     try:
+    #         # Check if a spectrometer is available
+    #         if self.spectrometer_controller.spec is None:
+    #             print("No spectrometer available.")
+    #             return
+
+    #         # Get exposure time from the entry field
+    #         exposure_time_entry_value = self.exposure_time_entry.get()
+
+    #         # Check if exposure time entry is empty
+    #         if exposure_time_entry_value == '':
+    #             print("Exposure time is not provided.")
+    #             return
+
+    #         # Convert exposure time to float
+    #         exposure_time_mili = float(exposure_time_entry_value)
+    #         exposure_time_micros = exposure_time_mili * 1000.0
+
+    #         # Set integration time
+    #         self.spectrometer_controller.spec.integration_time_micros(exposure_time_micros)
+
+    #         # Create a plot window
+    #         plt.ion()  # Turn on interactive mode
+    #         self.fig, self.ax = plt.subplots()
+    #         self.line, = self.ax.plot([], [])  # Empty line for the plot
+
+    #         # Set the labels for the plot
+    #         self.ax.set_xlabel('Wavelength (nm)')
+    #         self.ax.set_ylabel('Intensity')
+
+    #         # Define function to handle plot window close event
+    #         def on_close(event):
+    #             plt.close(self.fig)  # Close the plot window
+
+    #         # Connect the close event to the function
+    #         self.fig.canvas.mpl_connect('close_event', on_close)
+
+    #         # Main loop to continuously update the plot with live spectrum data
+    #         while getattr(self, "live_spectrum_running", True):
+    #             # Acquire spectrum data
+    #             wavelengths, intensities = self.spectrometer_controller.spec.spectrum()
+
+    #             # Update the plot with new data
+    #             self.line.set_xdata(wavelengths)
+    #             self.line.set_ydata(intensities)
+    #             self.ax.relim()  # Update the limits of the axes
+    #             self.ax.autoscale_view()  # Auto-scale the axes
+    #             self.fig.canvas.draw()  # Redraw the plot
+    #             self.fig.canvas.flush_events()  # Flush the GUI events to update the plot
+
+    #     except Exception as e:
+    #         print(f"An error occurred: {e}")
+    #         # Handle any exceptions gracefully
+
+    #     finally:
+    #         # Close the spectrometer when finished
+    #         if self.spectrometer_controller.spec is not None:
+    #             self.spectrometer_controller.spec.close()
+    #             # self.motor_controller.close_motor()
+
+    def stop_live_spectrum(self):
+        # Set the flag to stop the live spectrum
+        self.live_spectrum_running = False
 
     def quit_application(self):
         # Disconnect spectrometer and close motor when quitting the application
