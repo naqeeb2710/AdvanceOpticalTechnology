@@ -11,6 +11,8 @@ from main_v4 import MotorController
 from main_v4 import MeasurementController
 import time
 import csv
+from liveSpectrum import LiveSpectrum
+from liveSpectrum2 import LiveSpectrum as li
 
 class App:
     def __init__(self, root):
@@ -18,7 +20,7 @@ class App:
         self.root.title("Amplified Spontaneous Emission Measurement App")
 
         # Initialize controllers
-        self.spectrometer_controller = SpectrometerController()
+        # self.spectrometer_controller = SpectrometerController()
         self.motor_controller = MotorController()
 
         # Create IntVar to store checkbox state
@@ -85,7 +87,7 @@ class App:
         ttk.Button(frame3, text="Go", command=lambda: self.motor_controller.move_to_angle(float(self.move_to_angle_entry.get()))).grid(row=1, column=2, padx=(5, 5), pady=5)
 
 
-        ttk.Button(frame3, text="Live", command=self.live_spectrum_thread).grid(row=2, column=0, pady=5)
+        ttk.Button(frame3, text="Live", command=self.live_spectrum).grid(row=2, column=0, pady=5)
         ttk.Button(frame3, text="Save Live", command=self.stop_live_spectrum).grid(row=2, column=1, padx=(5, 5), pady=5)
 
         # Create a horizontal frame for buttons and progress bar (2:1 ratio)
@@ -209,6 +211,7 @@ class App:
     def start_measurement(self):
         try:
             # Get user input values
+            self.spectrometer_controller = SpectrometerController()
             initial_angle = float(self.initial_angle_entry.get())
             step_size = float(self.step_size_entry.get())
             final_angle = float(self.final_angle_entry.get())
@@ -274,6 +277,7 @@ class App:
                 # Go Home if the checkbox is checked\
                 
                 self.motor_controller.move_to_angle(0)
+            self.spectrometer_controller.disconnect_spectrometer()
 
         except Exception as e:
             print(f"An error occurred: {e}")
@@ -284,6 +288,7 @@ class App:
     def start_power_measurement(self):
         try:
             # Get user input values
+            self.spectrometer_controller=SpectrometerController()
             initial_angle = float(self.initial_angle_entry.get())
             step_size = float(self.step_size_entry.get())
             final_angle = float(self.final_angle_entry.get())
@@ -374,6 +379,7 @@ class App:
                 for row in angle_power_list:
                     csv_writer.writerow(row)
 
+            self.spectrometer_controller.disconnect_spectrometer()
             angles, powers = zip(*angle_power_list)
             plt.figure(figsize=(12, 8))
             plt.scatter(angles, powers)
@@ -403,92 +409,60 @@ class App:
             print(f"An error occurred: {e}")
             # Close motor and spectrometer in case of an error
             self.motor_controller.close_motor()
-            # self.spectrometer_controller.disconnect_spectrometer()
-    
+            self.spectrometer_controller.disconnect_spectrometer()
+                       
     # def live_spectrum(self):
-    #     # Create a new thread for the live spectrum
-    #     thread = Thread(target=self.live_spectrum_thread)
-    #     thread.start()
-    
-    # 
-    
-    def live_spectrum_thread(self):
-        try:
-            exposure_time_mili= float(self.exposure_time_entry.get())
-            exposure_time_micros = exposure_time_mili * 1000.0
-            self.spectrometer_controller.live_spectrum(exposure_time_micros)
-        except Exception as e:
-            print(f"An error occurred: {e}")
 
-            # Handle any exceptions gracefully
-    # def live_spectrum_thread(self):
     #     try:
-    #         # Check if a spectrometer is available
-    #         if self.spectrometer_controller.spec is None:
-    #             print("No spectrometer available.")
-    #             return
+    #         print("Live spectrum started")
 
-    #         # Get exposure time from the entry field
+    #         self.liveSpec = LiveSpectrum()
+    #         print("object created")
     #         exposure_time_entry_value = self.exposure_time_entry.get()
-
-    #         # Check if exposure time entry is empty
-    #         if exposure_time_entry_value == '':
-    #             print("Exposure time is not provided.")
-    #             return
-
-    #         # Convert exposure time to float
     #         exposure_time_mili = float(exposure_time_entry_value)
     #         exposure_time_micros = exposure_time_mili * 1000.0
-
-    #         # Set integration time
-    #         self.spectrometer_controller.spec.integration_time_micros(exposure_time_micros)
-
-    #         # Create a plot window
-    #         plt.ion()  # Turn on interactive mode
-    #         self.fig, self.ax = plt.subplots()
-    #         self.line, = self.ax.plot([], [])  # Empty line for the plot
-
-    #         # Set the labels for the plot
-    #         self.ax.set_xlabel('Wavelength (nm)')
-    #         self.ax.set_ylabel('Intensity')
-
-    #         # Define function to handle plot window close event
-    #         def on_close(event):
-    #             plt.close(self.fig)  # Close the plot window
-
-    #         # Connect the close event to the function
-    #         self.fig.canvas.mpl_connect('close_event', on_close)
-
-    #         # Main loop to continuously update the plot with live spectrum data
-    #         while getattr(self, "live_spectrum_running", True):
-    #             # Acquire spectrum data
-    #             wavelengths, intensities = self.spectrometer_controller.spec.spectrum()
-
-    #             # Update the plot with new data
-    #             self.line.set_xdata(wavelengths)
-    #             self.line.set_ydata(intensities)
-    #             self.ax.relim()  # Update the limits of the axes
-    #             self.ax.autoscale_view()  # Auto-scale the axes
-    #             self.fig.canvas.draw()  # Redraw the plot
-    #             self.fig.canvas.flush_events()  # Flush the GUI events to update the plot
+    #         self.liveSpec.live_spectrum(exposure_time_micros)
 
     #     except Exception as e:
     #         print(f"An error occurred: {e}")
-    #         # Handle any exceptions gracefully
-
-    #     finally:
-    #         # Close the spectrometer when finished
-    #         if self.spectrometer_controller.spec is not None:
-    #             self.spectrometer_controller.spec.close()
-    #             # self.motor_controller.close_motor()
-
+    #         self.liveSpec.close_plot()
+    #         self.liveSpec.disconnect_spectrometer()
+    # #         # Handle any exceptions gracefully
+    
+    def live_spectrum(self):
+        try:
+            print("Live spectrum started")
+            self.liveSpec = li()
+            print("object created")
+            exposure_time_entry_value = self.exposure_time_entry.get()
+            exposure_time_mili = float(exposure_time_entry_value)
+            exposure_time_micros = exposure_time_mili * 1000.0
+            for plot_path in self.liveSpec.live_spectrum(exposure_time_micros, max_plots=5):
+                # Load the plot image
+                img = plt.imread(plot_path)
+                print("Latest plot path:", plot_path)
+                # Display the plot image in the Tkinter application
+                self.ax.imshow(img)
+                self.ax.axis('off')
+                self.canvas.draw()
+                 # Adjust the delay time as needed
+                self.root.after(2, self.root.update())
+            
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            self.liveSpec.close()
+            # self.motor_controller.close_motor()
+            # self.liveSpec.close_plot()
+            
+    
     def stop_live_spectrum(self):
         # Set the flag to stop the live spectrum
-        self.live_spectrum_running = False
+        self.liveSpec.save_live_spectrum()
+
 
     def quit_application(self):
         # Disconnect spectrometer and close motor when quitting the application
-        self.spectrometer_controller.disconnect_spectrometer()
+        # self.spectrometer_controller.disconnect_spectrometer()
         self.motor_controller.close_motor()
         self.root.quit()
         self.root.destroy()

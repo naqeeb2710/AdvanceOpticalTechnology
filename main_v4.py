@@ -25,6 +25,7 @@ class SpectrometerController:
             print(devices[0])
         else:
             print("No spectrometer devices available.")
+        self.fig = None  # Initialize figure object to store the reference of the plot window
         
 
     def perform_accumulation(self, num_accumulations, exposure_time_micros, output_csv_filename):
@@ -90,9 +91,7 @@ class SpectrometerController:
     #     if self.spec is None:
     #         print("Spectrometer not connected. Please connect first.")
     #         return
-        
-
-    
+         
     def live_spectrum(self, exposure_time_micros):
         if self.spec is None:
             print("Spectrometer not connected. Please connect first.")
@@ -109,9 +108,7 @@ class SpectrometerController:
 
             # Define function to handle plot window close event
             def on_close(event):
-                nonlocal live_spectrum_running
-                live_spectrum_running = False
-                plt.close(fig)  # Close the plot window
+                plt.close(self.fig)  # Close the plot window # Close the plot window
 
             # Connect the close event of the plot window to the handler
             # fig.canvas.mpl_connect('close_event', on_close)
@@ -123,16 +120,10 @@ class SpectrometerController:
                 # Save the plot image
                 fig.savefig('BG_spectrometer_plot.png', bbox_inches='tight', pad_inches=0.5)
 
-            # # Add a button to the plot window for saving data
-            # save_button_ax = plt.axes([0.81, 0.01, 0.1, 0.075])
-            # save_button = Button(save_button_ax, 'Save')
-            # save_button.on_clicked(on_save)
-            
-                        # Add a button outside the plot window for saving data
+            # Add a button outside the plot window for saving data
             save_button_ax = plt.axes([0.85, 0.01, 0.1, 0.065])
             save_button = Button(save_button_ax, 'Save')
             save_button.on_clicked(on_save)
-
 
             # Connect the close event of the plot window to the handler
             fig.canvas.mpl_connect('close_event', on_close)
@@ -140,6 +131,7 @@ class SpectrometerController:
             live_spectrum_running = True
             while live_spectrum_running:
                 # Acquire spectrum data
+                
                 wavelengths, intensities = self.spec.spectrum()
 
                 # Update the plot with new data
@@ -159,6 +151,10 @@ class SpectrometerController:
             # Close the spectrometer when finished
             self.spec.close()
         
+    def close_plot(self):
+        if self.fig is not None:
+            plt.close(self.fig)
+
     def disconnect_spectrometer(self):
         if self.spec is not None:
             self.spec.close()
@@ -319,7 +315,7 @@ class MeasurementController:
             # Update the class variable
             MeasurementController.current_angle = current_angle_normalized
 
-            self.current_csv_filename = f'{self.experiment_name}_angle_{int(current_angle_normalized)}_integrationtime_{int(exposure_time_micros/1000.0)}_acc_{num_accumulations}.csv'
+            self.current_csv_filename = f'{self.experiment_name}_angle_{int(current_angle_normalized)}_intTime_{int(exposure_time_micros/1000.0)}_acc_{num_accumulations}.csv'
             self.spectrometer_controller.perform_accumulation(num_accumulations, exposure_time_micros, self.current_csv_filename)
             
             current_angle += step_size
