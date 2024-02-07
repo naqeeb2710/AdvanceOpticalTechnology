@@ -6,6 +6,7 @@ import csv
 import numpy as np
 import tkinter as tk
 from tkinter import filedialog
+import shutil
 
 class LiveSpectrum:
     def __init__(self):
@@ -21,6 +22,7 @@ class LiveSpectrum:
 
     def live_spectrum(self, exposure_time_micros, max_plots=5):
         # Create a "plotdump" folder if it doesn't exist
+        shutil.rmtree("plotdump", ignore_errors=True)
         os.makedirs("plotdump", exist_ok=True)
 
         # Function to update the plot with new data

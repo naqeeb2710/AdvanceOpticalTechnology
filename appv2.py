@@ -11,8 +11,7 @@ from main_v4 import MotorController
 from main_v4 import MeasurementController
 import time
 import csv
-from liveSpectrum import LiveSpectrum
-from liveSpectrum2 import LiveSpectrum as li
+from liveSpectrum import LiveSpectrum as li
 
 class App:
     def __init__(self, root):
@@ -28,7 +27,7 @@ class App:
 
         # Set up GUI components
         self.create_widgets()
-        # self.update_current_info()
+        self.update_current_info()
 
     def create_widgets(self):
         # Create a container frame for the layout
@@ -102,7 +101,7 @@ class App:
         ttk.Button(button_frame, text="Home", command=self.motor_controller.move_home, style="Green.TButton").grid(row=0, column=0, padx=(5, 5), pady=5)
 
         # Start Measurement button
-        ttk.Button(button_frame, text="Spectrum", command=self.start_measurement_thread).grid(row=0, column=1, padx=(5, 5), pady=5)
+        ttk.Button(button_frame, text="Spectrum", command=self.start_measurement).grid(row=0, column=1, padx=(5, 5), pady=5)
 
         ttk.Button(button_frame, text="Power", command=self.start_power_measurement).grid(row=0, column=2, padx=(5, 5), pady=5)
 
