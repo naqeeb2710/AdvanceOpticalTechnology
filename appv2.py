@@ -83,7 +83,7 @@ class App:
         ttk.Label(frame3, text="Move to Angle:").grid(row=1, column=0, padx=5, pady=5, sticky=tk.E)
         self.move_to_angle_entry = ttk.Entry(frame3)
         self.move_to_angle_entry.grid(row=1, column=1, padx=5, pady=5)
-        ttk.Button(frame3, text="Go", command=lambda: self.motor_controller.move_to_angle(float(self.move_to_angle_entry.get()))).grid(row=1, column=2, padx=(5, 5), pady=5)
+        ttk.Button(frame3, text="Go", command=self.moveangle).grid(row=1, column=2, padx=(5, 5), pady=5)
 
 
         ttk.Button(frame3, text="Live", command=self.live_spectrum).grid(row=2, column=0, pady=5)
@@ -160,6 +160,14 @@ class App:
         self.current_angle_label = ttk.Label(info_labels_frame, text="0 degrees")
         self.current_angle_label.grid(row=2, column=1, padx=5, pady=5, sticky="w")
 
+
+    def moveangle(self):
+        # Implement the logic for moving to a specific angle
+        angle = float(self.move_to_angle_entry.get())%360
+        if hasattr(self.motor_controller.inst, 'velocity_max'):
+            self.motor_controller.inst.velocity_max(0)  # Set velocity to 0 before cleanup
+        self.motor_controller.inst.velocity_max(25)
+        self.motor_controller.move_to_angle(angle)
 
     def update_current_info(self):
     # Method to update the current velocity and angle labels
