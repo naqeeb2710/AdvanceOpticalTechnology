@@ -12,6 +12,7 @@ from main_v4 import MeasurementController
 import time
 import csv
 from liveSpectrum import LiveSpectrum as li
+from tkinter import filedialog
 
 class App:
     def __init__(self, root):
@@ -306,6 +307,10 @@ class App:
 
             # Configure motor
             self.motor_controller.configure_motor(25)
+            save_dir = filedialog.askdirectory()
+            if not save_dir:
+            # If the user cancels the dialog, return without saving
+                return
 
             # Create measurement controller
             measurement_controller = MeasurementController(self.spectrometer_controller, self.motor_controller, experiment_name)
@@ -314,8 +319,8 @@ class App:
             self.ax.clear()
 
             angle_power_list = []  # Initialize an empty list to store angle-power pairs
-            dump_folder = 'experiment_data'
-            os.makedirs(dump_folder, exist_ok=True)
+            # dump_folder = 'experiment_data'
+            # os.makedirs(dump_folder, exist_ok=True)
             measurement_range = measurement_controller.default_measurement_range  # Initialize measurement range
             status_counter = 0  # Initialize status counter
             measurement_controller.power_meter.connect()
@@ -333,7 +338,7 @@ class App:
                 power_data, average_power = measurement_controller.power_meter.disarm()  # Unpack the tuple to get power data and average power
                 if power_data:
                     print("Power data recorded:")
-                    power_meter_filename = os.path.join(dump_folder, f'power_meter_dump_{experiment_name}_angle_{angle}.csv')
+                    power_meter_filename = os.path.join(save_dir, f'power_meter_dump_{experiment_name}_angle_{angle}.csv')
                     with open(power_meter_filename, 'w') as power_dump:
                         # Write header
                         power_dump.write('time, power, status\n')
@@ -357,7 +362,7 @@ class App:
                     power_data, average_power = measurement_controller.power_meter.disarm()
                     if power_data:
                         print("Power data recorded:")
-                        power_meter_filename = os.path.join(dump_folder, f'power_meter_dump_{experiment_name}_angle_{angle}.csv')
+                        power_meter_filename = os.path.join(save_dir, f'power_meter_dump_{experiment_name}_angle_{angle}.csv')
                         with open(power_meter_filename, 'w') as power_dump:
                             # Write header
                             power_dump.write('time, power, status\n')
@@ -378,7 +383,7 @@ class App:
             print(angle_power_list)
             # Save the angle-power list to a CSV file
             os.makedirs('experiment_data', exist_ok=True)
-            angle_power_filename = os.path.join('experiment_data', f'{experiment_name}_angle_power.csv')
+            angle_power_filename = os.path.join(save_dir, f'{experiment_name}_angle_power.csv')
             with open(angle_power_filename, 'w', newline='') as csvfile:
                 csv_writer = csv.writer(csvfile)
                 header = ['Angle (deg)', 'Average Power (nJ)']
@@ -394,11 +399,13 @@ class App:
             plt.ylabel('Average Power (nJ)')
             plt.yticks([i for i in range(0, int(max(powers)) + 5, 5)])  # Set ticks at intervals of 5
             #save plot in experiment_data folder
-            plt.savefig(f'experiment_data/{experiment_name}_angle_power.png', bbox_inches='tight', pad_inches=0.5)
+            plot_filename = os.path.join(save_dir, f'{experiment_name}_angle_power.png')
+            plt.savefig(plot_filename, bbox_inches='tight', pad_inches=0.5)
+            # plt.savefig(f'/{experiment_name}_angle_power.png', bbox_inches='tight', pad_inches=0.5)
 
             # Display the latest graph in the Tkinter application
-            img = plt.imread(f'experiment_data/{experiment_name}_angle_power.png')
-            # img = plt.imread(f'{experiment_name}_angle_power.png')
+            img = plt.imread(plot_filename)
+            # img = plt.imread(f'experiment_data/{experiment_name}_angle_power.png')
             self.ax.imshow(img)
             self.ax.axis('off')  # Turn off axis labels
             # Update the canvas
