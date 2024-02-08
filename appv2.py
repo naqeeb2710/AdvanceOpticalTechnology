@@ -28,7 +28,7 @@ class App:
 
         # Set up GUI components
         self.create_widgets()
-        self.update_current_info()
+        # self.update_current_info()
 
     def create_widgets(self):
         # Create a container frame for the layout
@@ -238,6 +238,8 @@ class App:
 
             # Clear previous plot
             self.ax.clear()
+            
+            save_dir = filedialog.askdirectory()
 
             # Measure at angles with default velocity using a while loop
             total_steps = ((final_angle - initial_angle) / step_size) + 1
@@ -247,7 +249,7 @@ class App:
                 angle = (initial_angle + (current_step - 1) * step_size)
                 
                 measurement_controller.measure_at_angles(
-                    angle, angle, 1, num_accumulations, exposure_time_micros, 0.5
+                    angle, angle, 1, num_accumulations, exposure_time_micros, 0.5,save_dir
                 )
 
                 # Access the current_csv_filename from the MeasurementController
@@ -255,7 +257,8 @@ class App:
                 # Dynamically generate the plot filename based on the current angle
                 output_plot_filename = current_csv_filename.replace('.csv', '.png')
                 # Save the plot as an image file in the "plot" folder
-                output_plot_filepath = os.path.join("experiment_data", output_plot_filename)
+                output_plot_filepath = os.path.join(save_dir, output_plot_filename)
+                print(f"Plot saved to: {output_plot_filepath}")
 
                 # Display the latest graph in the Tkinter application
                 img = plt.imread(output_plot_filepath)
@@ -425,36 +428,18 @@ class App:
             self.motor_controller.close_motor()
             self.spectrometer_controller.disconnect_spectrometer()
                        
-    # def live_spectrum(self):
-
-    #     try:
-    #         print("Live spectrum started")
-
-    #         self.liveSpec = LiveSpectrum()
-    #         print("object created")
-    #         exposure_time_entry_value = self.exposure_time_entry.get()
-    #         exposure_time_mili = float(exposure_time_entry_value)
-    #         exposure_time_micros = exposure_time_mili * 1000.0
-    #         self.liveSpec.live_spectrum(exposure_time_micros)
-
-    #     except Exception as e:
-    #         print(f"An error occurred: {e}")
-    #         self.liveSpec.close_plot()
-    #         self.liveSpec.disconnect_spectrometer()
-    # #         # Handle any exceptions gracefully
-    
     def live_spectrum(self):
         try:
             print("Live spectrum started")
             self.liveSpec = li()
-            print("object created")
+            # print("object created")
             exposure_time_entry_value = self.exposure_time_entry.get()
             exposure_time_mili = float(exposure_time_entry_value)
             exposure_time_micros = exposure_time_mili * 1000.0
             for plot_path in self.liveSpec.live_spectrum(exposure_time_micros, max_plots=5):
                 # Load the plot image
                 img = plt.imread(plot_path)
-                print("Latest plot path:", plot_path)
+                # print("Latest plot path:", plot_path)
                 # Display the plot image in the Tkinter application
                 self.ax.imshow(img)
                 self.ax.axis('off')
@@ -471,7 +456,11 @@ class App:
     
     def stop_live_spectrum(self):
         # Set the flag to stop the live spectrum
-        self.liveSpec.save_live_spectrum()
+        exposure_time_entry_value = self.exposure_time_entry.get()
+        exposure_time_mili = float(exposure_time_entry_value)
+        exposure_time_micros = exposure_time_mili * 1000.0
+
+        self.liveSpec.save_live_spectrum(exposure_time_micros)
 
 
     def quit_application(self):

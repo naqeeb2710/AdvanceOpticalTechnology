@@ -86,29 +86,17 @@ class LiveSpectrum:
             
     #     print(f"Live spectrum data saved to {data_filename}")
     
-    def save_live_spectrum(self):
+    def save_live_spectrum(self, exposure_time_micros):
         # Stop the live spectrum loop
         # Get the current timestamp
         plt.close()
         timestamp = time.strftime("%Y%m%d%H%M%S")
+        self.spec.integration_time_micros(exposure_time_micros)
         wavelength, Intensity = self.spec.spectrum()
-        plt.plot(wavelength, Intensity)
-        plt.xlabel('Wavelength (nm)')
-        plt.ylabel('Intensity')
-        plt.savefig(f"BG_spectrum.png", bbox_inches='tight', pad_inches=0.5)
+       
         if self.spec is not None:
             self.spec.close()  # Close the spectrometer
 
-        # Save the wavelengths and intensities data to a CSV file
-        data_filename = f"BG_spectrum_{timestamp}.csv"
-        with open(data_filename, mode='w', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow(['Wavelength (nm)', 'Intensity'])
-            # Replace the following line with the actual data from your spectrometer
-            writer.writerows(zip(wavelength,Intensity)) # Example random dat
-            
-        print(f"Live spectrum data saved to {data_filename}")
-    
         # Create a Tkinter root window
         root = tk.Tk()
         root.withdraw()  # Hide the root window
@@ -121,8 +109,9 @@ class LiveSpectrum:
             plt.plot(wavelength, Intensity)
             plt.xlabel('Wavelength (nm)')
             plt.ylabel('Intensity')
-            plot_filename = os.path.join(save_dir, 'BG_spectrum.png')
+            plot_filename = os.path.join(save_dir, f"BG_spectrum_{timestamp}.png")
             plt.savefig(plot_filename, bbox_inches='tight', pad_inches=0.5)
+            plt.close()
 
             # Save the data to a CSV file
             data_filename = os.path.join(save_dir, f"BG_spectrum_{timestamp}.csv")

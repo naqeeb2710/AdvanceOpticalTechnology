@@ -28,7 +28,7 @@ class SpectrometerController:
         self.fig = None  # Initialize figure object to store the reference of the plot window
         
 
-    def perform_accumulation(self, num_accumulations, exposure_time_micros, output_csv_filename):
+    def perform_accumulation(self, num_accumulations, exposure_time_micros, output_csv_filename,save_dir):
         if self.spec is None:
             print("Spectrometer not connected. Please connect first.")
             return
@@ -49,7 +49,7 @@ class SpectrometerController:
             intensities[i] = current_intensities
 
         # Create the "data" folder if it doesn't exist
-        data_folder = 'experiment_data'
+        data_folder = save_dir
         os.makedirs(data_folder, exist_ok=True)
 
         # Save the data to a CSV file in the "data" folder
@@ -64,7 +64,7 @@ class SpectrometerController:
         
 
         # Create the "plot" folder if it doesn't exist
-        plot_folder = 'experiment_data'
+        plot_folder = save_dir
         if not os.path.exists(plot_folder):
             os.makedirs(plot_folder)
 
@@ -299,7 +299,7 @@ class MeasurementController:
         plt.yticks([i for i in range(0, int(max(powers)) + 5, 5)])  # Set ticks at intervals of 2
         plt.savefig(f'{self.experiment_name}_angle_power.png', bbox_inches='tight', pad_inches=0.5)
 
-    def measure_at_angles(self, initial_angle, final_angle, step_size, num_accumulations, exposure_time_micros, delay_seconds):
+    def measure_at_angles(self, initial_angle, final_angle, step_size, num_accumulations, exposure_time_micros, delay_seconds,save_dir):
         current_angle = initial_angle
 
         while current_angle <= final_angle:
@@ -316,7 +316,7 @@ class MeasurementController:
             MeasurementController.current_angle = current_angle_normalized
 
             self.current_csv_filename = f'{self.experiment_name}_angle_{int(current_angle_normalized)}_intTime_{int(exposure_time_micros/1000.0)}_acc_{num_accumulations}.csv'
-            self.spectrometer_controller.perform_accumulation(num_accumulations, exposure_time_micros, self.current_csv_filename)
+            self.spectrometer_controller.perform_accumulation(num_accumulations, exposure_time_micros, self.current_csv_filename,save_dir)
             
             current_angle += step_size
 
