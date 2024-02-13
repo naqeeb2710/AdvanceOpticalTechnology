@@ -6,9 +6,9 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
 import os
-from main_v4 import SpectrometerController
-from main_v4 import MotorController
-from main_v4 import MeasurementController
+from main import SpectrometerController
+from main import MotorController
+from main import MeasurementController
 import time
 import csv
 from liveSpectrum import LiveSpectrum as li
@@ -37,96 +37,143 @@ class App:
 
         # Create frame for the first set of parameters
         frame1 = ttk.Frame(container_frame, padding="5", name="frame1", borderwidth=2, relief="groove")
-        frame1.grid(row=0, column=0, padx=5, pady=5, sticky="nsew")
+        frame1.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
 
-        ttk.Label(frame1, text="Initial Angle (degrees):").grid(row=0, column=0, padx=5, pady=5, sticky=tk.E)
-        self.initial_angle_entry = ttk.Entry(frame1)
-        self.initial_angle_entry.grid(row=0, column=1, padx=5, pady=5)
+        ttk.Label(frame1, text="Initial Angle (degrees):").grid(row=0, column=0, padx=0, pady=0, sticky=tk.E)
+        self.initial_angle_entry = ttk.Entry(frame1, width=10)  # Adjust the width as needed
+        self.initial_angle_entry.grid(row=0, column=1, padx=0, pady=5)
 
-        ttk.Label(frame1, text="Final Angle (degrees):").grid(row=1, column=0, padx=5, pady=5, sticky=tk.E)
-        self.final_angle_entry = ttk.Entry(frame1)
-        self.final_angle_entry.grid(row=1, column=1, padx=5, pady=5)
+        ttk.Label(frame1, text="Final Angle (degrees):").grid(row=0, column=2, padx=0, pady=0, sticky=tk.E)
+        self.final_angle_entry = ttk.Entry(frame1,width=10)  # Adjust the width as needed
+        self.final_angle_entry.grid(row=0, column=3, padx=0, pady=5)
 
         ttk.Label(frame1, text="Step Size (degrees):").grid(row=2, column=0, padx=5, pady=5, sticky=tk.E)
-        self.step_size_entry = ttk.Entry(frame1)
+        self.step_size_entry = ttk.Entry(frame1,width=10)
         self.step_size_entry.grid(row=2, column=1, padx=5, pady=5)
 
+        # Create a checkbox for "Go Home" or "After Measurement" in frame2
+        self.go_home_var = tk.IntVar()  # Define the variable
+        self.go_home_checkbox = ttk.Checkbutton(frame1, text="Go Home After Measurement", variable=self.go_home_var)
+        self.go_home_checkbox.grid(row=2, column=2, columnspan=2, pady=5, sticky=tk.W) 
+
+
+        ttk.Label(frame1, text="Move to (degrees):").grid(row=3, column=0, padx=5, pady=5, sticky=tk.E)
+        self.move_to_angle_entry = ttk.Entry(frame1,width=10)
+        self.move_to_angle_entry.grid(row=3, column=1, padx=5, pady=5)
+        ttk.Button(frame1, text="Go", command=self.moveangle).grid(row=3, column=2, padx=(5, 5), pady=5)
+
+        ttk.Label(frame1, text="Jog (degrees):").grid(row=4, column=0, padx=5, pady=5, sticky=tk.E)
+        self.angle_size_entry = ttk.Entry(frame1,width=10)
+        self.angle_size_entry.grid(row=4, column=1, padx=5, pady=5)
+
+        ttk.Button(frame1, text="+", command=self.up_angle).grid(row=4, column=2, padx=(5, 5), pady=5)
+        ttk.Button(frame1, text="-", command=self.down_angle).grid(row=4, column=3, padx=(5, 5), pady=5)
+
         #create an input for experiment name
-        ttk.Label(frame1, text="Sample name:").grid(row=3, column=0, padx=5, pady=5, sticky=tk.E)
-        self.experiment_name_entry = ttk.Entry(frame1)
-        self.experiment_name_entry.grid(row=3, column=1, padx=5, pady=5)
+        # ttk.Label(frame1, text="Sample name:").grid(row=3, column=0, padx=5, pady=5, sticky=tk.E)
+        # self.experiment_name_entry = ttk.Entry(frame1)
+        # self.experiment_name_entry.grid(row=3, column=1, padx=5, pady=5)
 
         # Create a frame for the second set of parameters
         frame2 = ttk.Frame(container_frame, padding="5", name="frame2", borderwidth=2, relief="groove")
         frame2.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
 
-        ttk.Label(frame2, text="Int. time power(S)").grid(row=0, column=0, padx=5, pady=5, sticky=tk.E)
-        self.int_time_power = ttk.Entry(frame2)
-        self.int_time_power.grid(row=0, column=1, padx=5, pady=5)
+        ttk.Label(frame2, text="Int. Time Spec (ms):").grid(row=0, column=0, padx=5, pady=5, sticky=tk.E)
+        self.exposure_time_entry = ttk.Entry(frame2,width=10)
+        self.exposure_time_entry.grid(row=0, column=1, padx=5, pady=5)
 
-        ttk.Label(frame2, text="Int. Time (ms):").grid(row=1, column=0, padx=5, pady=5, sticky=tk.E)
-        self.exposure_time_entry = ttk.Entry(frame2)
-        self.exposure_time_entry.grid(row=1, column=1, padx=5, pady=5)
+        ttk.Label(frame2, text="Num Accumulations:").grid(row=1, column=0, padx=5, pady=5, sticky=tk.E)
+        self.num_accumulations_entry = ttk.Entry(frame2,width=10)
+        self.num_accumulations_entry.grid(row=1, column=1, padx=5, pady=5)
 
-        ttk.Label(frame2, text="Num Accumulations:").grid(row=2, column=0, padx=5, pady=5, sticky=tk.E)
-        self.num_accumulations_entry = ttk.Entry(frame2)
-        self.num_accumulations_entry.grid(row=2, column=1, padx=5, pady=5)
+        ttk.Label(frame2, text="Int. Time power(s)").grid(row=2, column=0, padx=5, pady=5, sticky=tk.E)
+        self.int_time_power = ttk.Entry(frame2,width=10)
+        self.int_time_power.grid(row=2, column=1, padx=5, pady=5)
 
-        # Create a checkbox for "Go Home" or "After Measurement" in frame2
-        self.go_home_var = tk.IntVar()  # Define the variable
-        self.go_home_checkbox = ttk.Checkbutton(frame2, text="Go Home After Measurement", variable=self.go_home_var)
-        self.go_home_checkbox.grid(row=3, column=0, columnspan=2, pady=5, sticky=tk.W) 
+        # # Create a checkbox for "Go Home" or "After Measurement" in frame2
+        # self.go_home_var = tk.IntVar()  # Define the variable
+        # self.go_home_checkbox = ttk.Checkbutton(frame2, text="Go Home After Measurement", variable=self.go_home_var)
+        # self.go_home_checkbox.grid(row=3, column=0, columnspan=2, pady=5, sticky=tk.W) 
+
+        # Progress bar
+        ttk.Label(frame2, text="Progress:").grid(row=4, column=0, padx=5, pady=5, sticky=tk.E)
+        self.progress_label = ttk.Label(frame2, text="0%")
+        self.progress_label.grid(row=4, column=2, padx=5, pady=5, sticky=tk.W)
+        self.progress_bar = ttk.Progressbar(frame2, orient='horizontal', length=100, mode='determinate')
+        self.progress_bar.grid(row=4, column=1, padx=(0, 10), pady=5)  # Adjusted the padx to shift the progress bar to the left
 
         # Create a frame for the third set of parameters (single test)
         frame3 = ttk.Frame(container_frame, padding="5", name="frame3", borderwidth=2, relief="groove")
         frame3.grid(row=0, column=2, padx=10, pady=10, sticky="nsew")
 
-        ttk.Label(frame3, text="Move to Angle:").grid(row=1, column=0, padx=5, pady=5, sticky=tk.E)
-        self.move_to_angle_entry = ttk.Entry(frame3)
-        self.move_to_angle_entry.grid(row=1, column=1, padx=5, pady=5)
-        ttk.Button(frame3, text="Go", command=self.moveangle).grid(row=1, column=2, padx=(5, 5), pady=5)
+        # ttk.Label(frame3, text="Move to Angle:").grid(row=1, column=0, padx=5, pady=5, sticky=tk.E)
+        # self.move_to_angle_entry = ttk.Entry(frame3)
+        # self.move_to_angle_entry.grid(row=1, column=1, padx=5, pady=5)
+        # ttk.Button(frame3, text="Go", command=self.moveangle).grid(row=1, column=2, padx=(5, 5), pady=5)
+        ttk.Label(frame3, text="Sample name:").grid(row=0, column=0, padx=5, pady=5, sticky=tk.E)
+        self.experiment_name_entry = ttk.Entry(frame3,width=10)
+        self.experiment_name_entry.grid(row=0, column=1, padx=5, pady=5)
 
 
-        ttk.Button(frame3, text="Live", command=self.live_spectrum).grid(row=2, column=0, pady=5)
-        ttk.Button(frame3, text="Save Live", command=self.stop_live_spectrum).grid(row=2, column=1, padx=(5, 5), pady=5)
+        ttk.Button(frame3, text="Live", command=self.live_spectrum).grid(row=1, column=0, pady=5)
+        ttk.Button(frame3, text="Save Live", command=self.stop_live_spectrum).grid(row=1, column=1, padx=(5, 5), pady=5)
 
-        # Create a horizontal frame for buttons and progress bar (2:1 ratio)
-        button_frame = ttk.Frame(self.root, padding="5", name="button_frame", borderwidth=2, relief="groove")
-        button_frame.grid(row=1, column=0, columnspan=3, padx=5, pady=5, sticky="nsew")
+        # Start Measurement button
+        ttk.Button(frame3, text="Take Spectrum", command=self.start_measurement).grid(row=2, column=0, padx=(5, 5), pady=5)
+
+        ttk.Button(frame3, text=" Take Power", command=self.start_power_measurement).grid(row=2, column=1, padx=(5, 5), pady=5)
 
         # Create a style to configure the button color
         style = ttk.Style()
         style.configure("Green.TButton", background="green")
-
         # Home button
-        ttk.Button(button_frame, text="Home", command=self.motor_controller.move_home, style="Green.TButton").grid(row=0, column=0, padx=(5, 5), pady=5)
-
-        # Start Measurement button
-        ttk.Button(button_frame, text="Spectrum", command=self.start_measurement).grid(row=0, column=1, padx=(5, 5), pady=5)
-
-        ttk.Button(button_frame, text="Power", command=self.start_power_measurement).grid(row=0, column=2, padx=(5, 5), pady=5)
-
-        # Progress bar
-        ttk.Label(button_frame, text="Progress:").grid(row=0, column=3, padx=5, pady=5, sticky=tk.E)
-        self.progress_label = ttk.Label(button_frame, text="0%")
-        self.progress_label.grid(row=0, column=4, padx=5, pady=5, sticky=tk.W)
-        self.progress_bar = ttk.Progressbar(button_frame, orient='horizontal', length=130, mode='determinate')
-        self.progress_bar.grid(row=0, column=5, padx=(0, 5), pady=5)  # Adjusted the padx to shift the progress bar to the left
-
-        # Create a style to configure the button color
+        ttk.Button(frame3, text="Home 0 Deg", command=self.motor_controller.move_home, style="Green.TButton").grid(row=3, column=0, padx=(5, 5), pady=5)
+        
+        # Create a style to configure the button color``
         style = ttk.Style()
         style.configure("Red.TButton", background="red")
         # Quit button
-        ttk.Button(button_frame, text="Quit", command=self.quit_application, style="Red.TButton").grid(row=0, column=6, padx=(5, 5), pady=5)
+        ttk.Button(frame3, text="Exit", command=self.quit_application, style="Red.TButton").grid(row=3, column=1, padx=(5, 5), pady=5)
         # Bind the close button to the quit_application method
         self.root.protocol("WM_DELETE_WINDOW", self.quit_application)
 
-        ttk.Label(button_frame, text="Jog:").grid(row=0, column=7, padx=5, pady=5, sticky=tk.E)
-        self.angle_size_entry = ttk.Entry(button_frame)
-        self.angle_size_entry.grid(row=0, column=8, padx=5, pady=5)
+        # Create a horizontal frame for buttons and progress bar (2:1 ratio)
+        # button_frame = ttk.Frame(self.root, padding="5", name="button_frame", borderwidth=2, relief="groove")
+        # button_frame.grid(row=1, column=0, columnspan=3, padx=5, pady=5, sticky="nsew")
 
-        ttk.Button(button_frame, text="+", command=self.up_angle).grid(row=0, column=9, padx=(5, 5), pady=5)
-        ttk.Button(button_frame, text="-", command=self.down_angle).grid(row=0, column=10, padx=(5, 5), pady=5)
+        # # Create a style to configure the button color
+        # style = ttk.Style()
+        # style.configure("Green.TButton", background="green")
+
+        # # Home button
+        # ttk.Button(button_frame, text="Home", command=self.motor_controller.move_home, style="Green.TButton").grid(row=0, column=0, padx=(5, 5), pady=5)
+
+        # # Start Measurement button
+        # ttk.Button(button_frame, text="Spectrum", command=self.start_measurement).grid(row=0, column=1, padx=(5, 5), pady=5)
+
+        # ttk.Button(button_frame, text="Power", command=self.start_power_measurement).grid(row=0, column=2, padx=(5, 5), pady=5)
+
+        # # Progress bar
+        # ttk.Label(button_frame, text="Progress:").grid(row=0, column=3, padx=5, pady=5, sticky=tk.E)
+        # self.progress_label = ttk.Label(button_frame, text="0%")
+        # self.progress_label.grid(row=0, column=4, padx=5, pady=5, sticky=tk.W)
+        # self.progress_bar = ttk.Progressbar(button_frame, orient='horizontal', length=130, mode='determinate')
+        # self.progress_bar.grid(row=0, column=5, padx=(0, 5), pady=5)  # Adjusted the padx to shift the progress bar to the left
+
+        # # Create a style to configure the button color
+        # style = ttk.Style()
+        # style.configure("Red.TButton", background="red")
+        # # Quit button
+        # ttk.Button(button_frame, text="Quit", command=self.quit_application, style="Red.TButton").grid(row=0, column=6, padx=(5, 5), pady=5)
+        # # Bind the close button to the quit_application method
+        # self.root.protocol("WM_DELETE_WINDOW", self.quit_application)
+
+        # ttk.Label(button_frame, text="Jog:").grid(row=0, column=7, padx=5, pady=5, sticky=tk.E)
+        # self.angle_size_entry = ttk.Entry(button_frame)
+        # self.angle_size_entry.grid(row=0, column=8, padx=5, pady=5)
+
+        # ttk.Button(button_frame, text="+", command=self.up_angle).grid(row=0, column=9, padx=(5, 5), pady=5)
+        # ttk.Button(button_frame, text="-", command=self.down_angle).grid(row=0, column=10, padx=(5, 5), pady=5)
 
         # Create a frame for displaying current velocity, acceleration, and angle
         current_info_frame = ttk.Frame(self.root, padding="10", name="current_info_frame", borderwidth=2, relief="groove")
@@ -341,7 +388,7 @@ class App:
                 power_data, average_power = measurement_controller.power_meter.disarm()  # Unpack the tuple to get power data and average power
                 if power_data:
                     print("Power data recorded:")
-                    power_meter_filename = os.path.join(save_dir, f'power_meter_dump_{experiment_name}_angle_{angle}.csv')
+                    power_meter_filename = os.path.join(save_dir, f'{experiment_name}_power_{int(angle)}deg.csv')
                     with open(power_meter_filename, 'w') as power_dump:
                         # Write header
                         power_dump.write('time, power, status\n')
@@ -365,7 +412,7 @@ class App:
                     power_data, average_power = measurement_controller.power_meter.disarm()
                     if power_data:
                         print("Power data recorded:")
-                        power_meter_filename = os.path.join(save_dir, f'power_meter_dump_{experiment_name}_angle_{angle}.csv')
+                        power_meter_filename = os.path.join(save_dir, f'{experiment_name}_power_{angle}deg.csv')
                         with open(power_meter_filename, 'w') as power_dump:
                             # Write header
                             power_dump.write('time, power, status\n')
@@ -393,6 +440,7 @@ class App:
                 csv_writer.writerow(header)
                 for row in angle_power_list:
                     csv_writer.writerow(row)
+            print(">>>Angle vs plot data")
 
             self.spectrometer_controller.disconnect_spectrometer()
             angles, powers = zip(*angle_power_list)
@@ -404,6 +452,7 @@ class App:
             #save plot in experiment_data folder
             plot_filename = os.path.join(save_dir, f'{experiment_name}_angle_power.png')
             plt.savefig(plot_filename, bbox_inches='tight', pad_inches=0.5)
+            print(">>>plot saved")
             # plt.savefig(f'/{experiment_name}_angle_power.png', bbox_inches='tight', pad_inches=0.5)
 
             # Display the latest graph in the Tkinter application
