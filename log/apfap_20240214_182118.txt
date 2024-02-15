@@ -1,0 +1,11 @@
+Experiment Name: apfap
+<SeaBreezeDevice HR4000:HR4C222>
+Position: 0.0 degrees at angle: 0.0 degrees
+Final Position: 0.0 degrees
+Plot saved to: C:/Users/naqee/Desktop/ASE/experiment_data\apfap_spec_0deg_100ms_acc_1.png
+Position: 100.00001525878906 degrees at angle: 100.0 degrees
+Final Position: 100.00001525878906 degrees
+Plot saved to: C:/Users/naqee/Desktop/ASE/experiment_data\apfap_spec_100deg_100ms_acc_1.png
+Position: 199.99998474121094 degrees at angle: 200.0 degrees
+Final Position: 199.99998474121094 degrees
+Plot saved to: C:/Users/naqee/Desktop/ASE/experiment_data\apfap_spec_200deg_100ms_acc_1.png

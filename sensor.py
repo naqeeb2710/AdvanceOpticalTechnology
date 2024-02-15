@@ -87,8 +87,9 @@ class Sensor:
                 for i in range(0, len(data[0]), 2):
                     if i>=60 :
                         events.append((data[1][i] - data[1][0], data[0][i], data[2][i]))
-                        total_power += data[0][i]  # Accumulate power for each event
-                        num_events += 1
+                        if data[2][i] == 0:
+                            total_power += data[0][i]  # Accumulate power for each event
+                            num_events += 1
 
                 average_power = total_power / num_events
                 print(f"Number of Events: {num_events}", average_power)

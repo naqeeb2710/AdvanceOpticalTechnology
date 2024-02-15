@@ -1,0 +1,5 @@
+matplotlib==3.5.2
+numpy==1.22.0
+pywin32==304
+qcodes_contrib_drivers==0.18.0
+seabreeze==2.4.0

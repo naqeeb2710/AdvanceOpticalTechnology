@@ -1,0 +1,41 @@
+<SeaBreezeDevice HR4000:HR4C222>
+An error occurred: ('APT: [MOT_MoveAbsoluteEx]: Unknown code: 10111', 'setting K10CR1_position to 0.0')
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "C:\Users\naqee\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py", line 1921, in __call__
+    return self.func(*args)
+  File "C:\Users\naqee\Desktop\ASE\app.py", line 478, in quit_application
+    self.motor_controller.close_motor()
+  File "C:\Users\naqee\Desktop\ASE\main.py", line 195, in close_motor
+    self.apt.apt_clean_up()
+  File "C:\Users\naqee\AppData\Local\Programs\Python\Python310\lib\site-packages\qcodes_contrib_drivers\drivers\Thorlabs\APT.py", line 70, in apt_clean_up
+    self.error_check(code, 'APTCleanUp')
+  File "C:\Users\naqee\AppData\Local\Programs\Python\Python310\lib\site-packages\qcodes_contrib_drivers\drivers\Thorlabs\APT.py", line 65, in error_check
+    raise ThorlabsException("APT: [{}]: Unknown code: {}".format(function_name, code))
+qcodes_contrib_drivers.drivers.Thorlabs.APT.ThorlabsException: APT: [APTCleanUp]: Unknown code: 10005
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "C:\Users\naqee\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py", line 1921, in __call__
+    return self.func(*args)
+  File "C:\Users\naqee\Desktop\ASE\app.py", line 478, in quit_application
+    self.motor_controller.close_motor()
+  File "C:\Users\naqee\Desktop\ASE\main.py", line 195, in close_motor
+    self.apt.apt_clean_up()
+  File "C:\Users\naqee\AppData\Local\Programs\Python\Python310\lib\site-packages\qcodes_contrib_drivers\drivers\Thorlabs\APT.py", line 70, in apt_clean_up
+    self.error_check(code, 'APTCleanUp')
+  File "C:\Users\naqee\AppData\Local\Programs\Python\Python310\lib\site-packages\qcodes_contrib_drivers\drivers\Thorlabs\APT.py", line 65, in error_check
+    raise ThorlabsException("APT: [{}]: Unknown code: {}".format(function_name, code))
+qcodes_contrib_drivers.drivers.Thorlabs.APT.ThorlabsException: APT: [APTCleanUp]: Unknown code: 10005
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "C:\Users\naqee\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py", line 1921, in __call__
+    return self.func(*args)
+  File "C:\Users\naqee\Desktop\ASE\app.py", line 478, in quit_application
+    self.motor_controller.close_motor()
+  File "C:\Users\naqee\Desktop\ASE\main.py", line 195, in close_motor
+    self.apt.apt_clean_up()
+  File "C:\Users\naqee\AppData\Local\Programs\Python\Python310\lib\site-packages\qcodes_contrib_drivers\drivers\Thorlabs\APT.py", line 70, in apt_clean_up
+    self.error_check(code, 'APTCleanUp')
+  File "C:\Users\naqee\AppData\Local\Programs\Python\Python310\lib\site-packages\qcodes_contrib_drivers\drivers\Thorlabs\APT.py", line 65, in error_check
+    raise ThorlabsException("APT: [{}]: Unknown code: {}".format(function_name, code))
+qcodes_contrib_drivers.drivers.Thorlabs.APT.ThorlabsException: APT: [APTCleanUp]: Unknown code: 10005

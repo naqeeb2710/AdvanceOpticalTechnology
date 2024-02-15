@@ -86,11 +86,10 @@ class LiveSpectrum:
             
     #     print(f"Live spectrum data saved to {data_filename}")
     
-    def save_live_spectrum(self, exposure_time_micros):
+    def save_live_spectrum(self, exposure_time_micros, experiment_name):
         # Stop the live spectrum loop
         # Get the current timestamp
         plt.close()
-        timestamp = time.strftime("%Y%m%d%H%M%S")
         self.spec.integration_time_micros(exposure_time_micros)
         wavelength, Intensity = self.spec.spectrum()
        
@@ -109,12 +108,12 @@ class LiveSpectrum:
             plt.plot(wavelength, Intensity)
             plt.xlabel('Wavelength (nm)')
             plt.ylabel('Intensity')
-            plot_filename = os.path.join(save_dir, f"BG_spectrum_{timestamp}.png")
+            plot_filename = os.path.join(save_dir, f'{experiment_name}_bg_{exposure_time_micros/1000.0}.png')
             plt.savefig(plot_filename, bbox_inches='tight', pad_inches=0.5)
             plt.close()
 
             # Save the data to a CSV file
-            data_filename = os.path.join(save_dir, f"BG_spectrum_{timestamp}.csv")
+            data_filename = os.path.join(save_dir, f'{experiment_name}_bg_{exposure_time_micros/1000.0}.csv')
             with open(data_filename, mode='w', newline='') as file:
                 writer = csv.writer(file)
                 writer.writerow(['Wavelength (nm)', 'Intensity'])

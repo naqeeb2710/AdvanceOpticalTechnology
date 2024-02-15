@@ -1,0 +1,1 @@
+lib.CC_RequestPosition(serial_num)

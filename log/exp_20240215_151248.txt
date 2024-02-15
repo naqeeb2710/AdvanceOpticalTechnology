@@ -1,0 +1,108 @@
+Sample Name: exp
+<SeaBreezeDevice HR4000:HR4C222>
+Ophir connect OK
+Position: 0.0 degrees at angle: 0.0 degrees
+Ophir connect OK
+Number of Events: 112 2.60625e-09
+Average Power: 2.61 nanojoules
+Power data recorded:
+Position: 50.000030517578125 degrees at angle: 50.0 degrees
+Ophir connect OK
+Number of Events: 103 2.8224271844660205e-09
+Average Power: 2.82 nanojoules
+Power data recorded:
+Position: 100.0 degrees at angle: 100.0 degrees
+Ophir connect OK
+Number of Events: 103 8.295533980582525e-09
+Average Power: 8.30 nanojoules
+Power data recorded:
+Position: 150.0 degrees at angle: 150.0 degrees
+Ophir connect OK
+Number of Events: 29 1.761103448275862e-08
+Average Power: 17.61 nanojoules
+Power data recorded:
+status counter =  1
+status counter =  2
+status counter =  3
+status counter =  4
+status counter =  5
+status counter =  6
+status counter =  7
+status counter =  8
+status counter =  9
+status counter =  10
+status counter =  11
+status counter =  12
+status counter =  13
+status counter =  14
+status counter =  15
+status counter =  16
+status counter =  17
+status counter =  18
+status counter =  19
+status counter =  20
+status counter =  21
+status counter =  22
+status counter =  23
+status counter =  24
+status counter =  25
+status counter =  26
+status counter =  27
+status counter =  28
+status counter =  29
+status counter =  30
+status counter =  31
+status counter =  32
+status counter =  33
+status counter =  34
+status counter =  35
+status counter =  36
+status counter =  37
+status counter =  38
+status counter =  39
+status counter =  40
+status counter =  41
+status counter =  42
+status counter =  43
+status counter =  44
+status counter =  45
+status counter =  46
+status counter =  47
+status counter =  48
+status counter =  49
+status counter =  50
+status counter =  51
+status counter =  52
+status counter =  53
+status counter =  54
+status counter =  55
+status counter =  56
+status counter =  57
+status counter =  58
+status counter =  59
+status counter =  60
+Ophir connect OK
+Number of Events: 158 2.170696202531646e-08
+Average Power: 21.71 nanojoules
+Power data recorded:
+Position: 199.99993896484375 degrees at angle: 200.0 degrees
+Ophir connect OK
+Number of Events: 129 5.5306976744186054e-08
+Average Power: 55.31 nanojoules
+Power data recorded:
+Position: 250.00006103515625 degrees at angle: 250.0 degrees
+Ophir connect OK
+Number of Events: 182 9.555824175824178e-08
+Average Power: 95.56 nanojoules
+Power data recorded:
+Position: 300.0 degrees at angle: 300.0 degrees
+Ophir connect OK
+Number of Events: 161 1.251962732919255e-07
+Average Power: 125.20 nanojoules
+Power data recorded:
+Final Position: 300.0 degrees
+[[0.0, 2.60625], [50.0, 2.8224271844660205], [100.0, 8.295533980582524], [150.0, 21.70696202531646], [200.0, 55.30697674418605], [250.0, 95.55824175824178], [300.0, 125.19627329192551]]
+>>>Angle vs Power data saved
+>>>Angle vs Power plot saved
+>>>Moved to 0 Deg
+Sample Name: t2
