@@ -13,6 +13,8 @@ import time
 import csv
 from liveSpectrum import LiveSpectrum as li
 from tkinter import filedialog
+import tkinter.scrolledtext as scrolledtext
+from datetime import datetime
 
 class App:
     def __init__(self, root):
@@ -28,7 +30,14 @@ class App:
 
         # Set up GUI components
         self.create_widgets()
-        # self.update_current_info()
+        self.update_current_info()
+
+        self.experiment_name = "" 
+
+        # Redirect stdout and stderr to the ScrolledText widget
+        # sys.stdout = TextRedirector(self.terminal_text, self.experiment_name_entry.get(), "stdout")
+        # sys.stderr = TextRedirector(self.terminal_text, self.experiment_name_entry.get(), "stderr")
+
 
     def create_widgets(self):
         # Create a container frame for the layout
@@ -69,11 +78,6 @@ class App:
         ttk.Button(frame1, text="+", command=self.up_angle).grid(row=4, column=2, padx=(5, 5), pady=5)
         ttk.Button(frame1, text="-", command=self.down_angle).grid(row=4, column=3, padx=(5, 5), pady=5)
 
-        #create an input for experiment name
-        # ttk.Label(frame1, text="Sample name:").grid(row=3, column=0, padx=5, pady=5, sticky=tk.E)
-        # self.experiment_name_entry = ttk.Entry(frame1)
-        # self.experiment_name_entry.grid(row=3, column=1, padx=5, pady=5)
-
         # Create a frame for the second set of parameters
         frame2 = ttk.Frame(container_frame, padding="5", name="frame2", borderwidth=2, relief="groove")
         frame2.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
@@ -88,12 +92,7 @@ class App:
 
         ttk.Label(frame2, text="Int. Time power(s)").grid(row=2, column=0, padx=5, pady=5, sticky=tk.E)
         self.int_time_power = ttk.Entry(frame2,width=10)
-        self.int_time_power.grid(row=2, column=1, padx=5, pady=5)
-
-        # # Create a checkbox for "Go Home" or "After Measurement" in frame2
-        # self.go_home_var = tk.IntVar()  # Define the variable
-        # self.go_home_checkbox = ttk.Checkbutton(frame2, text="Go Home After Measurement", variable=self.go_home_var)
-        # self.go_home_checkbox.grid(row=3, column=0, columnspan=2, pady=5, sticky=tk.W) 
+        self.int_time_power.grid(row=2, column=1, padx=5, pady=5) 
 
         # Progress bar
         ttk.Label(frame2, text="Progress:").grid(row=4, column=0, padx=5, pady=5, sticky=tk.E)
@@ -106,14 +105,11 @@ class App:
         frame3 = ttk.Frame(container_frame, padding="5", name="frame3", borderwidth=2, relief="groove")
         frame3.grid(row=0, column=2, padx=10, pady=10, sticky="nsew")
 
-        # ttk.Label(frame3, text="Move to Angle:").grid(row=1, column=0, padx=5, pady=5, sticky=tk.E)
-        # self.move_to_angle_entry = ttk.Entry(frame3)
-        # self.move_to_angle_entry.grid(row=1, column=1, padx=5, pady=5)
-        # ttk.Button(frame3, text="Go", command=self.moveangle).grid(row=1, column=2, padx=(5, 5), pady=5)
-        ttk.Label(frame3, text="Sample name:").grid(row=0, column=0, padx=5, pady=5, sticky=tk.E)
+        ttk.Label(frame3, text="").grid(row=0, column=0, padx=5, pady=5, sticky=tk.E)
         self.experiment_name_entry = ttk.Entry(frame3,width=10)
-        self.experiment_name_entry.grid(row=0, column=1, padx=5, pady=5)
+        self.experiment_name_entry.grid(row=0, column=0, padx=5, pady=5)
 
+        ttk.Button(frame3, text="Set Sample name", command=self.start).grid(row=0, column=1, padx=5, pady=5)
 
         ttk.Button(frame3, text="Live", command=self.live_spectrum).grid(row=1, column=0, pady=5)
         ttk.Button(frame3, text="Save Live", command=self.stop_live_spectrum).grid(row=1, column=1, padx=(5, 5), pady=5)
@@ -136,44 +132,6 @@ class App:
         ttk.Button(frame3, text="Exit", command=self.quit_application, style="Red.TButton").grid(row=3, column=1, padx=(5, 5), pady=5)
         # Bind the close button to the quit_application method
         self.root.protocol("WM_DELETE_WINDOW", self.quit_application)
-
-        # Create a horizontal frame for buttons and progress bar (2:1 ratio)
-        # button_frame = ttk.Frame(self.root, padding="5", name="button_frame", borderwidth=2, relief="groove")
-        # button_frame.grid(row=1, column=0, columnspan=3, padx=5, pady=5, sticky="nsew")
-
-        # # Create a style to configure the button color
-        # style = ttk.Style()
-        # style.configure("Green.TButton", background="green")
-
-        # # Home button
-        # ttk.Button(button_frame, text="Home", command=self.motor_controller.move_home, style="Green.TButton").grid(row=0, column=0, padx=(5, 5), pady=5)
-
-        # # Start Measurement button
-        # ttk.Button(button_frame, text="Spectrum", command=self.start_measurement).grid(row=0, column=1, padx=(5, 5), pady=5)
-
-        # ttk.Button(button_frame, text="Power", command=self.start_power_measurement).grid(row=0, column=2, padx=(5, 5), pady=5)
-
-        # # Progress bar
-        # ttk.Label(button_frame, text="Progress:").grid(row=0, column=3, padx=5, pady=5, sticky=tk.E)
-        # self.progress_label = ttk.Label(button_frame, text="0%")
-        # self.progress_label.grid(row=0, column=4, padx=5, pady=5, sticky=tk.W)
-        # self.progress_bar = ttk.Progressbar(button_frame, orient='horizontal', length=130, mode='determinate')
-        # self.progress_bar.grid(row=0, column=5, padx=(0, 5), pady=5)  # Adjusted the padx to shift the progress bar to the left
-
-        # # Create a style to configure the button color
-        # style = ttk.Style()
-        # style.configure("Red.TButton", background="red")
-        # # Quit button
-        # ttk.Button(button_frame, text="Quit", command=self.quit_application, style="Red.TButton").grid(row=0, column=6, padx=(5, 5), pady=5)
-        # # Bind the close button to the quit_application method
-        # self.root.protocol("WM_DELETE_WINDOW", self.quit_application)
-
-        # ttk.Label(button_frame, text="Jog:").grid(row=0, column=7, padx=5, pady=5, sticky=tk.E)
-        # self.angle_size_entry = ttk.Entry(button_frame)
-        # self.angle_size_entry.grid(row=0, column=8, padx=5, pady=5)
-
-        # ttk.Button(button_frame, text="+", command=self.up_angle).grid(row=0, column=9, padx=(5, 5), pady=5)
-        # ttk.Button(button_frame, text="-", command=self.down_angle).grid(row=0, column=10, padx=(5, 5), pady=5)
 
         # Create a frame for displaying current velocity, acceleration, and angle
         current_info_frame = ttk.Frame(self.root, padding="10", name="current_info_frame", borderwidth=2, relief="groove")
@@ -208,6 +166,9 @@ class App:
         self.current_angle_label = ttk.Label(info_labels_frame, text="0 degrees")
         self.current_angle_label.grid(row=2, column=1, padx=5, pady=5, sticky="w")
 
+        # Create a scrolled text widget to display terminal information
+        self.terminal_text = scrolledtext.ScrolledText(info_labels_frame, wrap=tk.WORD, width=30, height=20)
+        self.terminal_text.grid(row=3, column=0, columnspan=2, padx=10, pady=10, sticky="nsew")
 
     def moveangle(self):
         # Implement the logic for moving to a specific angle
@@ -226,7 +187,6 @@ class App:
         self.current_velocity_label.config(text=f"{current_velocity:.2f} deg/s")
         self.current_angle_label.config(text=f"{current_angle:.2f} degrees")
         self.current_acceleration_label.config(text=f"{current_acceleration:.2f} deg/s^2")
-
 
         # Schedule the update after a short delay
         self.root.after(500, self.update_current_info)
@@ -258,6 +218,14 @@ class App:
         self.motor_controller.inst.velocity_max(25)
         self.motor_controller.move_to_angle(0)
 
+    def start(self):
+                # Set the experiment name attribute
+        self.experiment_name = self.experiment_name_entry.get()
+        # Redirect stdout and stderr to the ScrolledText widget
+        sys.stdout = TextRedirector(self.terminal_text, self.experiment_name, "stdout")
+        sys.stderr = TextRedirector(self.terminal_text, self.experiment_name, "stderr")
+
+        
     def start_measurement_thread(self):
         # Start a new thread for the measurement to avoid blocking the main thread
         thread = Thread(target=self.start_measurement)
@@ -335,6 +303,7 @@ class App:
                 # Go Home if the checkbox is checked\
                 
                 self.motor_controller.move_to_angle(0)
+                print(">>>Moved to 0 Deg")
             self.spectrometer_controller.disconnect_spectrometer()
 
         except Exception as e:
@@ -399,6 +368,8 @@ class App:
                                 if event[2] == 1:  # Check if data indicates status change
                                     status_counter += 1
                                     print('status counter = ', status_counter)
+                                    if status_counter > measurement_controller.threshold_status_count:
+                                        break
                 else:
                     print("No power data recorded.")
                 
@@ -408,11 +379,11 @@ class App:
                     measurement_controller.power_meter.measurement_range = measurement_range
                     status_counter = 0  # Reset status counter after changing the range
                     measurement_controller.power_meter.connect()
-                    measurement_controller.power_meter.arm()
+                    measurement_controller.power_meter.arm(delay_seconds=power_delay)
                     power_data, average_power = measurement_controller.power_meter.disarm()
                     if power_data:
                         print("Power data recorded:")
-                        power_meter_filename = os.path.join(save_dir, f'{experiment_name}_power_{angle}deg.csv')
+                        power_meter_filename = os.path.join(save_dir, f'{experiment_name}_power_{int(angle)}deg.csv')
                         with open(power_meter_filename, 'w') as power_dump:
                             # Write header
                             power_dump.write('time, power, status\n')
@@ -440,7 +411,7 @@ class App:
                 csv_writer.writerow(header)
                 for row in angle_power_list:
                     csv_writer.writerow(row)
-            print(">>>Angle vs plot data")
+            print(">>>Angle vs Power data saved")
 
             self.spectrometer_controller.disconnect_spectrometer()
             angles, powers = zip(*angle_power_list)
@@ -452,7 +423,7 @@ class App:
             #save plot in experiment_data folder
             plot_filename = os.path.join(save_dir, f'{experiment_name}_angle_power.png')
             plt.savefig(plot_filename, bbox_inches='tight', pad_inches=0.5)
-            print(">>>plot saved")
+            print(">>>Angle vs Power plot saved")
             # plt.savefig(f'/{experiment_name}_angle_power.png', bbox_inches='tight', pad_inches=0.5)
 
             # Display the latest graph in the Tkinter application
@@ -470,6 +441,7 @@ class App:
             if self.go_home_var.get():
                 # Go Home if the checkbox is checked
                 measurement_controller.motor_controller.move_to_angle(0)
+                print(">>>Moved to 0 Deg")
 
         except Exception as e:
             print(f"An error occurred: {e}")
@@ -497,7 +469,7 @@ class App:
                 self.root.after(2, self.root.update())
             
         except Exception as e:
-            print(f"An error occurred: {e}")
+            # print(f"An error occurred: {e}")
             self.liveSpec.close()
             # self.motor_controller.close_motor()
             # self.liveSpec.close_plot()
@@ -508,8 +480,11 @@ class App:
         exposure_time_entry_value = self.exposure_time_entry.get()
         exposure_time_mili = float(exposure_time_entry_value)
         exposure_time_micros = exposure_time_mili * 1000.0
+        current_angle = int(self.motor_controller.inst.position())
+        experiment_name = self.experiment_name_entry.get()
+        experiment_name = experiment_name + "_" + str(current_angle) + "deg"
 
-        self.liveSpec.save_live_spectrum(exposure_time_micros)
+        self.liveSpec.save_live_spectrum(exposure_time_micros,experiment_name)
 
 
     def quit_application(self):
@@ -519,6 +494,28 @@ class App:
         self.root.quit()
         self.root.destroy()
         sys.exit()
+
+class TextRedirector:
+    
+    def __init__(self, widget, experiment_name, tag="stdout", log="log"):
+        self.widget = widget
+        self.tag = tag
+        self.experiment_name = experiment_name  # Store the experiment name
+        print("Sample Name:", self.experiment_name)
+        if not os.path.exists(log):
+            os.makedirs(log)  # Create the log folder if it doesn't exist
+        self.file_name = os.path.join(log, f"{experiment_name}_{time.strftime('%Y%m%d_%H%M%S')}.txt")        # self.file_name = time.strftime("%Y%m%d_%H%M%S") + ".txt"  # Current timestamp as file name
+        self.file = open(self.file_name, 'a')  # Open the file in append mode
+
+    def write(self, str):
+        self.widget.insert(tk.END, str, (self.tag,))
+        self.widget.see(tk.END)  # Scroll to the end of the text widget
+        self.file.write(str)  # Write the string to the file
+        self.file.flush()
+        # write this to text file
+
+    def flush(self):
+        pass
 
 # Create the main application window
 root = tk.Tk()
