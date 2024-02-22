@@ -1,0 +1,142 @@
+Sample Name: sesnorpj
+<SeaBreezeDevice HR4000:HR4C222>
+Ophir connect OK
+Current Position:  60.0
+-60.0
+Delay:  3.4
+Position: 35.96439688573459 degrees at angle: 0.0 degrees
+Ophir connect OK
+An error occurred: float division by zero
+<SeaBreezeDevice HR4000:HR4C222>
+Ophir connect OK
+Current Position:  0.0
+Delay:  1
+Position: 0.0 degrees at angle: 0.0 degrees
+Ophir connect OK
+Number of Events: 120 8.852666666666668e-11
+Average Power: 0.09 nanojoules
+Power data recorded:
+Current Position:  0.0
+Delay:  1
+Position: 10.0 degrees at angle: 10.0 degrees
+Ophir connect OK
+Number of Events: 95 1.1357684210526319e-10
+Average Power: 0.11 nanojoules
+Power data recorded:
+Current Position:  10.0
+10.0
+Delay:  1.4
+Position: 20.0 degrees at angle: 20.0 degrees
+Ophir connect OK
+Number of Events: 145 1.4076689655172426e-10
+Average Power: 0.14 nanojoules
+Power data recorded:
+Current Position:  20.0
+10.0
+Delay:  1.4
+Position: 30.0 degrees at angle: 30.0 degrees
+Ophir connect OK
+Number of Events: 37 1.637972972972973e-10
+Average Power: 0.16 nanojoules
+Power data recorded:
+status counter =  1
+status counter =  2
+status counter =  3
+status counter =  4
+status counter =  5
+status counter =  6
+Ophir connect OK
+Number of Events: 129 1.7821705426356588e-10
+Average Power: 0.18 nanojoules
+Power data recorded:
+Current Position:  30.0
+10.0
+Delay:  1.4
+Position: 40.0 degrees at angle: 40.0 degrees
+Ophir connect OK
+Number of Events: 129 2.2412403100775182e-10
+Average Power: 0.22 nanojoules
+Power data recorded:
+Current Position:  40.0
+10.0
+Delay:  1.4
+Position: 50.0 degrees at angle: 50.0 degrees
+Ophir connect OK
+Number of Events: 129 2.638914728682171e-10
+Average Power: 0.26 nanojoules
+Power data recorded:
+Current Position:  50.0
+10.0
+Delay:  1.4
+Position: 60.0 degrees at angle: 60.0 degrees
+Ophir connect OK
+Number of Events: 129 3.3141085271317837e-10
+Average Power: 0.33 nanojoules
+Power data recorded:
+Current Position:  60.0
+10.0
+Delay:  1.4
+Position: 70.0 degrees at angle: 70.0 degrees
+Ophir connect OK
+Number of Events: 129 4.0863565891472864e-10
+Average Power: 0.41 nanojoules
+Power data recorded:
+Current Position:  70.0
+10.0
+Delay:  1.4
+Position: 80.0 degrees at angle: 80.0 degrees
+Ophir connect OK
+Number of Events: 129 4.847209302325582e-10
+Average Power: 0.48 nanojoules
+Power data recorded:
+Current Position:  80.0
+10.0
+Delay:  1.4
+Position: 90.0 degrees at angle: 90.0 degrees
+Ophir connect OK
+Number of Events: 95 5.925157894736843e-10
+Average Power: 0.59 nanojoules
+Power data recorded:
+Current Position:  90.0
+10.0
+Delay:  1.4
+Position: 100.0 degrees at angle: 100.0 degrees
+Ophir connect OK
+Number of Events: 129 7.242713178294575e-10
+Average Power: 0.72 nanojoules
+Power data recorded:
+Final Position: 100.0 degrees
+[[0.0, 0.08852666666666668], [10.0, 0.11357684210526318], [20.0, 0.14076689655172425], [30.0, 0.17821705426356588], [40.0, 0.22412403100775183], [50.0, 0.2638914728682171], [60.0, 0.3314108527131784], [70.0, 0.40863565891472864], [80.0, 0.4847209302325582], [90.0, 0.5925157894736843], [100.0, 0.7242713178294575]]
+>>>Angle vs Power data saved
+>>>Angle vs Power plot saved
+>>>Moved to 0 Deg
+<SeaBreezeDevice HR4000:HR4C222>
+Current Position:  0.0
+Delay:  1
+Position: 0.0 degrees at angle
+Final Position: 0.0 degrees
+Current Position:  0.0
+Delay:  1
+Position: 10.0 degrees at angle
+Final Position: 10.0 degrees
+Current Position:  10.0
+10.0
+Delay:  1.4
+Position: 20.0 degrees at angle
+Final Position: 20.0 degrees
+Current Position:  20.0
+10.0
+Delay:  1.4
+Position: 30.0 degrees at angle
+Final Position: 30.0 degrees
+Current Position:  30.0
+10.0
+Delay:  1.4
+Position: 40.0 degrees at angle
+Final Position: 40.0 degrees
+Current Position:  40.0
+10.0
+Delay:  1.4
+Position: 50.0 degrees at angle
+Final Position: 50.0 degrees
+>>>Moved to 0 Deg

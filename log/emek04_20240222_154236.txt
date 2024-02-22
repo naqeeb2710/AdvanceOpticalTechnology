@@ -1,0 +1,157 @@
+Sample Name: emek04
+<SeaBreezeDevice HR4000:HR4C222>
+Current Position:  0.0
+Delay:  1
+Position: 0.0 degrees at angle
+Final Position: 0.0 degrees
+Current Position:  0.0
+Delay:  1
+Position: 10.0 degrees at angle
+Final Position: 10.0 degrees
+Current Position:  10.0
+10.0
+Delay:  1.4
+Position: 20.0 degrees at angle
+Final Position: 20.0 degrees
+Current Position:  20.0
+10.0
+Delay:  1.4
+Position: 30.0 degrees at angle
+Final Position: 30.0 degrees
+Current Position:  30.0
+10.0
+Delay:  1.4
+Position: 40.0 degrees at angle
+Final Position: 40.0 degrees
+Current Position:  40.0
+10.0
+Delay:  1.4
+Position: 50.0 degrees at angle
+Final Position: 50.0 degrees
+Current Position:  50.0
+10.0
+Delay:  1.4
+Position: 60.0 degrees at angle
+Final Position: 60.0 degrees
+Current Position:  60.0
+10.0
+Delay:  1.4
+Position: 70.0 degrees at angle
+Final Position: 70.0 degrees
+Current Position:  70.0
+10.0
+Delay:  1.4
+Position: 80.0 degrees at angle
+Final Position: 80.0 degrees
+Current Position:  80.0
+10.0
+Delay:  1.4
+Position: 90.0 degrees at angle
+Final Position: 90.0 degrees
+Current Position:  90.0
+10.0
+Delay:  1.4
+Position: 100.0 degrees at angle
+Final Position: 100.0 degrees
+Current Position:  100.0
+10.0
+Delay:  1.4
+Position: 110.0 degrees at angle
+Final Position: 110.0 degrees
+Current Position:  110.0
+10.0
+Delay:  1.4
+Position: 120.0 degrees at angle
+Final Position: 120.0 degrees
+Current Position:  120.0
+10.0
+Delay:  1.4
+Position: 130.0 degrees at angle
+Final Position: 130.0 degrees
+Current Position:  130.0
+10.0
+Delay:  1.4
+Position: 140.0 degrees at angle
+Final Position: 140.0 degrees
+Current Position:  140.0
+10.0
+Delay:  1.4
+Position: 150.0 degrees at angle
+Final Position: 150.0 degrees
+Current Position:  150.0
+10.0
+Delay:  1.4
+Position: 160.0 degrees at angle
+Final Position: 160.0 degrees
+Current Position:  160.0
+10.0
+Delay:  1.4
+Position: 170.0 degrees at angle
+Final Position: 170.0 degrees
+Current Position:  170.0
+10.0
+Delay:  1.4
+Position: 180.0 degrees at angle
+Final Position: 180.0 degrees
+Current Position:  180.0
+10.0
+Delay:  1.4
+Position: 190.0 degrees at angle
+Final Position: 190.0 degrees
+Current Position:  190.0
+10.0
+Delay:  1.4
+Position: 200.0 degrees at angle
+Final Position: 200.0 degrees
+Current Position:  200.0
+10.0
+Delay:  1.4
+Position: 210.0 degrees at angle
+Final Position: 210.0 degrees
+Current Position:  210.0
+10.0
+Delay:  1.4
+Position: 220.0 degrees at angle
+Final Position: 220.0 degrees
+Current Position:  220.0
+10.0
+Delay:  1.4
+Position: 230.0 degrees at angle
+Final Position: 230.0 degrees
+Current Position:  230.0
+10.0
+Delay:  1.4
+Position: 240.0 degrees at angle
+Final Position: 240.0 degrees
+Current Position:  240.0
+10.0
+Delay:  1.4
+Position: 250.0 degrees at angle
+Final Position: 250.0 degrees
+Current Position:  250.0
+10.0
+Delay:  1.4
+Position: 260.0 degrees at angle
+Final Position: 260.0 degrees
+Current Position:  260.0
+10.0
+Delay:  1.4
+Position: 270.0 degrees at angle
+Final Position: 270.0 degrees
+Current Position:  270.0
+10.0
+Delay:  1.4
+Position: 280.0 degrees at angle
+Final Position: 280.0 degrees
+Current Position:  280.0
+10.0
+Delay:  1.4
+Position: 290.0 degrees at angle
+Final Position: 290.0 degrees
+Current Position:  290.0
+10.0
+Delay:  1.4
+Position: 300.0 degrees at angle
+Final Position: 300.0 degrees
+>>>Moved to 0 Deg
+Sample Name: emek05

@@ -1,0 +1,4 @@
+Sample Name: fff
+<SeaBreezeDevice HR4000:HR4C222>
+Delay: -9.0
+An error occurred: sleep length must be non-negative

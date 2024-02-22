@@ -308,7 +308,7 @@ class App:
             experiment_name = self.experiment_name_entry.get()
 
             # Configure motor
-            self.motor_controller.configure_motor(25)
+            # self.motor_controller.configure_motor(25)
             save_dir = filedialog.askdirectory()
             if not save_dir:
             # If the user cancels the dialog, return without saving
@@ -333,7 +333,7 @@ class App:
                 angle = current_angle % 360  # Convert angle to be within the range [0, 360)
                 delay=self.motor_controller.delaytime(angle)
                 measurement_controller.motor_controller.move_to_angle(angle)
-                time.sleep(delay)
+                # time.sleep(delay)
                 current_position = measurement_controller.motor_controller.current_position()
                 print(f"Position: {current_position} degrees at angle: {angle} degrees")
                 time.sleep(0.5)  # Pause the execution for 0.5 seconds
@@ -457,7 +457,7 @@ class App:
         exposure_time_entry_value = self.exposure_time_entry.get()
         exposure_time_mili = float(exposure_time_entry_value)
         exposure_time_micros = exposure_time_mili * 1000.0
-        current_angle = int(self.motor_controller.inst.position())
+        current_angle = int(self.motor_controller.current_position())
         experiment_name = self.experiment_name_entry.get()
         experiment_name = experiment_name + "_" + str(current_angle) + "deg"
 

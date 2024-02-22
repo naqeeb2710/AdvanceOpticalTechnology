@@ -1,0 +1,246 @@
+Sample Name: test
+<SeaBreezeDevice HR4000:HR4C222>
+Ophir connect OK
+Current Position:  0.0
+Delay:  1
+Position: 0.0 degrees at angle: 0.0 degrees
+Ophir connect OK
+Number of Events: 103 9.34951456310679e-10
+Average Power: 0.93 nanojoules
+Power data recorded:
+Current Position:  0.0
+Delay:  1
+Position: 25.518914841100685 degrees at angle: 50.0 degrees
+Ophir connect OK
+Number of Events: 129 2.936821705426356e-09
+Average Power: 2.94 nanojoules
+Power data recorded:
+Current Position:  50.0
+50.0
+Delay:  3.0
+Position: 75.4606725114075 degrees at angle: 100.0 degrees
+Ophir connect OK
+Number of Events: 129 9.10341085271318e-09
+Average Power: 9.10 nanojoules
+Power data recorded:
+Current Position:  100.0
+50.0
+Delay:  3.0
+Position: 125.3301106692155 degrees at angle: 150.0 degrees
+Ophir connect OK
+Number of Events: 18 1.5340555555555555e-08
+Average Power: 15.34 nanojoules
+Power data recorded:
+status counter =  1
+status counter =  2
+status counter =  3
+status counter =  4
+status counter =  5
+status counter =  6
+Ophir connect OK
+Number of Events: 103 2.3926213592233003e-08
+Average Power: 23.93 nanojoules
+Power data recorded:
+Current Position:  150.0
+50.0
+Delay:  3.0
+Position: 175.4263291658427 degrees at angle: 200.0 degrees
+Ophir connect OK
+Number of Events: 76 5.7260526315789493e-08
+Average Power: 57.26 nanojoules
+Power data recorded:
+Current Position:  200.0
+50.0
+Delay:  3.0
+Position: 225.62202544439805 degrees at angle: 250.0 degrees
+Ophir connect OK
+Number of Events: 129 1.0617906976744188e-07
+Average Power: 106.18 nanojoules
+Power data recorded:
+Current Position:  250.0
+50.0
+Delay:  3.0
+Position: 275.86901335208336 degrees at angle: 300.0 degrees
+Ophir connect OK
+Number of Events: 129 1.0917286821705426e-07
+Average Power: 109.17 nanojoules
+Power data recorded:
+Current Position:  300.0
+50.0
+Delay:  3.0
+Position: 326.11625028381417 degrees at angle: 350.0 degrees
+Ophir connect OK
+An error occurred: float division by zero
+<SeaBreezeDevice HR4000:HR4C222>
+Ophir connect OK
+Current Position:  350.0
+-350.0
+Delay:  15.0
+Position: 324.6731925615053 degrees at angle: 0.0 degrees
+Ophir connect OK
+An error occurred: float division by zero
+<SeaBreezeDevice HR4000:HR4C222>
+Ophir connect OK
+Current Position:  0.0
+Delay:  1
+Position: 0.0 degrees at angle: 0.0 degrees
+Ophir connect OK
+Number of Events: 103 1.0150485436893203e-09
+Average Power: 1.02 nanojoules
+Power data recorded:
+Current Position:  0.0
+Delay:  1
+Position: 25.385079065134438 degrees at angle: 50.0 degrees
+Ophir connect OK
+Number of Events: 129 3.206279069767439e-09
+Average Power: 3.21 nanojoules
+Power data recorded:
+Current Position:  50.0
+50.0
+Delay:  3.0
+Position: 75.23061091457743 degrees at angle: 100.0 degrees
+Ophir connect OK
+Number of Events: 129 9.085736434108523e-09
+Average Power: 9.09 nanojoules
+Power data recorded:
+Current Position:  100.0
+50.0
+Delay:  3.0
+Position: 125.4228355049695 degrees at angle: 150.0 degrees
+Ophir connect OK
+Number of Events: 19 1.5920526315789475e-08
+Average Power: 15.92 nanojoules
+Power data recorded:
+status counter =  1
+status counter =  2
+status counter =  3
+status counter =  4
+status counter =  5
+status counter =  6
+Ophir connect OK
+Number of Events: 103 2.468252427184467e-08
+Average Power: 24.68 nanojoules
+Power data recorded:
+Current Position:  150.0
+50.0
+Delay:  3.0
+Position: 175.33678304878674 degrees at angle: 200.0 degrees
+Ophir connect OK
+Number of Events: 129 5.7448062015503865e-08
+Average Power: 57.45 nanojoules
+Power data recorded:
+Current Position:  200.0
+50.0
+Delay:  3.0
+Position: 225.37138274263364 degrees at angle: 250.0 degrees
+Ophir connect OK
+Number of Events: 129 1.0731627906976744e-07
+Average Power: 107.32 nanojoules
+Power data recorded:
+Current Position:  250.0
+50.0
+Delay:  3.0
+Position: 275.39875341492535 degrees at angle: 300.0 degrees
+Ophir connect OK
+Number of Events: 129 1.0742635658914733e-07
+Average Power: 107.43 nanojoules
+Power data recorded:
+Current Position:  300.0
+50.0
+Delay:  3.0
+Position: 325.3369075608095 degrees at angle: 350.0 degrees
+Ophir connect OK
+An error occurred: float division by zero
+<SeaBreezeDevice HR4000:HR4C222>
+Ophir connect OK
+Current Position:  350.0
+-350.0
+Delay:  15.0
+Position: 324.53951791874493 degrees at angle: 0.0 degrees
+Ophir connect OK
+An error occurred: float division by zero
+<SeaBreezeDevice HR4000:HR4C222>
+Ophir connect OK
+Current Position:  0.0
+Delay:  1
+Position: 0.0 degrees at angle: 0.0 degrees
+Ophir connect OK
+Number of Events: 103 9.769902912621356e-10
+Average Power: 0.98 nanojoules
+Power data recorded:
+Current Position:  0.0
+Delay:  1
+Position: 25.31293533431478 degrees at angle: 50.0 degrees
+Ophir connect OK
+Number of Events: 103 3.1494174757281535e-09
+Average Power: 3.15 nanojoules
+Power data recorded:
+Current Position:  50.0
+50.0
+Delay:  3.0
+Position: 75.41607523455868 degrees at angle: 100.0 degrees
+Ophir connect OK
+Number of Events: 103 9.25252427184466e-09
+Average Power: 9.25 nanojoules
+Power data recorded:
+Current Position:  100.0
+50.0
+Delay:  3.0
+Position: 125.41256692521222 degrees at angle: 150.0 degrees
+Ophir connect OK
+Number of Events: 15 1.6177333333333332e-08
+Average Power: 16.18 nanojoules
+Power data recorded:
+status counter =  1
+status counter =  2
+status counter =  3
+status counter =  4
+status counter =  5
+status counter =  6
+Ophir connect OK
+Number of Events: 103 2.4854368932038835e-08
+Average Power: 24.85 nanojoules
+Power data recorded:
+Current Position:  150.0
+50.0
+Delay:  3.0
+Position: 175.43645126086733 degrees at angle: 200.0 degrees
+Ophir connect OK
+Number of Events: 103 6.23766990291262e-08
+Average Power: 62.38 nanojoules
+Power data recorded:
+Current Position:  200.0
+50.0
+Delay:  3.0
+Position: 225.3644979602001 degrees at angle: 250.0 degrees
+Ophir connect OK
+Number of Events: 103 1.0923106796116501e-07
+Average Power: 109.23 nanojoules
+Power data recorded:
+Current Position:  250.0
+50.0
+Delay:  3.0
+Position: 275.53278694528063 degrees at angle: 300.0 degrees
+Ophir connect OK
+Number of Events: 103 1.0987669902912624e-07
+Average Power: 109.88 nanojoules
+Power data recorded:
+Final Position: 300.0 degrees
+[[0.0, 0.9769902912621355], [50.0, 3.1494174757281534], [100.0, 9.25252427184466], [150.0, 24.854368932038835], [200.0, 62.3766990291262], [250.0, 109.23106796116501], [300.0, 109.87669902912624]]
+>>>Angle vs Power data saved
+>>>Angle vs Power plot saved
+>>>Moved to 0 Deg
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "C:\Users\naqee\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py", line 1921, in __call__
+    return self.func(*args)
+  File "D:\Project\AdvanceOpticalTechnology\appv2.py", line 177, in moveangle
+    self.motor_controller.getvelocity()
+AttributeError: 'ThorlabsMotionController' object has no attribute 'getvelocity'
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "C:\Users\naqee\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py", line 1921, in __call__
+    return self.func(*args)
+  File "D:\Project\AdvanceOpticalTechnology\appv2.py", line 177, in moveangle
+    self.motor_controller.getvelocity()
+AttributeError: 'ThorlabsMotionController' object has no attribute 'getvelocity'

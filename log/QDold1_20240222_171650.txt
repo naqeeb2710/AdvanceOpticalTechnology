@@ -1,0 +1,84 @@
+Sample Name: QDold1
+<SeaBreezeDevice HR4000:HR4C222>
+Current Position:  200.0
+-200.0
+Delay:  9.0
+Position: 0.0 degrees at angle
+Final Position: 0.0 degrees
+Current Position:  0.0
+20.0
+Delay:  1.8
+Position: 20.0 degrees at angle
+Final Position: 20.0 degrees
+Current Position:  20.0
+20.0
+Delay:  1.8
+Position: 40.0 degrees at angle
+Final Position: 40.0 degrees
+Current Position:  40.0
+20.0
+Delay:  1.8
+Position: 60.0 degrees at angle
+Final Position: 60.0 degrees
+Current Position:  60.0
+20.0
+Delay:  1.8
+Position: 80.0 degrees at angle
+Final Position: 80.0 degrees
+Current Position:  80.0
+20.0
+Delay:  1.8
+Position: 100.0 degrees at angle
+Final Position: 100.0 degrees
+Current Position:  100.0
+20.0
+Delay:  1.8
+Position: 120.0 degrees at angle
+Final Position: 120.0 degrees
+Current Position:  120.0
+20.0
+Delay:  1.8
+Position: 140.0 degrees at angle
+Final Position: 140.0 degrees
+Current Position:  140.0
+20.0
+Delay:  1.8
+Position: 160.0 degrees at angle
+Final Position: 160.0 degrees
+Current Position:  160.0
+20.0
+Delay:  1.8
+Position: 180.0 degrees at angle
+Final Position: 180.0 degrees
+Current Position:  180.0
+20.0
+Delay:  1.8
+Position: 200.0 degrees at angle
+Final Position: 200.0 degrees
+Current Position:  200.0
+20.0
+Delay:  1.8
+Position: 220.0 degrees at angle
+Final Position: 220.0 degrees
+Current Position:  220.0
+20.0
+Delay:  1.8
+Position: 240.0 degrees at angle
+Final Position: 240.0 degrees
+Current Position:  240.0
+20.0
+Delay:  1.8
+Position: 260.0 degrees at angle
+Final Position: 260.0 degrees
+Current Position:  260.0
+20.0
+Delay:  1.8
+Position: 280.0 degrees at angle
+Final Position: 280.0 degrees
+Current Position:  280.0
+20.0
+Delay:  1.8
+Position: 300.0 degrees at angle
+Final Position: 300.0 degrees
+>>>Moved to 0 Deg
+Sample Name: QDold2

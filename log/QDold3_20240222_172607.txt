@@ -1,0 +1,232 @@
+Sample Name: QDold3
+<SeaBreezeDevice HR4000:HR4C222>
+Current Position:  0.0
+0.0
+Delay:  1.0
+Position: 0.0 degrees at angle
+Final Position: 0.0 degrees
+Current Position:  0.0
+20.0
+Delay:  1.8
+Position: 20.0 degrees at angle
+Final Position: 20.0 degrees
+Current Position:  20.0
+20.0
+Delay:  1.8
+Position: 40.0 degrees at angle
+Final Position: 40.0 degrees
+Current Position:  40.0
+20.0
+Delay:  1.8
+Position: 60.0 degrees at angle
+Final Position: 60.0 degrees
+Current Position:  60.0
+20.0
+Delay:  1.8
+Position: 80.0 degrees at angle
+Final Position: 80.0 degrees
+Current Position:  80.0
+20.0
+Delay:  1.8
+Position: 100.0 degrees at angle
+Final Position: 100.0 degrees
+Current Position:  100.0
+20.0
+Delay:  1.8
+Position: 120.0 degrees at angle
+Final Position: 120.0 degrees
+Current Position:  120.0
+20.0
+Delay:  1.8
+Position: 140.0 degrees at angle
+Final Position: 140.0 degrees
+Current Position:  140.0
+20.0
+Delay:  1.8
+Position: 160.0 degrees at angle
+Final Position: 160.0 degrees
+Current Position:  160.0
+20.0
+Delay:  1.8
+Position: 180.0 degrees at angle
+Final Position: 180.0 degrees
+Current Position:  180.0
+20.0
+Delay:  1.8
+Position: 200.0 degrees at angle
+Final Position: 200.0 degrees
+Current Position:  200.0
+20.0
+Delay:  1.8
+Position: 220.0 degrees at angle
+Final Position: 220.0 degrees
+Current Position:  220.0
+20.0
+Delay:  1.8
+Position: 240.0 degrees at angle
+Final Position: 240.0 degrees
+Current Position:  240.0
+20.0
+Delay:  1.8
+Position: 260.0 degrees at angle
+Final Position: 260.0 degrees
+Current Position:  260.0
+20.0
+Delay:  1.8
+Position: 280.0 degrees at angle
+Final Position: 280.0 degrees
+Current Position:  280.0
+20.0
+Delay:  1.8
+Position: 300.0 degrees at angle
+Final Position: 300.0 degrees
+>>>Moved to 0 Deg
+<SeaBreezeDevice HR4000:HR4C222>
+Ophir connect OK
+Current Position:  0.0
+0.0
+Delay:  1.0
+Position: 0.0 degrees at angle: 0.0 degrees
+Ophir connect OK
+Number of Events: 129 1.6608527131782949e-09
+Average Power: 1.66 nanojoules
+Power data recorded:
+Current Position:  0.0
+20.0
+Delay:  1.8
+Position: 19.04872814630895 degrees at angle: 20.0 degrees
+Ophir connect OK
+Number of Events: 129 2.7594573643410833e-09
+Average Power: 2.76 nanojoules
+Power data recorded:
+Current Position:  20.0
+20.0
+Delay:  1.8
+Position: 39.03430672438165 degrees at angle: 40.0 degrees
+Ophir connect OK
+Number of Events: 102 4.259901960784314e-09
+Average Power: 4.26 nanojoules
+Power data recorded:
+Current Position:  40.0
+20.0
+Delay:  1.8
+Position: 59.03724374327086 degrees at angle: 60.0 degrees
+Ophir connect OK
+Number of Events: 103 6.787961165048542e-09
+Average Power: 6.79 nanojoules
+Power data recorded:
+Current Position:  60.0
+20.0
+Delay:  1.8
+Position: 79.10557887104217 degrees at angle: 80.0 degrees
+Ophir connect OK
+Number of Events: 144 9.89131944444444e-09
+Average Power: 9.89 nanojoules
+Power data recorded:
+Current Position:  80.0
+20.0
+Delay:  1.8
+Position: 99.01617191448221 degrees at angle: 100.0 degrees
+Ophir connect OK
+Number of Events: 100 1.5216299999999995e-08
+Average Power: 15.22 nanojoules
+Power data recorded:
+status counter =  1
+status counter =  2
+status counter =  3
+Current Position:  100.0
+20.0
+Delay:  1.8
+Position: 118.65790687965547 degrees at angle: 120.0 degrees
+Ophir connect OK
+Number of Events: 36 2.0032500000000004e-08
+Average Power: 20.03 nanojoules
+Power data recorded:
+status counter =  1
+status counter =  2
+status counter =  3
+status counter =  4
+status counter =  5
+status counter =  6
+Ophir connect OK
+Number of Events: 129 2.3137209302325575e-08
+Average Power: 23.14 nanojoules
+Power data recorded:
+Current Position:  120.0
+20.0
+Delay:  1.8
+Position: 139.02580328565256 degrees at angle: 140.0 degrees
+Ophir connect OK
+Number of Events: 129 3.6538759689922483e-08
+Average Power: 36.54 nanojoules
+Power data recorded:
+Current Position:  140.0
+20.0
+Delay:  1.8
+Position: 159.07220232471272 degrees at angle: 160.0 degrees
+Ophir connect OK
+Number of Events: 103 5.02097087378641e-08
+Average Power: 50.21 nanojoules
+Power data recorded:
+Current Position:  160.0
+20.0
+Delay:  1.8
+Position: 179.084338584811 degrees at angle: 180.0 degrees
+Ophir connect OK
+Number of Events: 129 7.858062015503877e-08
+Average Power: 78.58 nanojoules
+Power data recorded:
+Current Position:  180.0
+20.0
+Delay:  1.8
+Position: 199.05142346538932 degrees at angle: 200.0 degrees
+Ophir connect OK
+Number of Events: 156 1.0075448717948718e-07
+Average Power: 100.75 nanojoules
+Power data recorded:
+Current Position:  200.0
+20.0
+Delay:  1.8
+Position: 219.03919931445145 degrees at angle: 220.0 degrees
+Ophir connect OK
+Number of Events: 129 1.2138527131782947e-07
+Average Power: 121.39 nanojoules
+Power data recorded:
+Current Position:  220.0
+20.0
+Delay:  1.8
+Position: 239.039228611398 degrees at angle: 240.0 degrees
+Ophir connect OK
+Number of Events: 101 1.620693069306931e-07
+Average Power: 162.07 nanojoules
+Power data recorded:
+Current Position:  240.0
+20.0
+Delay:  1.8
+Position: 259.016157266009 degrees at angle: 260.0 degrees
+Ophir connect OK
+Number of Events: 76 1.7597499999999999e-07
+Average Power: 175.97 nanojoules
+Power data recorded:
+Current Position:  260.0
+20.0
+Delay:  1.8
+Position: 279.0609962426666 degrees at angle: 280.0 degrees
+Ophir connect OK
+Number of Events: 70 1.8422857142857141e-07
+Average Power: 184.23 nanojoules
+Power data recorded:
+Current Position:  280.0
+20.0
+Delay:  1.8
+Position: 299.02764166904706 degrees at angle: 300.0 degrees
+Ophir connect OK
+Number of Events: 97 1.8283092783505156e-07
+Average Power: 182.83 nanojoules
+Power data recorded:
+Final Position: 300.0 degrees
+[[0.0, 1.6608527131782949], [20.0, 2.7594573643410834], [40.0, 4.2599019607843145], [60.0, 6.787961165048542], [80.0, 9.891319444444441], [100.0, 15.216299999999995], [120.0, 23.137209302325576], [140.0, 36.538759689922486], [160.0, 50.209708737864105], [180.0, 78.58062015503877], [200.0, 100.75448717948717], [220.0, 121.38527131782948], [240.0, 162.0693069306931], [260.0, 175.975], [280.0, 184.22857142857143], [300.0, 182.83092783505157]]
+>>>Angle vs Power data saved
+>>>Angle vs Power plot saved
+>>>Moved to 0 Deg
+Sample Name: QDnew7

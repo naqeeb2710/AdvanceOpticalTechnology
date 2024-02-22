@@ -1,0 +1,136 @@
+Sample Name: emek07
+<SeaBreezeDevice HR4000:HR4C222>
+Ophir connect OK
+Current Position:  0.0
+Delay:  1
+Position: 0.0 degrees at angle: 0.0 degrees
+Ophir connect OK
+Number of Events: 103 1.2725242718446596e-09
+Average Power: 1.27 nanojoules
+Power data recorded:
+Current Position:  0.0
+Delay:  1
+Position: 25.51567020427296 degrees at angle: 50.0 degrees
+Ophir connect OK
+Number of Events: 129 3.941007751937984e-09
+Average Power: 3.94 nanojoules
+Power data recorded:
+Current Position:  50.0
+50.0
+Delay:  3.0
+Position: 75.54307017351117 degrees at angle: 100.0 degrees
+Ophir connect OK
+Number of Events: 151 1.1301456953642386e-08
+Average Power: 11.30 nanojoules
+Power data recorded:
+Current Position:  100.0
+50.0
+Delay:  3.0
+Position: 125.91404275889346 degrees at angle: 150.0 degrees
+Ophir connect OK
+Number of Events: 5 1.809e-08
+Average Power: 18.09 nanojoules
+Power data recorded:
+status counter =  1
+status counter =  2
+status counter =  3
+status counter =  4
+status counter =  5
+status counter =  6
+Ophir connect OK
+Number of Events: 103 2.81242718446602e-08
+Average Power: 28.12 nanojoules
+Power data recorded:
+Current Position:  150.0
+50.0
+Delay:  3.0
+Position: 175.5532801593754 degrees at angle: 200.0 degrees
+Ophir connect OK
+Number of Events: 129 6.012480620155038e-08
+Average Power: 60.12 nanojoules
+Power data recorded:
+Current Position:  200.0
+50.0
+Delay:  3.0
+Position: 224.0118579391063 degrees at angle: 250.0 degrees
+Ophir connect OK
+Number of Events: 76 1.1749342105263153e-07
+Average Power: 117.49 nanojoules
+Power data recorded:
+Current Position:  250.0
+50.0
+Delay:  3.0
+Position: 275.8588692843488 degrees at angle: 300.0 degrees
+Ophir connect OK
+Number of Events: 76 1.1194605263157895e-07
+Average Power: 111.95 nanojoules
+Power data recorded:
+Final Position: 300.0 degrees
+[[0.0, 1.2725242718446597], [50.0, 3.941007751937984], [100.0, 11.301456953642386], [150.0, 28.1242718446602], [200.0, 60.12480620155038], [250.0, 117.49342105263153], [300.0, 111.94605263157895]]
+>>>Angle vs Power data saved
+>>>Angle vs Power plot saved
+>>>Moved to 0 Deg
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "C:\Users\naqee\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py", line 1921, in __call__
+    return self.func(*args)
+  File "D:\Project\AdvanceOpticalTechnology\appv2.py", line 177, in moveangle
+    self.motor_controller.getvelocity()
+AttributeError: 'ThorlabsMotionController' object has no attribute 'getvelocity'
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "C:\Users\naqee\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py", line 1921, in __call__
+    return self.func(*args)
+  File "D:\Project\AdvanceOpticalTechnology\appv2.py", line 200, in up_angle
+    self.motor_controller.getvelocity()
+AttributeError: 'ThorlabsMotionController' object has no attribute 'getvelocity'
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "C:\Users\naqee\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py", line 1921, in __call__
+    return self.func(*args)
+  File "D:\Project\AdvanceOpticalTechnology\appv2.py", line 200, in up_angle
+    self.motor_controller.getvelocity()
+AttributeError: 'ThorlabsMotionController' object has no attribute 'getvelocity'
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "C:\Users\naqee\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py", line 1921, in __call__
+    return self.func(*args)
+  File "D:\Project\AdvanceOpticalTechnology\appv2.py", line 200, in up_angle
+    self.motor_controller.getvelocity()
+AttributeError: 'ThorlabsMotionController' object has no attribute 'getvelocity'
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "C:\Users\naqee\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py", line 1921, in __call__
+    return self.func(*args)
+  File "D:\Project\AdvanceOpticalTechnology\appv2.py", line 200, in up_angle
+    self.motor_controller.getvelocity()
+AttributeError: 'ThorlabsMotionController' object has no attribute 'getvelocity'
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "C:\Users\naqee\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py", line 1921, in __call__
+    return self.func(*args)
+  File "D:\Project\AdvanceOpticalTechnology\appv2.py", line 200, in up_angle
+    self.motor_controller.getvelocity()
+AttributeError: 'ThorlabsMotionController' object has no attribute 'getvelocity'
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "C:\Users\naqee\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py", line 1921, in __call__
+    return self.func(*args)
+  File "D:\Project\AdvanceOpticalTechnology\appv2.py", line 200, in up_angle
+    self.motor_controller.getvelocity()
+AttributeError: 'ThorlabsMotionController' object has no attribute 'getvelocity'
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "C:\Users\naqee\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py", line 1921, in __call__
+    return self.func(*args)
+  File "D:\Project\AdvanceOpticalTechnology\appv2.py", line 200, in up_angle
+    self.motor_controller.getvelocity()
+AttributeError: 'ThorlabsMotionController' object has no attribute 'getvelocity'
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "C:\Users\naqee\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py", line 1921, in __call__
+    return self.func(*args)
+  File "D:\Project\AdvanceOpticalTechnology\appv2.py", line 209, in down_angle
+    self.motor_controller.getvelocity()
+AttributeError: 'ThorlabsMotionController' object has no attribute 'getvelocity'
+Sample Name: sesnorpj

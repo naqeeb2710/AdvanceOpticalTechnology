@@ -140,8 +140,15 @@ class ThorlabsMotionController:
         self.lib.CC_RequestPosition(self.serial_num)
         time.sleep(0.1)
         current=(self.lib.CC_GetPosition(self.serial_num)/self.STEPS_PER_REV.value)
-        delay= (angle - current )/25
+        print("Current Position: ",current)
+        # if angle == 0:
+        #     delay=1
+        #     print("Delay: ",delay)
+        # else :
+        delay= (abs(angle - current ))/25
+        print(angle - current)
         delay=delay+1
+        print("Delay: ",delay)
         self.close_device()
         return delay
     

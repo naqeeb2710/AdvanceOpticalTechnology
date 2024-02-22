@@ -1,0 +1,10 @@
+Sample Name: qd
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "C:\Users\naqee\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py", line 1921, in __call__
+    return self.func(*args)
+  File "D:\Project\AdvanceOpticalTechnology\appv2.py", line 464, in stop_live_spectrum
+    self.liveSpec.save_live_spectrum(exposure_time_micros,experiment_name)
+  File "D:\Project\AdvanceOpticalTechnology\liveSpectrum.py", line 93, in save_live_spectrum
+    self.spec.integration_time_micros(exposure_time_micros)
+AttributeError: 'NoneType' object has no attribute 'integration_time_micros'

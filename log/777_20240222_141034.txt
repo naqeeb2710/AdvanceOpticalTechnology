@@ -1,0 +1,14 @@
+Sample Name: 777
+<SeaBreezeDevice HR4000:HR4C222>
+Position: 0.0 degrees at angle
+Final Position: 0.0 degrees
+Position: 50.0 degrees at angle
+Final Position: 50.0 degrees
+Position: 100.0 degrees at angle
+Final Position: 100.0 degrees
+Position: 150.0 degrees at angle
+Final Position: 150.0 degrees
+Position: 200.0 degrees at angle
+Final Position: 200.0 degrees
+Position: 250.0 degrees at angle
+Final Position: 250.0 degrees

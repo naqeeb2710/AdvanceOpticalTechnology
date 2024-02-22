@@ -1,0 +1,32 @@
+Sample Name: ghh
+<SeaBreezeDevice HR4000:HR4C222>
+Current Position:  0.0
+Delay:  1
+Position: 0.0 degrees at angle
+Final Position: 0.0 degrees
+Current Position:  0.0
+Delay:  1
+Position: 47.467073894223375 degrees at angle
+Final Position: 50.0 degrees
+Current Position:  50.0
+50.0
+Delay:  3.0
+Position: 100.0 degrees at angle
+Final Position: 100.0 degrees
+Current Position:  100.0
+50.0
+Delay:  3.0
+Position: 150.0 degrees at angle
+Final Position: 150.0 degrees
+Current Position:  150.0
+50.0
+Delay:  3.0
+Position: 200.0 degrees at angle
+Final Position: 200.0 degrees
+Current Position:  200.0
+50.0
+Delay:  3.0
+Position: 250.0 degrees at angle
+Final Position: 250.0 degrees
+Live spectrum started
+<SeaBreezeDevice HR4000:HR4C222> for live spectrum

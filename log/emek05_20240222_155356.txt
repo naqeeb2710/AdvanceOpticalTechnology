@@ -1,0 +1,265 @@
+Sample Name: emek05
+<SeaBreezeDevice HR4000:HR4C222>
+Ophir connect OK
+Current Position:  0.0
+Delay:  1
+Position: 0.0 degrees at angle: 0.0 degrees
+Ophir connect OK
+Number of Events: 103 1.2522330097087374e-09
+Average Power: 1.25 nanojoules
+Power data recorded:
+Current Position:  0.0
+Delay:  1
+Position: 10.0 degrees at angle: 10.0 degrees
+Ophir connect OK
+Number of Events: 103 1.5542718446601935e-09
+Average Power: 1.55 nanojoules
+Power data recorded:
+Current Position:  10.0
+10.0
+Delay:  1.4
+Position: 20.0 degrees at angle: 20.0 degrees
+Ophir connect OK
+Number of Events: 131 2.044580152671756e-09
+Average Power: 2.04 nanojoules
+Power data recorded:
+Current Position:  20.0
+10.0
+Delay:  1.4
+Position: 30.0 degrees at angle: 30.0 degrees
+Ophir connect OK
+Number of Events: 103 2.5393203883495143e-09
+Average Power: 2.54 nanojoules
+Power data recorded:
+Current Position:  30.0
+10.0
+Delay:  1.4
+Position: 40.0 degrees at angle: 40.0 degrees
+Ophir connect OK
+Number of Events: 129 3.201395348837211e-09
+Average Power: 3.20 nanojoules
+Power data recorded:
+Current Position:  40.0
+10.0
+Delay:  1.4
+Position: 50.0 degrees at angle: 50.0 degrees
+Ophir connect OK
+Number of Events: 129 3.899767441860466e-09
+Average Power: 3.90 nanojoules
+Power data recorded:
+Current Position:  50.0
+10.0
+Delay:  1.4
+Position: 60.0 degrees at angle: 60.0 degrees
+Ophir connect OK
+Number of Events: 129 4.883178294573646e-09
+Average Power: 4.88 nanojoules
+Power data recorded:
+Current Position:  60.0
+10.0
+Delay:  1.4
+Position: 70.0 degrees at angle: 70.0 degrees
+Ophir connect OK
+Number of Events: 103 5.807184466019415e-09
+Average Power: 5.81 nanojoules
+Power data recorded:
+Current Position:  70.0
+10.0
+Delay:  1.4
+Position: 80.0 degrees at angle: 80.0 degrees
+Ophir connect OK
+Number of Events: 103 7.3616504854368925e-09
+Average Power: 7.36 nanojoules
+Power data recorded:
+Current Position:  80.0
+10.0
+Delay:  1.4
+Position: 90.0 degrees at angle: 90.0 degrees
+Ophir connect OK
+Number of Events: 129 8.930310077519384e-09
+Average Power: 8.93 nanojoules
+Power data recorded:
+Current Position:  90.0
+10.0
+Delay:  1.4
+Position: 100.0 degrees at angle: 100.0 degrees
+Ophir connect OK
+Number of Events: 129 1.0995658914728676e-08
+Average Power: 11.00 nanojoules
+Power data recorded:
+Current Position:  100.0
+10.0
+Delay:  1.4
+Position: 110.0 degrees at angle: 110.0 degrees
+Ophir connect OK
+Number of Events: 129 1.3119379844961244e-08
+Average Power: 13.12 nanojoules
+Power data recorded:
+Current Position:  110.0
+10.0
+Delay:  1.4
+Position: 120.0 degrees at angle: 120.0 degrees
+Ophir connect OK
+Number of Events: 149 1.5325570469798658e-08
+Average Power: 15.33 nanojoules
+Power data recorded:
+status counter =  1
+status counter =  2
+status counter =  3
+status counter =  4
+status counter =  5
+status counter =  6
+Ophir connect OK
+Number of Events: 129 1.5864341085271305e-08
+Average Power: 15.86 nanojoules
+Power data recorded:
+Current Position:  120.0
+10.0
+Delay:  1.4
+Position: 130.0 degrees at angle: 130.0 degrees
+Ophir connect OK
+Number of Events: 156 1.932948717948719e-08
+Average Power: 19.33 nanojoules
+Power data recorded:
+Current Position:  130.0
+10.0
+Delay:  1.4
+Position: 140.0 degrees at angle: 140.0 degrees
+Ophir connect OK
+Number of Events: 113 2.348761061946903e-08
+Average Power: 23.49 nanojoules
+Power data recorded:
+Current Position:  140.0
+10.0
+Delay:  1.4
+Position: 150.0 degrees at angle: 150.0 degrees
+Ophir connect OK
+Number of Events: 103 2.8096116504854367e-08
+Average Power: 28.10 nanojoules
+Power data recorded:
+Current Position:  150.0
+10.0
+Delay:  1.4
+Position: 160.0 degrees at angle: 160.0 degrees
+Ophir connect OK
+Number of Events: 103 3.238349514563106e-08
+Average Power: 32.38 nanojoules
+Power data recorded:
+Current Position:  160.0
+10.0
+Delay:  1.4
+Position: 170.0 degrees at angle: 170.0 degrees
+Ophir connect OK
+Number of Events: 131 3.831145038167937e-08
+Average Power: 38.31 nanojoules
+Power data recorded:
+Current Position:  170.0
+10.0
+Delay:  1.4
+Position: 180.0 degrees at angle: 180.0 degrees
+Ophir connect OK
+Number of Events: 129 4.75139534883721e-08
+Average Power: 47.51 nanojoules
+Power data recorded:
+Current Position:  180.0
+10.0
+Delay:  1.4
+Position: 190.0 degrees at angle: 190.0 degrees
+Ophir connect OK
+Number of Events: 103 5.41514563106796e-08
+Average Power: 54.15 nanojoules
+Power data recorded:
+Current Position:  190.0
+10.0
+Delay:  1.4
+Position: 200.0 degrees at angle: 200.0 degrees
+Ophir connect OK
+Number of Events: 129 6.074108527131783e-08
+Average Power: 60.74 nanojoules
+Power data recorded:
+Current Position:  200.0
+10.0
+Delay:  1.4
+Position: 210.0 degrees at angle: 210.0 degrees
+Ophir connect OK
+Number of Events: 103 6.670388349514561e-08
+Average Power: 66.70 nanojoules
+Power data recorded:
+Current Position:  210.0
+10.0
+Delay:  1.4
+Position: 220.0 degrees at angle: 220.0 degrees
+Ophir connect OK
+Number of Events: 103 7.319611650485439e-08
+Average Power: 73.20 nanojoules
+Power data recorded:
+Current Position:  220.0
+10.0
+Delay:  1.4
+Position: 230.0 degrees at angle: 230.0 degrees
+Ophir connect OK
+Number of Events: 156 8.054423076923076e-08
+Average Power: 80.54 nanojoules
+Power data recorded:
+Current Position:  230.0
+10.0
+Delay:  1.4
+Position: 240.0 degrees at angle: 240.0 degrees
+Ophir connect OK
+Number of Events: 129 9.647209302325583e-08
+Average Power: 96.47 nanojoules
+Power data recorded:
+Current Position:  240.0
+10.0
+Delay:  1.4
+Position: 250.0 degrees at angle: 250.0 degrees
+Ophir connect OK
+Number of Events: 129 1.1447441860465109e-07
+Average Power: 114.47 nanojoules
+Power data recorded:
+Current Position:  250.0
+10.0
+Delay:  1.4
+Position: 260.0 degrees at angle: 260.0 degrees
+Ophir connect OK
+Number of Events: 129 1.1518759689922478e-07
+Average Power: 115.19 nanojoules
+Power data recorded:
+Current Position:  260.0
+10.0
+Delay:  1.4
+Position: 270.0 degrees at angle: 270.0 degrees
+Ophir connect OK
+Number of Events: 129 1.119062015503876e-07
+Average Power: 111.91 nanojoules
+Power data recorded:
+Current Position:  270.0
+10.0
+Delay:  1.4
+Position: 280.0 degrees at angle: 280.0 degrees
+Ophir connect OK
+Number of Events: 156 1.130698717948718e-07
+Average Power: 113.07 nanojoules
+Power data recorded:
+Current Position:  280.0
+10.0
+Delay:  1.4
+Position: 290.0 degrees at angle: 290.0 degrees
+Ophir connect OK
+Number of Events: 103 1.1415825242718443e-07
+Average Power: 114.16 nanojoules
+Power data recorded:
+Current Position:  290.0
+10.0
+Delay:  1.4
+Position: 300.0 degrees at angle: 300.0 degrees
+Ophir connect OK
+Number of Events: 129 1.1523255813953495e-07
+Average Power: 115.23 nanojoules
+Power data recorded:
+Final Position: 300.0 degrees
+[[0.0, 1.2522330097087373], [10.0, 1.5542718446601935], [20.0, 2.044580152671756], [30.0, 2.5393203883495143], [40.0, 3.201395348837211], [50.0, 3.899767441860466], [60.0, 4.8831782945736455], [70.0, 5.807184466019415], [80.0, 7.3616504854368925], [90.0, 8.930310077519383], [100.0, 10.995658914728676], [110.0, 13.119379844961244], [120.0, 15.864341085271304], [130.0, 19.329487179487188], [140.0, 23.487610619469027], [150.0, 28.09611650485437], [160.0, 32.38349514563106], [170.0, 38.31145038167937], [180.0, 47.513953488372096], [190.0, 54.1514563106796], [200.0, 60.74108527131783], [210.0, 66.70388349514562], [220.0, 73.19611650485439], [230.0, 80.54423076923075], [240.0, 96.47209302325584], [250.0, 114.47441860465109], [260.0, 115.18759689922477], [270.0, 111.90620155038759], [280.0, 113.0698717948718], [290.0, 114.15825242718442], [300.0, 115.23255813953494]]
+>>>Angle vs Power data saved
+>>>Angle vs Power plot saved
+>>>Moved to 0 Deg
+Sample Name: emek06

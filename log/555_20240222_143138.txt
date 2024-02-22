@@ -1,0 +1,12 @@
+Sample Name: 555
+<SeaBreezeDevice HR4000:HR4C222>
+Current Position:  250.0
+-250.0
+Delay:  -9.0
+An error occurred: sleep length must be non-negative
+Traceback (most recent call last):
+  File "D:\Project\AdvanceOpticalTechnology\appv2.py", line 499, in <module>
+    root.mainloop()
+  File "C:\Users\naqee\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py", line 1458, in mainloop
+    self.tk.mainloop(n)
+KeyboardInterrupt

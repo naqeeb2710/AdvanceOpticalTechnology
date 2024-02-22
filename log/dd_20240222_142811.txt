@@ -1,0 +1,32 @@
+Sample Name: dd
+<SeaBreezeDevice HR4000:HR4C222>
+Delay:  1
+Delay: 1
+Position: 0.0 degrees at angle
+Final Position: 0.0 degrees
+Delay:  1
+Delay: 1
+Position: 47.1181912065215 degrees at angle
+Final Position: 50.0 degrees
+Delay:  3.0
+Delay: 3.0
+Position: 100.0 degrees at angle
+Final Position: 100.0 degrees
+Delay:  3.0
+Delay: 3.0
+Position: 150.0 degrees at angle
+Final Position: 150.0 degrees
+Delay:  3.0
+Delay: 3.0
+Position: 200.0 degrees at angle
+Final Position: 200.0 degrees
+Delay:  3.0
+Delay: 3.0
+Position: 250.0 degrees at angle
+Final Position: 250.0 degrees
+Traceback (most recent call last):
+  File "D:\Project\AdvanceOpticalTechnology\appv2.py", line 499, in <module>
+    root.mainloop()
+  File "C:\Users\naqee\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py", line 1458, in mainloop
+    self.tk.mainloop(n)
+KeyboardInterrupt

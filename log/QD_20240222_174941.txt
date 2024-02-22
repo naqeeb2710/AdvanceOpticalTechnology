@@ -1,0 +1,11 @@
+Sample Name: QD
+Live spectrum started
+<SeaBreezeDevice HR4000:HR4C222> for live spectrum
+Live spectrum data saved to C:/Users/naqee/Desktop/ASE/2202\QD_0deg_bg_100.0.csv
+Spectrometer closed successfully.
+Traceback (most recent call last):
+  File "D:\Project\AdvanceOpticalTechnology\appv2.py", line 499, in <module>
+    root.mainloop()
+  File "C:\Users\naqee\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py", line 1458, in mainloop
+    self.tk.mainloop(n)
+KeyboardInterrupt

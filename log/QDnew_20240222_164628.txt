@@ -1,0 +1,34 @@
+Sample Name: QDnew
+<SeaBreezeDevice HR4000:HR4C222>
+Current Position:  90.0
+-90.0
+Delay:  4.6
+Position: 0.0 degrees at angle
+Final Position: 0.0 degrees
+Current Position:  0.0
+10.0
+Delay:  1.4
+Position: 10.0 degrees at angle
+Final Position: 10.0 degrees
+Current Position:  10.0
+10.0
+Delay:  1.4
+Position: 20.0 degrees at angle
+Final Position: 20.0 degrees
+Current Position:  20.0
+10.0
+Delay:  1.4
+Position: 30.0 degrees at angle
+Final Position: 30.0 degrees
+Current Position:  30.0
+10.0
+Delay:  1.4
+Position: 40.0 degrees at angle
+Final Position: 40.0 degrees
+Current Position:  40.0
+10.0
+Delay:  1.4
+Position: 50.0 degrees at angle
+Final Position: 50.0 degrees
+>>>Moved to 0 Deg
+Sample Name: QDnew1
