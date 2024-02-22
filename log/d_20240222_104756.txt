@@ -1,0 +1,4 @@
+Sample Name: d
+<SeaBreezeDevice HR4000:HR4C222>
+Position: 0.0 degrees at angle: 0.0 degrees
+An error occurred: type object 'MeasurementController' has no attribute 'current_angle'

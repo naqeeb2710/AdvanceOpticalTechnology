@@ -1,0 +1,43 @@
+Sample Name: ff
+<SeaBreezeDevice HR4000:HR4C222>
+>>>Measurement Controller Created
+Total steps: 1.2
+>>>Inside while loop
+Current step: 1 of 1.2
+An error occurred: MeasurementController.measure_at_angles() missing 1 required positional argument: 'save_dir'
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "C:\Users\naqee\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py", line 1921, in __call__
+    return self.func(*args)
+  File "D:\Project\AdvanceOpticalTechnology\appv2.py", line 170, in moveangle
+    self.motor_controller.getvelocity()
+  File "D:\Project\AdvanceOpticalTechnology\mainKinesis.py", line 162, in getvelocity
+    self.lib.CC_SetVelParamsBlock(self.serial_num, 25*7329109)
+OSError: exception: access violation reading 0x000000000AEBD551
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "C:\Users\naqee\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py", line 1921, in __call__
+    return self.func(*args)
+  File "D:\Project\AdvanceOpticalTechnology\appv2.py", line 170, in moveangle
+    self.motor_controller.getvelocity()
+  File "D:\Project\AdvanceOpticalTechnology\mainKinesis.py", line 162, in getvelocity
+    self.lib.CC_SetVelParamsBlock(self.serial_num, 25*7329109)
+OSError: exception: access violation reading 0x000000000AEBD551
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "C:\Users\naqee\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py", line 1921, in __call__
+    return self.func(*args)
+  File "D:\Project\AdvanceOpticalTechnology\appv2.py", line 170, in moveangle
+    self.motor_controller.getvelocity()
+  File "D:\Project\AdvanceOpticalTechnology\mainKinesis.py", line 162, in getvelocity
+    self.lib.CC_SetVelParamsBlock(self.serial_num, 25*7329109)
+OSError: exception: access violation reading 0x000000000AEBD551
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "C:\Users\naqee\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py", line 1921, in __call__
+    return self.func(*args)
+  File "D:\Project\AdvanceOpticalTechnology\appv2.py", line 180, in up_angle
+    self.motor_controller.getvelocity()
+  File "D:\Project\AdvanceOpticalTechnology\mainKinesis.py", line 162, in getvelocity
+    self.lib.CC_SetVelParamsBlock(self.serial_num, 25*7329109)
+OSError: exception: access violation reading 0x000000000AEBD551

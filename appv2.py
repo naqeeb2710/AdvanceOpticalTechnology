@@ -6,9 +6,9 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
 import os
-from main import SpectrometerController
-from main import MotorController
-from main import MeasurementController
+from mainKinesies2 import SpectrometerController
+from mainKinesies2 import ThorlabsMotionController as MotorController
+from mainKinesies2 import MeasurementController
 import time
 import csv
 from liveSpectrum import LiveSpectrum as li
@@ -30,7 +30,7 @@ class App:
 
         # Set up GUI components
         self.create_widgets()
-        self.update_current_info()
+        # self.update_current_info()
 
         self.experiment_name = "" 
 
@@ -173,50 +173,47 @@ class App:
     def moveangle(self):
         # Implement the logic for moving to a specific angle
         angle = float(self.move_to_angle_entry.get())%360
-        if hasattr(self.motor_controller.inst, 'velocity_max'):
-            self.motor_controller.inst.velocity_max(0)  # Set velocity to 0 before cleanup
-        self.motor_controller.inst.velocity_max(25)
         self.motor_controller.move_to_angle(angle)
+        self.motor_controller.getvelocity()
+        self.motor_controller.close_device()
 
-    def update_current_info(self):
-    # Method to update the current velocity and angle labels
-        current_velocity = self.motor_controller.inst._get_velocity_max()
-        current_angle = self.motor_controller.inst.position()
-        current_acceleration = self.motor_controller.inst._get_velocity_acceleration()
+    # def update_current_info(self):
+    # # Method to update the current velocity and angle labels
+    #     current_velocity = self.motor_controller.inst._get_velocity_max()
+    #     current_angle = self.motor_controller.inst.position()
+    #     current_acceleration = self.motor_controller.inst._get_velocity_acceleration()
 
-        self.current_velocity_label.config(text=f"{current_velocity:.2f} deg/s")
-        self.current_angle_label.config(text=f"{current_angle:.2f} degrees")
-        self.current_acceleration_label.config(text=f"{current_acceleration:.2f} deg/s^2")
+    #     self.current_velocity_label.config(text=f"{current_velocity:.2f} deg/s")
+    #     self.current_angle_label.config(text=f"{current_angle:.2f} degrees")
+    #     self.current_acceleration_label.config(text=f"{current_acceleration:.2f} deg/s^2")
 
-        # Schedule the update after a short delay
-        self.root.after(500, self.update_current_info)
+    #     # Schedule the update after a short delay
+    #     self.root.after(500, self.update_current_info)
 
     def up_angle(self):
         # Implement the logic for increasing the angle
-        if hasattr(self.motor_controller.inst, 'velocity_max'):
-            self.motor_controller.inst.velocity_max(0)  # Set velocity to 0 before cleanup
-        self.motor_controller.inst.velocity_max(25)
-        current_angle = self.motor_controller.inst.position()
+        current_angle = self.motor_controller.current_position()
         angle_size = float(self.angle_size_entry.get())
         new_angle = (current_angle + angle_size) % 360  # Ensure the angle stays within [0, 360)
         self.motor_controller.move_to_angle(new_angle)
+        self.motor_controller.move_to_angle(new_angle)
+        self.motor_controller.getvelocity()
+        self.motor_controller.close_device()
 
     def down_angle(self):
         # Implement the logic for decreasing the angle
-        if hasattr(self.motor_controller.inst, 'velocity_max'):
-            self.motor_controller.inst.velocity_max(0)  # Set velocity to 0 before cleanup
-        self.motor_controller.inst.velocity_max(25)
-        current_angle = self.motor_controller.inst.position()
+        current_angle = self.motor_controller.current_position()
         angle_size = float(self.angle_size_entry.get())
         new_angle = (current_angle - angle_size) % 360  # Ensure the angle stays within [0, 360)
         self.motor_controller.move_to_angle(new_angle)
+        self.motor_controller.getvelocity()
+        self.motor_controller.close_device()
     
     def home_angle(self):
         # Implement the logic for moving the angle to 0
-        if hasattr(self.motor_controller.inst, 'velocity_max'):
-            self.motor_controller.inst.velocity_max(0)
-        self.motor_controller.inst.velocity_max(25)
         self.motor_controller.move_to_angle(0)
+        self.motor_controller.getvelocity()
+        self.motor_controller.close_device()
 
     def start(self):
                 # Set the experiment name attribute
@@ -224,12 +221,6 @@ class App:
         # Redirect stdout and stderr to the ScrolledText widget
         sys.stdout = TextRedirector(self.terminal_text, self.experiment_name, "stdout")
         sys.stderr = TextRedirector(self.terminal_text, self.experiment_name, "stderr")
-
-        
-    def start_measurement_thread(self):
-        # Start a new thread for the measurement to avoid blocking the main thread
-        thread = Thread(target=self.start_measurement)
-        thread.start()
 
     def start_measurement(self):
         try:
@@ -242,11 +233,7 @@ class App:
             exposure_time_mili= float(self.exposure_time_entry.get())
             exposure_time_micros = exposure_time_mili * 1000.0
 
-            # target_velocity = float(self.target_velocity_entry.get())
             experiment_name = self.experiment_name_entry.get()
-
-            # Configure motor
-            # self.motor_controller.configure_motor(25)
 
             # Create measurement controller
             measurement_controller = MeasurementController(self.spectrometer_controller, self.motor_controller,experiment_name)
@@ -273,7 +260,7 @@ class App:
                 output_plot_filename = current_csv_filename.replace('.csv', '.png')
                 # Save the plot as an image file in the "plot" folder
                 output_plot_filepath = os.path.join(save_dir, output_plot_filename)
-                print(f"Plot saved to: {output_plot_filepath}")
+                # print(f"Plot saved to: {output_plot_filepath}")
 
                 # Display the latest graph in the Tkinter application
                 img = plt.imread(output_plot_filepath)
@@ -290,13 +277,10 @@ class App:
                 self.root.update()
 
                 # Delay for a short time before the next measurement
-                self.root.after(100)  # Adjust the delay time as needed
+                self.root.after(10)  # Adjust the delay time as needed
 
                 # Increment the current_step for the next iteration
                 current_step += 1
-            
-            # Clear input fields after the calculation
-            # self.initial_angle_entry.delete(0, tk.END)
                 
             # Check the checkbox state
             if self.go_home_var.get():
@@ -308,8 +292,7 @@ class App:
 
         except Exception as e:
             print(f"An error occurred: {e}")
-            # Close motor and spectrometer in case of an error
-            self.motor_controller.close_motor()
+            # Close motor and spectrometer in case of an erro
             self.spectrometer_controller.disconnect_spectrometer()
     
     def start_power_measurement(self):
@@ -348,8 +331,10 @@ class App:
             current_angle = initial_angle
             while current_angle <= final_angle:
                 angle = current_angle % 360  # Convert angle to be within the range [0, 360)
+                delay=self.motor_controller.delaytime(angle)
                 measurement_controller.motor_controller.move_to_angle(angle)
-                current_position = measurement_controller.motor_controller.inst.position()
+                time.sleep(delay)
+                current_position = measurement_controller.motor_controller.current_position()
                 print(f"Position: {current_position} degrees at angle: {angle} degrees")
                 time.sleep(0.5)  # Pause the execution for 0.5 seconds
                 measurement_controller.power_meter.connect()
@@ -399,7 +384,7 @@ class App:
             # Move to the final angle after completing the loop
             final_angle_normalized = final_angle % 360
             measurement_controller.motor_controller.move_to_angle(final_angle_normalized)
-            final_position = measurement_controller.motor_controller.inst.position()
+            final_position = measurement_controller.motor_controller.current_position()
             print(f"Final Position: {final_position} degrees")
             print(angle_power_list)
             # Save the angle-power list to a CSV file
@@ -424,18 +409,12 @@ class App:
             plot_filename = os.path.join(save_dir, f'{experiment_name}_angle_power.png')
             plt.savefig(plot_filename, bbox_inches='tight', pad_inches=0.5)
             print(">>>Angle vs Power plot saved")
-            # plt.savefig(f'/{experiment_name}_angle_power.png', bbox_inches='tight', pad_inches=0.5)
-
             # Display the latest graph in the Tkinter application
             img = plt.imread(plot_filename)
-            # img = plt.imread(f'experiment_data/{experiment_name}_angle_power.png')
             self.ax.imshow(img)
             self.ax.axis('off')  # Turn off axis labels
             # Update the canvas
             self.canvas.draw()
-
-            # Clear input fields after the calculation
-            # self.initial_angle_entry.delete(0, tk.END)
 
             # Check the checkbox state
             if self.go_home_var.get():
@@ -446,7 +425,6 @@ class App:
         except Exception as e:
             print(f"An error occurred: {e}")
             # Close motor and spectrometer in case of an error
-            self.motor_controller.close_motor()
             self.spectrometer_controller.disconnect_spectrometer()
                        
     def live_spectrum(self):
@@ -471,7 +449,6 @@ class App:
         except Exception as e:
             # print(f"An error occurred: {e}")
             self.liveSpec.close()
-            # self.motor_controller.close_motor()
             # self.liveSpec.close_plot()
             
     
@@ -490,7 +467,6 @@ class App:
     def quit_application(self):
         # Disconnect spectrometer and close motor when quitting the application
         # self.spectrometer_controller.disconnect_spectrometer()
-        self.motor_controller.close_motor()
         self.root.quit()
         self.root.destroy()
         sys.exit()

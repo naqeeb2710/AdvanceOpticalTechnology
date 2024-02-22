@@ -1,0 +1,22 @@
+Sample Name: vi
+<SeaBreezeDevice HR4000:HR4C222>
+Position: 0.0 degrees at angle
+Final Position: 0.0 degrees
+Plot saved to: C:/Users/naqee/Desktop/ASE/22022024\vi_spec_0deg_100ms_acc_1.png
+Position: 50.0 degrees at angle
+Final Position: 50.0 degrees
+Plot saved to: C:/Users/naqee/Desktop/ASE/22022024\vi_spec_50deg_100ms_acc_1.png
+Position: 100.0 degrees at angle
+Final Position: 100.0 degrees
+Plot saved to: C:/Users/naqee/Desktop/ASE/22022024\vi_spec_100deg_100ms_acc_1.png
+Position: 150.0 degrees at angle
+Final Position: 150.0 degrees
+Plot saved to: C:/Users/naqee/Desktop/ASE/22022024\vi_spec_150deg_100ms_acc_1.png
+Position: 200.0 degrees at angle
+Final Position: 200.0 degrees
+Plot saved to: C:/Users/naqee/Desktop/ASE/22022024\vi_spec_200deg_100ms_acc_1.png
+Position: 250.0 degrees at angle
+Final Position: 250.0 degrees
+Plot saved to: C:/Users/naqee/Desktop/ASE/22022024\vi_spec_250deg_100ms_acc_1.png
+Live spectrum started
+<SeaBreezeDevice HR4000:HR4C222> for live spectrum

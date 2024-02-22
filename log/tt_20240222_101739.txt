@@ -1,0 +1,7 @@
+Sample Name: tt
+<SeaBreezeDevice HR4000:HR4C222>
+>>>Measurement Controller Created
+Total steps: 6.0
+>>>Inside while loop
+Current step: 1 of 6.0
+An error occurred: 'ThorlabsMotionController' object has no attribute 'inst'

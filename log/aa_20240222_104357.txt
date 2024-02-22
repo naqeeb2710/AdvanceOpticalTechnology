@@ -1,0 +1,60 @@
+Sample Name: aa
+<SeaBreezeDevice HR4000:HR4C222>
+Position: 103.80754103403572 degrees at angle: 0.0 degrees
+An error occurred: 'ThorlabsMotionController' object has no attribute 'inst'
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "C:\Users\naqee\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py", line 1921, in __call__
+    return self.func(*args)
+  File "D:\Project\AdvanceOpticalTechnology\appv2.py", line 471, in quit_application
+    self.motor_controller.close_motor()
+AttributeError: 'ThorlabsMotionController' object has no attribute 'close_motor'
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "C:\Users\naqee\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py", line 1921, in __call__
+    return self.func(*args)
+  File "D:\Project\AdvanceOpticalTechnology\appv2.py", line 471, in quit_application
+    self.motor_controller.close_motor()
+AttributeError: 'ThorlabsMotionController' object has no attribute 'close_motor'
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "C:\Users\naqee\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py", line 1921, in __call__
+    return self.func(*args)
+  File "D:\Project\AdvanceOpticalTechnology\appv2.py", line 471, in quit_application
+    self.motor_controller.close_motor()
+AttributeError: 'ThorlabsMotionController' object has no attribute 'close_motor'
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "C:\Users\naqee\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py", line 1921, in __call__
+    return self.func(*args)
+  File "D:\Project\AdvanceOpticalTechnology\appv2.py", line 471, in quit_application
+    sys.exit()
+AttributeError: 'ThorlabsMotionController' object has no attribute 'close_motor'
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "C:\Users\naqee\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py", line 1921, in __call__
+    return self.func(*args)
+  File "D:\Project\AdvanceOpticalTechnology\appv2.py", line 471, in quit_application
+    sys.exit()
+AttributeError: 'ThorlabsMotionController' object has no attribute 'close_motor'
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "C:\Users\naqee\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py", line 1921, in __call__
+    return self.func(*args)
+  File "D:\Project\AdvanceOpticalTechnology\appv2.py", line 471, in quit_application
+    sys.exit()
+AttributeError: 'ThorlabsMotionController' object has no attribute 'close_motor'
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "C:\Users\naqee\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py", line 1921, in __call__
+    return self.func(*args)
+  File "D:\Project\AdvanceOpticalTechnology\appv2.py", line 471, in quit_application
+    sys.exit()
+AttributeError: 'ThorlabsMotionController' object has no attribute 'close_motor'
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "C:\Users\naqee\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py", line 1921, in __call__
+    return self.func(*args)
+  File "D:\Project\AdvanceOpticalTechnology\appv2.py", line 471, in quit_application
+    sys.exit()
+AttributeError: 'ThorlabsMotionController' object has no attribute 'close_motor'

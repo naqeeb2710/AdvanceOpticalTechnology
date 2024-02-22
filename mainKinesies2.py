@@ -5,15 +5,13 @@ from matplotlib.ticker import FormatStrFormatter
 import csv
 from sensor import Sensor
 from seabreeze.spectrometers import list_devices, Spectrometer
-from qcodes_contrib_drivers.drivers.Thorlabs.APT import Thorlabs_APT
-from qcodes_contrib_drivers.drivers.Thorlabs.K10CR1 import Thorlabs_K10CR1
 import csv
-import sys
+import numpy as np
+from matplotlib.widgets import Button
 from ctypes import *
-import  time
+import sys
 
 
-# Define the SpectrometerController class
 class SpectrometerController:
     def __init__(self):
         self.spec = None
@@ -25,6 +23,7 @@ class SpectrometerController:
             print("No spectrometer devices available.")
         self.fig = None  # Initialize figure object to store the reference of the plot window
         
+
     def perform_accumulation(self, num_accumulations, exposure_time_micros, output_csv_filename,save_dir):
         if self.spec is None:
             print("Spectrometer not connected. Please connect first.")
@@ -58,6 +57,7 @@ class SpectrometerController:
 
             for row in zip(wavelengths, *intensities):
                 csv_writer.writerow(row)
+        
 
         # Create the "plot" folder if it doesn't exist
         plot_folder = save_dir
@@ -77,12 +77,12 @@ class SpectrometerController:
         ax.set_ylabel('Intensity')
 
         # Add angle and exposure time information inside the plot
-        info_text = f"Angle: {MeasurementController.current_angle}°\nExp Time: {exposure_time_micros/1000.0} ms"
+        info_text = f"Angle:{MeasurementController.current_angle}° \n Exp Time: {exposure_time_micros/1000.0} ms"
         ax.text(0.98, 0.98, info_text, transform=ax.transAxes, verticalalignment='top', horizontalalignment='right', bbox=dict(boxstyle='round', facecolor='wheat', alpha=1))
 
         plt.savefig(output_plot_filepath, bbox_inches='tight', pad_inches=0.5)
         time.sleep(1.0)
-        
+    
     def close_plot(self):
         if self.fig is not None:
             plt.close(self.fig)
@@ -140,17 +140,11 @@ class ThorlabsMotionController:
         self.lib.CC_RequestPosition(self.serial_num)
         time.sleep(0.1)
         current=(self.lib.CC_GetPosition(self.serial_num)/self.STEPS_PER_REV.value)
-        delay= (angle - 25)/10
+        delay= (angle - current )/25
         delay=delay+1
         self.close_device()
         return delay
     
-    def getvelocity(self):
-        self.open_device()
-        velocity_params = c_char_p(b"")
-        self.lib.CC_SetVelParamsBlock(self.serial_num, 25*7329109)
-        print(velocity_params)
-
     def move_to_angle(self, angle):
         self.open_device()
         steps = int(angle * self.STEPS_PER_REV.value)
@@ -161,7 +155,6 @@ class ThorlabsMotionController:
         acceleration_value = 1502*25
         max_velocity_value = 25*7329109
         self.lib.CC_SetVelParams(self.serial_num, acceleration_value, max_velocity_value)
-        # time.sleep(0.5)
         self.close_device()
 
     def jog_move(self, steps):
@@ -175,10 +168,11 @@ class ThorlabsMotionController:
         print("Current position:", self.lib.CC_GetPosition((self.serial_num)/self.STEPS_PER_REV.value))
         self.close_device()
 
+
 class MeasurementController:
-    def __init__(self, spectrometer_controller, motorcontroller, experiment_name):
+    def __init__(self, spectrometer_controller, motor_controller, experiment_name):
         self.spectrometer_controller = spectrometer_controller
-        self.motor_controller = motorcontroller
+        self.motor_controller = motor_controller
         self.current_csv_filename = None
         self.power_meter = Sensor()
         self.experiment_name = experiment_name  # Add an experiment name attribute
@@ -203,9 +197,10 @@ class MeasurementController:
             self.motor_controller.move_to_angle(current_angle_normalized)
             current_position = self.motor_controller.current_position()
             # time.sleep(0.5)  # Pause the execution for 0.5 seconds
-            print(f"Position: {current_position} degrees at angle: {current_angle_normalized} degrees")
+            print(f"Position: {current_position} degrees at angle")
             time.sleep(delay_seconds)
 
+            # Update the class variable
             # MeasurementController.current_angle = current_angle_normalized
 
             self.power_meter.connect()
@@ -279,28 +274,27 @@ class MeasurementController:
         plt.yticks([i for i in range(0, int(max(powers)) + 5, 5)])  # Set ticks at intervals of 2
         plt.savefig(f'{self.experiment_name}_angle_power.png', bbox_inches='tight', pad_inches=0.5)
 
-    def measure_at_angles(self, initial_angle, final_angle, step_size, num_accumulations, exposure_time_micros,save_dir):
+    def measure_at_angles(self, initial_angle, final_angle, step_size, num_accumulations, exposure_time_micros, delay_seconds,save_dir):
         current_angle = initial_angle
 
         while current_angle <= final_angle:
             # Convert the angle to be within the range [0, 360)
-            # time.sleep(0.5)
-            # print(count)
             current_angle_normalized = current_angle % 360
 
             delay=self.motor_controller.delaytime(current_angle_normalized)
             self.motor_controller.move_to_angle(current_angle_normalized)
-            # self.motor_controller.getvelocity()
-            # self.motor_controller.velocity()
             time.sleep(delay)
-            current_pos=self.motor_controller.current_position()/136533
-            print("Moved to angle:", current_pos)
-            # MeasurementController.current_angle = current_angle_normalized
 
-            self.current_csv_filename = f'{self.experiment_name}_spec_{int(current_angle_normalized)}deg_{int(exposure_time_micros/1000.0)}ms_acc_{num_accumulations}.csv'
+            current_position = self.motor_controller.current_position()
+            # time.sleep(0.5)  # Pause the execution for 0.5 seconds
+            print(f"Position: {current_position} degrees at angle")
+            # time.sleep(delay_seconds)
+
+            # Update the class variable
+            MeasurementController.current_angle = current_position
+
+            self.current_csv_filename = f'{self.experiment_name}_spec_{int(current_position)}deg_{int(exposure_time_micros/1000.0)}ms_acc_{num_accumulations}.csv'
             self.spectrometer_controller.perform_accumulation(num_accumulations, exposure_time_micros, self.current_csv_filename,save_dir)
-            print("Spectrum recorded at angle:", current_pos)
-            
             current_angle += step_size
 
         # Move to the final angle after completing the loop
@@ -341,13 +335,11 @@ def main():
             measurement_controller.measure_power_at_angles(initial_angle, final_angle, step_size,delay_seconds)
         elif action == 's':
             # Measure power at angles
-            os.makedirs('data', exist_ok=True)
-            savedir = os.path.join('data', experiment_name)
             measurement_controller.measure_at_angles(
-                initial_angle, final_angle, step_size, num_accumulations, exposure_time_micros, delay_seconds,
-            savedir)
+                initial_angle, final_angle, step_size, num_accumulations, exposure_time_micros, delay_seconds
+            )
         else:
-            print("Invalid action selected. Please choose 's' for spectrum or 'p' for power measurement.")
+            print("Invalid action selected. Please choose 'a' for accumulation or 'p' for power measurement.")
 
     except Exception as e:
         print(f"An error occurred: {e}")
@@ -355,7 +347,7 @@ def main():
     finally:
         # Close both spectrometer and motor controller
         spectrometer_controller.disconnect_spectrometer()
-        # motor_controller.close_motor()
+      
 
 
 if __name__ == "__main__":

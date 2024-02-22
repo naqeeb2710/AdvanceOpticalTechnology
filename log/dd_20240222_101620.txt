@@ -1,0 +1,9 @@
+Sample Name: dd
+<SeaBreezeDevice HR4000:HR4C222>
+>>>Measurement Controller Created
+Total steps: 6.0
+An error occurred: 'ThorlabsMotionController' object has no attribute 'inst'
+<SeaBreezeDevice HR4000:HR4C222>
+>>>Measurement Controller Created
+Total steps: 6.0
+An error occurred: 'ThorlabsMotionController' object has no attribute 'inst'
