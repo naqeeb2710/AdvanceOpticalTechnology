@@ -1,5 +1,0 @@
-stage.move_to(0)
-stage.setup_homing(velocity=7329109)
-stage.home()
-stage.wait_move()
-print(stage.get_position)
