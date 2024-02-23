@@ -174,7 +174,6 @@ class App:
         # Implement the logic for moving to a specific angle
         angle = float(self.move_to_angle_entry.get())%360
         self.motor_controller.move_to_angle(angle)
-        self.motor_controller.getvelocity()
         self.motor_controller.close_device()
 
     # def update_current_info(self):
@@ -196,8 +195,6 @@ class App:
         angle_size = float(self.angle_size_entry.get())
         new_angle = (current_angle + angle_size) % 360  # Ensure the angle stays within [0, 360)
         self.motor_controller.move_to_angle(new_angle)
-        self.motor_controller.move_to_angle(new_angle)
-        self.motor_controller.getvelocity()
         self.motor_controller.close_device()
 
     def down_angle(self):
@@ -206,13 +203,11 @@ class App:
         angle_size = float(self.angle_size_entry.get())
         new_angle = (current_angle - angle_size) % 360  # Ensure the angle stays within [0, 360)
         self.motor_controller.move_to_angle(new_angle)
-        self.motor_controller.getvelocity()
         self.motor_controller.close_device()
     
     def home_angle(self):
         # Implement the logic for moving the angle to 0
         self.motor_controller.move_to_angle(0)
-        self.motor_controller.getvelocity()
         self.motor_controller.close_device()
 
     def start(self):
@@ -287,7 +282,7 @@ class App:
                 # Go Home if the checkbox is checked\
                 
                 self.motor_controller.move_to_angle(0)
-                print(">>>Moved to 0 Deg")
+                print(">>>Moved to 0 Deg \n \n \n ")
             self.spectrometer_controller.disconnect_spectrometer()
 
         except Exception as e:
@@ -326,20 +321,23 @@ class App:
             measurement_range = measurement_controller.default_measurement_range  # Initialize measurement range
             status_counter = 0  # Initialize status counter
             measurement_controller.power_meter.connect()
+            
 
+
+            
             # Measure at angles with default velocity using a while loop
             current_angle = initial_angle
             while current_angle <= final_angle:
                 angle = current_angle % 360  # Convert angle to be within the range [0, 360)
                 delay=self.motor_controller.delaytime(angle)
                 measurement_controller.motor_controller.move_to_angle(angle)
-                # time.sleep(delay)
+                time.sleep(delay)
                 current_position = measurement_controller.motor_controller.current_position()
                 print(f"Position: {current_position} degrees at angle: {angle} degrees")
                 time.sleep(0.5)  # Pause the execution for 0.5 seconds
                 measurement_controller.power_meter.connect()
                 measurement_controller.power_meter.arm(delay_seconds=power_delay)
-                power_data, average_power = measurement_controller.power_meter.disarm()  # Unpack the tuple to get power data and average power
+                power_data, totalpower, numevent = measurement_controller.power_meter.disarm()  # Unpack the tuple to get power data and average power
                 if power_data:
                     print("Power data recorded:")
                     power_meter_filename = os.path.join(save_dir, f'{experiment_name}_power_{int(angle)}deg.csv')
@@ -357,15 +355,36 @@ class App:
                                         break
                 else:
                     print("No power data recorded.")
-                
-                # Check if status counter exceeds threshold
-                if status_counter > measurement_controller.threshold_status_count:
-                    measurement_range = 2  # Change to 200nJ range
+                    measurement_range = measurement_range+1  # Change to 200nJ range
+                    print("Range Changed")
                     measurement_controller.power_meter.measurement_range = measurement_range
                     status_counter = 0  # Reset status counter after changing the range
                     measurement_controller.power_meter.connect()
                     measurement_controller.power_meter.arm(delay_seconds=power_delay)
-                    power_data, average_power = measurement_controller.power_meter.disarm()
+                    print("Armed measurement conrroller")
+                    power_data, totalpower, numevent = measurement_controller.power_meter.disarm()
+                    if power_data:
+                        print("Power data recorded:")
+                        power_meter_filename = os.path.join(save_dir, f'{experiment_name}_power_{int(angle)}deg.csv')
+                        with open(power_meter_filename, 'w') as power_dump:
+                            # Write header
+                            power_dump.write('time, power, status\n')
+                            # Write data rows
+                            for event in power_data:
+                                power_dump.write('%.3f, %.2e, %.2f\n' % (event[0], event[1], event[2]))
+                    else:
+                        status_counter = 0 
+                
+                # Check if status counter exceeds threshold
+                if status_counter > measurement_controller.threshold_status_count:
+                    measurement_range = 2  # Change to 200nJ range
+                    print("Range Changed")
+                    measurement_controller.power_meter.measurement_range = measurement_range
+                    status_counter = 0  # Reset status counter after changing the range
+                    measurement_controller.power_meter.connect()
+                    measurement_controller.power_meter.arm(delay_seconds=power_delay)
+                    print("Armed measurement conrroller")
+                    power_data, totalpower, numevent = measurement_controller.power_meter.disarm()
                     if power_data:
                         print("Power data recorded:")
                         power_meter_filename = os.path.join(save_dir, f'{experiment_name}_power_{int(angle)}deg.csv')
@@ -377,7 +396,10 @@ class App:
                                 power_dump.write('%.3f, %.2e, %.2f\n' % (event[0], event[1], event[2]))
                 else:
                     status_counter = 0  # Reset status counter if not exceeded threshold
-                
+                average_power = totalpower / numevent
+                print(f"Number of Events: {numevent}", average_power)
+                average_power = average_power * 1e9
+                print(f"Average Power: {average_power:.2f} nanojoules")
                 angle_power_list.append([angle, average_power])
                 current_angle += step_size
 
@@ -420,7 +442,7 @@ class App:
             if self.go_home_var.get():
                 # Go Home if the checkbox is checked
                 measurement_controller.motor_controller.move_to_angle(0)
-                print(">>>Moved to 0 Deg")
+                print(">>>Moved to 0 Deg \n \n \n")
 
         except Exception as e:
             print(f"An error occurred: {e}")

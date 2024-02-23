@@ -91,13 +91,14 @@ class Sensor:
                             total_power += data[0][i]  # Accumulate power for each event
                             num_events += 1
 
-                average_power = total_power / num_events
-                print(f"Number of Events: {num_events}", average_power)
-                average_power_nanojoules = average_power * 1e9
-                print(f"Average Power: {average_power_nanojoules:.2f} nanojoules")
+                # average_power = total_power / num_events
+                # print(f"Number of Events: {num_events}", average_power)
+                # average_power_nanojoules = average_power * 1e9
+                # print(f"Average Power: {average_power_nanojoules:.2f} nanojoules")
                 self.ready = True
 
-                return events, average_power_nanojoules
+                # return events, average_power_nanojoules
+                return events, total_power, num_events
             print('Not exists!')
         else:
             print('Sensor is not connected!')
